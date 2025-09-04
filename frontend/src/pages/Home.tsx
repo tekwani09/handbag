@@ -6,9 +6,11 @@ import { getProductPrice, formatPrice } from '../utils/currency'
 export default function Home() {
   const { selectedCountry } = useCurrency()
   const [featuredProducts, setFeaturedProducts] = useState([])
+  const [categories, setCategories] = useState([])
 
   useEffect(() => {
     fetchFeaturedProducts()
+    fetchCategories()
   }, [])
 
   const fetchFeaturedProducts = async () => {
@@ -18,6 +20,16 @@ export default function Home() {
       setFeaturedProducts(data.products?.slice(0, 4) || [])
     } catch (error) {
       console.error('Failed to fetch products')
+    }
+  }
+
+  const fetchCategories = async () => {
+    try {
+      const response = await fetch('/api/categories')
+      const data = await response.json()
+      setCategories(data.categories || [])
+    } catch (error) {
+      console.error('Failed to fetch categories')
     }
   }
 
@@ -54,25 +66,7 @@ export default function Home() {
 
       {/* Product Categories Grid */}
       <section className="py-0">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-          {/* Handbags */}
-          <div className="relative group overflow-hidden">
-            <div className="aspect-square bg-gray-200">
-              <img 
-                src="https://images.unsplash.com/photo-1584917865442-de89df76afd3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1035&q=80" 
-                alt="Handbags" 
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-              />
-            </div>
-            <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            <div className="absolute bottom-8 left-8 text-white">
-              <h3 className="text-2xl font-light mb-2">HANDBAGS</h3>
-              <Link to="/products" className="text-sm uppercase tracking-wide border-b border-white pb-1 hover:border-transparent transition-colors">
-                View All
-              </Link>
-            </div>
-          </div>
-
+        <div className="grid grid-cols-1 md:grid-cols-2">
           {/* Leather Goods */}
           <div className="relative group overflow-hidden">
             <div className="aspect-square bg-gray-200">
@@ -83,9 +77,9 @@ export default function Home() {
               />
             </div>
             <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            <div className="absolute bottom-8 left-8 text-white">
-              <h3 className="text-2xl font-light mb-2">LEATHER GOODS</h3>
-              <Link to="/products" className="text-sm uppercase tracking-wide border-b border-white pb-1 hover:border-transparent transition-colors">
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-center">
+              <h3 className="text-4xl font-light mb-4 tracking-wide">LEATHER GOODS</h3>
+              <Link to="/leather-goods" className="text-sm uppercase tracking-wide border-b border-white pb-1 hover:border-transparent transition-colors">
                 View All
               </Link>
             </div>
@@ -101,9 +95,9 @@ export default function Home() {
               />
             </div>
             <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            <div className="absolute bottom-8 left-8 text-white">
-              <h3 className="text-2xl font-light mb-2">ACCESSORIES</h3>
-              <Link to="/products" className="text-sm uppercase tracking-wide border-b border-white pb-1 hover:border-transparent transition-colors">
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-center">
+              <h3 className="text-4xl font-light mb-4 tracking-wide">ACCESSORIES</h3>
+              <Link to="/accessories" className="text-sm uppercase tracking-wide border-b border-white pb-1 hover:border-transparent transition-colors">
                 View All
               </Link>
             </div>
@@ -111,9 +105,63 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Featured Collection */}
+      {/* Our Families Section */}
       <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-full mx-auto px-2 sm:px-4 lg:px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-light mb-6 tracking-wide">
+              OUR FAMILIES
+            </h2>
+            <p className="text-xl text-gray-600 font-light max-w-2xl mx-auto">
+              Discover our signature collections, each crafted with meticulous attention to detail
+            </p>
+          </div>
+          
+          <div className="overflow-x-auto scrollbar-hide">
+            <div className="flex gap-1">
+              {categories.map((category: any, index: number) => {
+                const modelImages = [
+                  'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=800',
+                  'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=800',
+                  'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=800',
+                  'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800',
+                  'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=800',
+                  'https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?w=800'
+                ]
+                
+                return (
+                  <div key={category.id} className="group flex-shrink-0" style={{ width: 'calc(100vw / 5.5)' }}>
+                    <div className="relative overflow-hidden">
+                      <div className="aspect-[3/4] bg-gray-200">
+                        <img 
+                          src={modelImages[index % modelImages.length]} 
+                          alt={`Model with ${category.name}`} 
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                      </div>
+                      <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </div>
+                    <div className="bg-white text-black pl-0.5 pr-4 py-4">
+                      <h3 className="text-sm font-light mb-4 tracking-wide text-left">{category.name.toUpperCase()}</h3>
+                      <div className="flex items-center">
+                        <img 
+                          src={category.image || `https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=100`} 
+                          alt={category.name} 
+                          className="w-16 max-h-12 object-cover"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Collection */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-full mx-auto px-2 sm:px-4 lg:px-6">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-light mb-6 tracking-wide">
               NEW COLLECTION
@@ -153,7 +201,7 @@ export default function Home() {
 
       {/* Brand Story Section */}
       <section className="bg-gray-50 py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-full mx-auto px-2 sm:px-4 lg:px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div>
               <h2 className="text-4xl md:text-5xl font-light mb-8 tracking-wide">
