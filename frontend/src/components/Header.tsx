@@ -23,9 +23,14 @@ const Header = () => {
           </button>
 
           {/* Center - Logo */}
-          <Link to="/" className="text-xl font-light tracking-widest text-black">
-            STRATHBERRY
-          </Link>
+          <div className="flex flex-col items-center">
+            <Link to="/" className="text-xl font-light tracking-widest text-black">
+              STRATHBERRY
+            </Link>
+            <span className="text-xs text-gray-400 mt-1">
+              v{new Date().toLocaleString()}
+            </span>
+          </div>
 
           {/* Right - Icons */}
           <div className="flex items-center space-x-5">
