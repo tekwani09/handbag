@@ -119,6 +119,7 @@ cd backend
 npm install
 npm run db:push
 node scripts/createAdmin.js
+node populate-ec2-db.js
 
 # Install and build frontend
 cd ../frontend
