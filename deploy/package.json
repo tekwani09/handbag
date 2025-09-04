@@ -1,0 +1,13 @@
+{
+  "name": "handbag-store-deploy",
+  "version": "1.0.0",
+  "description": "Deployment scripts for Handbag Store",
+  "main": "launch-ec2.js",
+  "scripts": {
+    "launch": "node launch-ec2.js",
+    "deploy": "node deploy-to-ec2.js"
+  },
+  "dependencies": {
+    "@aws-sdk/client-ec2": "^3.0.0"
+  }
+}
