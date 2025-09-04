@@ -1,0 +1,58 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches: [ clean-main ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: |
+          frontend/package-lock.json
+          backend/package-lock.json
+    
+    - name: Build Frontend
+      run: |
+        cd frontend
+        npm ci
+        npm run build
+    
+    - name: Build Backend
+      run: |
+        cd backend
+        npm ci
+        npm run build
+    
+    - name: Deploy to EC2
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ec2-user
+        key: ${{ secrets.EC2_SSH_KEY }}
+        script: |
+          cd /home/ec2-user/handbag-store
+          git pull origin clean-main
+          
+          # Build and restart backend
+          cd backend
+          npm ci
+          npm run build
+          pm2 restart handbag-backend
+          
+          # Build and restart frontend
+          cd ../frontend
+          npm ci
+          npm run build
+          pm2 restart handbag-frontend
+          
+          echo "✅ Deployment completed!"
