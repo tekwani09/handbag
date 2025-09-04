@@ -90,7 +90,7 @@ systemctl restart postgresql
 
 # Clone repository and setup app
 cd /home/ubuntu
-git clone https://github.com/deekshanttekwani/handbag-store.git || echo "Using existing repo"
+git clone -b clean-main https://github.com/tekwani09/handbag.git handbag-store || echo "Using existing repo"
 cd handbag-store
 
 # Get EC2 public IP

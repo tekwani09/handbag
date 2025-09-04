@@ -36,7 +36,7 @@ export default function Home() {
           <div className="h-full flex items-center justify-center">
             <div className="text-center text-white px-4">
               <h1 className="text-6xl md:text-8xl font-light mb-8 tracking-wide">
-                STRATHBERRY
+                LUXURY HANDBAGS
               </h1>
               <p className="text-xl md:text-2xl font-light mb-12 max-w-2xl mx-auto">
                 British luxury leather goods since 2013

@@ -7,9 +7,9 @@ echo "🚀 Deploying Handbag Store..."
 EC2_IP=$(curl -s http://169.254.169.254/latest/meta-data/public-ipv4)
 echo "EC2 Public IP: $EC2_IP"
 
-# Clone repository (replace with your GitHub repo)
+# Clone repository
 cd /home/ubuntu
-git clone https://github.com/yourusername/handbag-store.git || echo "Repo already exists"
+git clone -b clean-main https://github.com/tekwani09/handbag.git handbag-store || echo "Repo already exists"
 cd handbag-store
 
 # Update environment variables for production
