@@ -25,7 +25,7 @@ jobs:
       run: |
         cd frontend
         npm ci
-        npm run build
+        npx vite build
     
     - name: Build Backend
       run: |
@@ -52,7 +52,7 @@ jobs:
           # Build and restart frontend
           cd ../frontend
           npm ci
-          npm run build
+          npx vite build
           pm2 restart handbag-frontend
           
           echo "✅ Deployment completed!"
