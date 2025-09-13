@@ -43,6 +43,15 @@ jobs:
         command_timeout: 60s
         script: |
           set -e
+          # Install dependencies if not present
+          sudo yum update -y
+          sudo yum install -y git
+          curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+          source ~/.bashrc
+          nvm install 18
+          nvm use 18
+          npm install -g pm2
+          
           if [ ! -d "/home/ec2-user/handbag-store" ]; then
             cd /home/ec2-user
             git clone https://github.com/tekwani09/handbag.git handbag-store
