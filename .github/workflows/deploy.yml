@@ -39,21 +39,24 @@ jobs:
         host: 3.85.240.180
         username: ec2-user
         key: ${{ secrets.EC2_SSH_KEY }}
+        timeout: 300s
+        command_timeout: 60s
         script: |
-          cd /home/ec2-user/handbag-store
+          set -e
+          cd /home/ec2-user/handbag-store || exit 1
           git fetch origin clean-main
           git reset --hard origin/clean-main
           
-          # Build and restart backend
+          # Quick backend restart
           cd backend
-          npm ci
+          npm ci --production
           npm run build
-          pm2 restart handbag-backend
+          pm2 restart handbag-backend || pm2 start dist/index.js --name handbag-backend
           
-          # Build and restart frontend
+          # Quick frontend restart  
           cd ../frontend
-          npm ci
-          npx vite build
-          pm2 restart handbag-frontend
+          npm ci --production
+          npm run build
+          pm2 restart handbag-frontend || pm2 serve dist 3000 --name handbag-frontend
           
           echo "✅ Deployment completed!"
