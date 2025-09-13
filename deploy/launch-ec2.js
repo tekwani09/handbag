@@ -22,7 +22,7 @@ async function launchEC2Instance() {
       { IpProtocol: 'tcp', FromPort: 80, ToPort: 80, CidrIp: '0.0.0.0/0' }, // HTTP
       { IpProtocol: 'tcp', FromPort: 443, ToPort: 443, CidrIp: '0.0.0.0/0' }, // HTTPS
       { IpProtocol: 'tcp', FromPort: 3000, ToPort: 3000, CidrIp: '0.0.0.0/0' }, // Frontend
-      { IpProtocol: 'tcp', FromPort: 5000, ToPort: 5000, CidrIp: '0.0.0.0/0' } // Backend
+      { IpProtocol: 'tcp', FromPort: 5005, ToPort: 5005, CidrIp: '0.0.0.0/0' } // Backend
     ];
 
     for (const rule of rules) {

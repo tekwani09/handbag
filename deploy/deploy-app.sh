@@ -23,7 +23,7 @@ JWT_SECRET="handbag-store-jwt-secret-key-2024-production"
 JWT_EXPIRES_IN="7d"
 
 # Server
-PORT=5000
+PORT=5005
 NODE_ENV="production"
 FRONTEND_URL="http://$EC2_IP"
 

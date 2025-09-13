@@ -11,7 +11,7 @@
    - HTTP (80) - Anywhere (0.0.0.0/0)
    - HTTPS (443) - Anywhere (0.0.0.0/0)
    - Custom TCP (3000) - Anywhere (0.0.0.0/0)
-   - Custom TCP (5000) - Anywhere (0.0.0.0/0)
+   - Custom TCP (5005) - Anywhere (0.0.0.0/0)
 6. **Storage**: 8GB (Free tier limit)
 7. **Launch Instance**
 

@@ -17,7 +17,7 @@ import storyRoutes from './routes/stories'
 dotenv.config()
 
 const app = express()
-const PORT = process.env.PORT || 5000
+const PORT = process.env.PORT || 5005
 
 // Rate limiting
 const limiter = rateLimit({

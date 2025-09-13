@@ -44,7 +44,7 @@ async function fullAutoDeploy() {
       { IpProtocol: 'tcp', FromPort: 80, ToPort: 80, CidrIp: '0.0.0.0/0' },
       { IpProtocol: 'tcp', FromPort: 443, ToPort: 443, CidrIp: '0.0.0.0/0' },
       { IpProtocol: 'tcp', FromPort: 3000, ToPort: 3000, CidrIp: '0.0.0.0/0' },
-      { IpProtocol: 'tcp', FromPort: 5000, ToPort: 5000, CidrIp: '0.0.0.0/0' }
+      { IpProtocol: 'tcp', FromPort: 5005, ToPort: 5005, CidrIp: '0.0.0.0/0' }
     ];
 
     for (const rule of rules) {
@@ -101,7 +101,7 @@ cat > backend/.env << EOF
 DATABASE_URL="postgresql://handbag_user:handbag_password@localhost:5432/handbag_store"
 JWT_SECRET="handbag-store-jwt-secret-key-2024-production"
 JWT_EXPIRES_IN="7d"
-PORT=5000
+PORT=5005
 NODE_ENV="production"
 FRONTEND_URL="http://\$EC2_IP"
 STRIPE_SECRET_KEY="sk_test_your_stripe_secret_key"
@@ -145,7 +145,7 @@ server {
     }
 
     location /api {
-        proxy_pass http://localhost:5000;
+        proxy_pass http://localhost:5005;
         proxy_http_version 1.1;
         proxy_set_header Upgrade \$http_upgrade;
         proxy_set_header Connection 'upgrade';
