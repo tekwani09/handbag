@@ -70,7 +70,7 @@ export default function Home() {
     try {
       const response = await fetch('/api/products')
       const data = await response.json()
-      setFeaturedProducts(data.products?.slice(0, 4) || [])
+      setFeaturedProducts(data.products?.slice(0, 8) || [])
     } catch (error) {
       console.error('Failed to fetch products')
     }
@@ -110,7 +110,7 @@ export default function Home() {
         <div className="absolute inset-0 bg-black/30">
           <div className="h-full flex items-center justify-center pt-32">
             <div className="text-center text-white px-4">
-              <p className="text-xl md:text-2xl font-light mb-8 max-w-2xl mx-auto">
+              <p className="text-sm font-medium uppercase tracking-widest mb-4 max-w-2xl mx-auto">
                 British luxury leather goods since 2013
               </p>
               <h1 className="text-3xl md:text-5xl font-bold mb-12 tracking-wide">
