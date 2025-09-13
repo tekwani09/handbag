@@ -62,13 +62,13 @@ jobs:
           
           # Quick backend restart
           cd backend
-          npm ci --production
+          npm ci
           npm run build
           pm2 restart handbag-backend || pm2 start dist/index.js --name handbag-backend
           
           # Quick frontend restart  
           cd ../frontend
-          npm ci --production
+          npm ci
           npm run build
           pm2 restart handbag-frontend || pm2 serve dist 3000 --name handbag-frontend
           
