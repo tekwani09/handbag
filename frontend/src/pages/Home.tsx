@@ -7,11 +7,47 @@ export default function Home() {
   const { selectedCountry } = useCurrency()
   const [featuredProducts, setFeaturedProducts] = useState([])
   const [categories, setCategories] = useState([])
+  const [stories, setStories] = useState([])
 
   useEffect(() => {
     fetchFeaturedProducts()
     fetchCategories()
+    fetchStories()
   }, [])
+
+  useEffect(() => {
+    const scrollContainer = document.getElementById('families-scroll')
+    const scrollDot = document.getElementById('scroll-dot')
+    
+    if (scrollContainer && scrollDot) {
+      const handleScroll = () => {
+        const scrollLeft = scrollContainer.scrollLeft
+        const maxScroll = scrollContainer.scrollWidth - scrollContainer.clientWidth
+        const scrollPercentage = maxScroll > 0 ? (scrollLeft / maxScroll) * 100 : 0
+        scrollDot.style.left = `${Math.min(scrollPercentage, 100)}%`
+      }
+      
+      scrollContainer.addEventListener('scroll', handleScroll)
+      return () => scrollContainer.removeEventListener('scroll', handleScroll)
+    }
+  }, [categories])
+
+  useEffect(() => {
+    const scrollContainer = document.getElementById('stories-scroll')
+    const scrollDot = document.getElementById('stories-scroll-dot')
+    
+    if (scrollContainer && scrollDot) {
+      const handleScroll = () => {
+        const scrollLeft = scrollContainer.scrollLeft
+        const maxScroll = scrollContainer.scrollWidth - scrollContainer.clientWidth
+        const scrollPercentage = maxScroll > 0 ? (scrollLeft / maxScroll) * 100 : 0
+        scrollDot.style.left = `${Math.min(scrollPercentage, 100)}%`
+      }
+      
+      scrollContainer.addEventListener('scroll', handleScroll)
+      return () => scrollContainer.removeEventListener('scroll', handleScroll)
+    }
+  }, [stories])
 
   const fetchFeaturedProducts = async () => {
     try {
@@ -30,6 +66,16 @@ export default function Home() {
       setCategories(data.categories || [])
     } catch (error) {
       console.error('Failed to fetch categories')
+    }
+  }
+
+  const fetchStories = async () => {
+    try {
+      const response = await fetch('/api/stories/featured')
+      const data = await response.json()
+      setStories(data.stories || [])
+    } catch (error) {
+      console.error('Failed to fetch stories')
     }
   }
 
@@ -117,7 +163,7 @@ export default function Home() {
             </button>
           </div>
           
-          <div className="overflow-x-auto scrollbar-hide">
+          <div className="overflow-x-auto scrollbar-hide" id="families-scroll">
             <div className="flex gap-1 group/container">
               {categories.map((category: any, index: number) => {
                 const modelImages = [
@@ -156,6 +202,13 @@ export default function Home() {
                   </div>
                 )
               })}
+            </div>
+          </div>
+          
+          {/* Scroll Indicator */}
+          <div className="mt-6 flex justify-center">
+            <div className="relative w-[500px] h-px bg-black">
+              <div className="absolute top-1/2 transform -translate-y-1/2 w-4 h-4 bg-black rounded-full transition-all duration-300" id="scroll-dot" style={{left: '0%'}}></div>
             </div>
           </div>
         </div>
@@ -202,32 +255,53 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Brand Story Section */}
+      {/* Latest Stories Section */}
       <section className="bg-gray-50 py-20">
         <div className="max-w-full mx-auto px-2 sm:px-4 lg:px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div>
-              <h2 className="text-4xl md:text-5xl font-light mb-8 tracking-wide">
-                BRITISH<br />CRAFTSMANSHIP
-              </h2>
-              <p className="text-xl text-gray-700 font-light mb-8 leading-relaxed">
-                Since 2013, Strathberry has embodied the excellence of British leather craftsmanship. 
-                Each piece is designed with passion and manufactured to the highest 
-                standards of quality.
-              </p>
-              <Link 
-                to="/about" 
-                className="inline-block bg-black text-white px-8 py-4 text-sm font-medium uppercase tracking-widest hover:bg-gray-800 transition-colors"
-              >
-                Our Story
-              </Link>
+          <div className="text-left mb-8">
+            <h2 className="text-4xl md:text-5xl font-light mb-6 tracking-wide">
+              LATEST STORIES
+            </h2>
+            <button className="text-black font-light underline hover:text-gray-600 transition-colors">
+              View All
+            </button>
+          </div>
+          
+          <div className="overflow-x-auto scrollbar-hide" id="stories-scroll">
+            <div className="flex gap-6 group/container">
+              {stories.map((story: any) => (
+                <a 
+                  key={story.id} 
+                  href={story.link} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="group flex-shrink-0 transition-all duration-300 group-hover/container:opacity-70 hover:!opacity-100" 
+                  style={{ width: 'calc(100vw / 4.5)' }}
+                >
+                  <div className="relative overflow-hidden">
+                    <div className="aspect-[4/5] bg-gray-200">
+                      <img 
+                        src={story.image} 
+                        alt={story.title} 
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                    </div>
+                    <div className="absolute inset-0 bg-white/50 opacity-0 group-hover/container:opacity-100 group-hover:!opacity-0 transition-opacity duration-300"></div>
+                    <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  </div>
+                  <div className="bg-gray-50 text-black p-4">
+                    <p className="text-xs text-gray-600 mb-2 font-light">{new Date(story.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                    <h3 className="text-sm font-light tracking-wide text-left leading-relaxed">{story.title}</h3>
+                  </div>
+                </a>
+              ))}
             </div>
-            <div className="aspect-video bg-gray-200 overflow-hidden rounded-lg">
-              <img 
-                src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" 
-                alt="Leather craftsmanship" 
-                className="w-full h-full object-cover"
-              />
+          </div>
+          
+          {/* Scroll Indicator */}
+          <div className="mt-6 flex justify-center">
+            <div className="relative w-[500px] h-px bg-black">
+              <div className="absolute top-1/2 transform -translate-y-1/2 w-4 h-4 bg-black rounded-full transition-all duration-300" id="stories-scroll-dot" style={{left: '0%'}}></div>
             </div>
           </div>
         </div>

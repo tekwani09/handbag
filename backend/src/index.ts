@@ -12,6 +12,7 @@ import userRoutes from './routes/users'
 import cartRoutes from './routes/cart'
 import adminRoutes from './routes/admin'
 import categoryRoutes from './routes/categories'
+import storyRoutes from './routes/stories'
 
 dotenv.config()
 
@@ -42,6 +43,7 @@ app.use('/api/users', userRoutes)
 app.use('/api/cart', cartRoutes)
 app.use('/api/admin', adminRoutes)
 app.use('/api/categories', categoryRoutes)
+app.use('/api/stories', storyRoutes)
 
 // Health check
 app.get('/api/health', (req, res) => {

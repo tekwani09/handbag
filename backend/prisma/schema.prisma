@@ -158,6 +158,20 @@ model CartItem {
   @@map("cart_items")
 }
 
+model Story {
+  id        String   @id @default(cuid())
+  title     String
+  image     String
+  link      String
+  platform  String   // instagram, facebook, twitter
+  featured  Boolean  @default(false)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("stories")
+}
+
 enum OrderStatus {
   PENDING
   CONFIRMED
