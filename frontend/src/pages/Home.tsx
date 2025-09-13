@@ -108,17 +108,17 @@ export default function Home() {
       {/* Our Families Section */}
       <section className="py-20 bg-white">
         <div className="max-w-full mx-auto px-2 sm:px-4 lg:px-6">
-          <div className="text-center mb-16">
+          <div className="text-left mb-8">
             <h2 className="text-4xl md:text-5xl font-light mb-6 tracking-wide">
               OUR FAMILIES
             </h2>
-            <p className="text-xl text-gray-600 font-light max-w-2xl mx-auto">
-              Discover our signature collections, each crafted with meticulous attention to detail
-            </p>
+            <button className="text-black font-light underline hover:text-gray-600 transition-colors">
+              Discover More
+            </button>
           </div>
           
           <div className="overflow-x-auto scrollbar-hide">
-            <div className="flex gap-1">
+            <div className="flex gap-1 group/container">
               {categories.map((category: any, index: number) => {
                 const modelImages = [
                   'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=800',
@@ -130,7 +130,7 @@ export default function Home() {
                 ]
                 
                 return (
-                  <div key={category.id} className="group flex-shrink-0" style={{ width: 'calc(100vw / 5.5)' }}>
+                  <div key={category.id} className="group flex-shrink-0 transition-all duration-300" style={{ width: 'calc(100vw / 5.5)' }}>
                     <div className="relative overflow-hidden">
                       <div className="aspect-[3/4] bg-gray-200">
                         <img 
@@ -139,16 +139,18 @@ export default function Home() {
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         />
                       </div>
+                      <div className="absolute inset-0 bg-white/50 opacity-0 group-hover/container:opacity-100 group-hover:!opacity-0 transition-opacity duration-300"></div>
                       <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     </div>
                     <div className="bg-white text-black pl-0.5 pr-4 py-4">
                       <h3 className="text-sm font-light mb-4 tracking-wide text-left">{category.name.toUpperCase()}</h3>
-                      <div className="flex items-center">
+                      <div className="flex items-center relative">
                         <img 
                           src={category.image || `https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=100`} 
                           alt={category.name} 
                           className="w-16 max-h-12 object-cover"
                         />
+                        <div className="absolute inset-0 bg-white/50 opacity-0 group-hover/container:opacity-100 group-hover:!opacity-0 transition-opacity duration-300"></div>
                       </div>
                     </div>
                   </div>
@@ -162,16 +164,16 @@ export default function Home() {
       {/* Featured Collection */}
       <section className="py-20 bg-gray-50">
         <div className="max-w-full mx-auto px-2 sm:px-4 lg:px-6">
-          <div className="text-center mb-16">
+          <div className="text-left mb-8">
             <h2 className="text-4xl md:text-5xl font-light mb-6 tracking-wide">
               NEW COLLECTION
             </h2>
-            <p className="text-xl text-gray-600 font-light max-w-2xl mx-auto">
-              Discover our latest creations combining traditional craftsmanship and contemporary design
-            </p>
+            <button className="text-black font-light underline hover:text-gray-600 transition-colors">
+              Discover More
+            </button>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 group/container">
             {featuredProducts.map((product: any) => (
               <Link key={product.id} to={`/products/${product.id}`} className="group">
                 <div className="relative overflow-hidden bg-gray-100 aspect-square mb-6">
@@ -186,6 +188,7 @@ export default function Home() {
                       <span className="text-gray-500 font-light">{product.name.toUpperCase()}</span>
                     </div>
                   )}
+                  <div className="absolute inset-0 bg-white/50 opacity-0 group-hover/container:opacity-100 group-hover:!opacity-0 transition-opacity duration-300"></div>
                   <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </div>
                 <div className="text-center">

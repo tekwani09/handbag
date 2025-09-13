@@ -47,12 +47,11 @@ export default function CountrySwitcher({ className = '' }: CountrySwitcherProps
       <div className={`relative ${className}`}>
         <button
           onClick={() => setIsOpen(true)}
-          className="flex items-center space-x-1 text-xs font-light text-black hover:text-gray-600 transition-colors uppercase tracking-wide"
+          className="flex items-center space-x-1 text-sm font-light text-black hover:text-gray-600 transition-colors tracking-wide"
         >
-          <span className="text-base">{selectedCountry.flag}</span>
-          <span>{selectedCountry.code}</span>
-          <span>|</span>
-          <span>{selectedCountry.currency}</span>
+          <span>Ship to:</span>
+          <span className="text-lg">{selectedCountry.flag}</span>
+          <span className="uppercase">{selectedCountry.code}</span>
         </button>
       </div>
 

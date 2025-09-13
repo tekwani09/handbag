@@ -9,6 +9,7 @@ import ScrollToTop from './components/ScrollToTop'
 import Home from './pages/Home'
 import Products from './pages/Products'
 import ProductDetail from './pages/ProductDetail'
+import Wishlist from './pages/Wishlist'
 import Cart from './pages/Cart'
 import Checkout from './pages/Checkout'
 import Login from './pages/Login'
@@ -23,7 +24,7 @@ import AccountAddresses from './pages/account/Addresses'
 function App() {
   return (
     <CurrencyProvider>
-      <div className="min-h-screen bg-white" style={{backgroundColor: '#f8f9fa', minHeight: '100vh'}}>
+      <div className="min-h-screen" style={{backgroundColor: '#fcfcfb', minHeight: '100vh'}}>
         <Helmet>
           <title>Luxury Handbags - Premium Collection</title>
           <meta name="description" content="Discover our premium collection of luxury handbags crafted with finest materials" />
@@ -37,6 +38,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/products" element={<Products />} />
           <Route path="/products/:id" element={<ProductDetail />} />
+          <Route path="/wishlist" element={<Wishlist />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/login" element={<Login />} />
