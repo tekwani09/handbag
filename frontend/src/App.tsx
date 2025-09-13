@@ -1,7 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
 import Header from './components/Header'
-import Footer from './components/Footer'
+
 import AdminLayout from './components/AdminLayout'
 import ProtectedRoute from './components/ProtectedRoute'
 import { CurrencyProvider } from './components/CountrySwitcher'
@@ -62,7 +62,7 @@ function App() {
         </Routes>
       </main>
         
-        <Footer />
+
       </div>
     </CurrencyProvider>
   )

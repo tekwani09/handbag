@@ -12,11 +12,9 @@ const Header = () => {
       <div style={{backgroundColor: '#fcfcfb'}}>
         <div className="max-w-full mx-auto px-2 sm:px-4 lg:px-6">
           <div className="flex items-center h-16 relative">
-            {/* Left - Search and Menu */}
+            {/* Left - Ship, Country and Menu */}
             <div className="flex items-center space-x-4">
-              <div className="hidden lg:block">
-                <SearchDropdown />
-              </div>
+              <CountrySwitcher className="hidden lg:block" />
               <button
                 className="lg:hidden text-black text-xs font-light uppercase tracking-wide"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -32,9 +30,27 @@ const Header = () => {
               </Link>
             </div>
 
-            {/* Right - Icons */}
+            {/* Right - Search and Icons */}
             <div className="flex items-center space-x-5 ml-auto">
-              <CountrySwitcher className="hidden lg:block" />
+              <div className="hidden lg:flex items-center">
+                <div className="relative group">
+                  <div className="flex items-center">
+                    <div className="flex items-center overflow-hidden">
+                      <button className="text-black hover:text-gray-600 transition-colors">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                      </button>
+                      <input 
+                        type="text" 
+                        placeholder="Search our collections" 
+                        className="w-0 group-hover:w-64 focus:w-64 transition-all duration-500 ease-out bg-transparent outline-none text-sm font-light pl-0 group-hover:pl-3 focus:pl-3 pr-2 py-2 text-black placeholder-gray-400 placeholder:opacity-0 group-hover:placeholder:opacity-100 focus:placeholder:opacity-60"
+                      />
+                    </div>
+                  </div>
+                  <div className="absolute bottom-0 left-6 h-px bg-black w-0 group-hover:w-5/6 focus-within:w-5/6 transition-all duration-500 ease-out"></div>
+                </div>
+              </div>
               <Link to="/wishlist" className="text-black transition-colors group">
                 <svg className="w-5 h-5 group-hover:fill-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
