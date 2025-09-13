@@ -76,24 +76,22 @@ jobs:
           pm2 restart handbag-frontend || pm2 serve dist 3000 --name handbag-frontend
           
           # Configure nginx
-          sudo tee /etc/nginx/conf.d/handbag.conf > /dev/null <<EOF
+          sudo bash -c 'cat > /etc/nginx/conf.d/handbag.conf << "EOF"
 server {
     listen 80;
     server_name _;
-    
     location / {
         proxy_pass http://localhost:3000;
-        proxy_set_header Host \$host;
-        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
     }
-    
     location /api {
         proxy_pass http://localhost:5005;
-        proxy_set_header Host \$host;
-        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
     }
 }
-EOF
+EOF'
           sudo systemctl reload nginx
           
           echo "✅ Deployment completed!"
