@@ -135,6 +135,65 @@ export default function Home() {
   }, [stories])
 
   useEffect(() => {
+    const scrollContainer = document.getElementById('stories-scroll')
+    const scrollDot = document.getElementById('stories-scroll-dot')
+    const scrollTrack = scrollDot?.parentElement
+    
+    if (scrollContainer && scrollDot && scrollTrack) {
+      const handleScroll = () => {
+        const scrollLeft = scrollContainer.scrollLeft
+        const maxScroll = scrollContainer.scrollWidth - scrollContainer.clientWidth
+        const scrollPercentage = maxScroll > 0 ? (scrollLeft / maxScroll) * 100 : 0
+        scrollDot.style.left = `${Math.min(scrollPercentage, 100)}%`
+      }
+      
+      let isDragging = false
+      
+      const handleMouseDown = (e: MouseEvent) => {
+        isDragging = true
+        e.preventDefault()
+        document.addEventListener('mousemove', handleMouseMove)
+        document.addEventListener('mouseup', handleMouseUp)
+      }
+      
+      const handleMouseMove = (e: MouseEvent) => {
+        if (!isDragging) return
+        const rect = scrollTrack.getBoundingClientRect()
+        const x = Math.max(0, Math.min(e.clientX - rect.left, rect.width))
+        const percentage = (x / rect.width) * 100
+        const maxScroll = scrollContainer.scrollWidth - scrollContainer.clientWidth
+        scrollContainer.scrollLeft = (percentage / 100) * maxScroll
+      }
+      
+      const handleMouseUp = () => {
+        isDragging = false
+        document.removeEventListener('mousemove', handleMouseMove)
+        document.removeEventListener('mouseup', handleMouseUp)
+      }
+      
+      const handleTrackClick = (e: MouseEvent) => {
+        if (e.target === scrollTrack) {
+          const rect = scrollTrack.getBoundingClientRect()
+          const x = e.clientX - rect.left
+          const percentage = (x / rect.width) * 100
+          const maxScroll = scrollContainer.scrollWidth - scrollContainer.clientWidth
+          scrollContainer.scrollLeft = (percentage / 100) * maxScroll
+        }
+      }
+      
+      scrollContainer.addEventListener('scroll', handleScroll)
+      scrollDot.addEventListener('mousedown', handleMouseDown)
+      scrollTrack.addEventListener('click', handleTrackClick)
+      
+      return () => {
+        scrollContainer.removeEventListener('scroll', handleScroll)
+        scrollDot.removeEventListener('mousedown', handleMouseDown)
+        scrollTrack.removeEventListener('click', handleTrackClick)
+      }
+    }
+  }, [])
+
+  useEffect(() => {
     const scrollContainer = document.getElementById('collection-scroll')
     const scrollDot = document.getElementById('collection-scroll-dot')
     const scrollTrack = scrollDot?.parentElement
@@ -257,38 +316,38 @@ export default function Home() {
       {/* Product Categories Grid */}
       <section className="py-0">
         <div className="grid grid-cols-1 md:grid-cols-2">
-          {/* Leather Goods */}
+          {/* Handbags */}
           <div className="relative group overflow-hidden">
-            <div className="aspect-square bg-gray-200">
+            <div className="h-[calc(100vh-7rem)] bg-gray-200">
               <img 
-                src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" 
-                alt="Leather Goods" 
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" 
+                alt="Handbags" 
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
             </div>
-            <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-center">
-              <h3 className="text-4xl font-light mb-4 tracking-wide">LEATHER GOODS</h3>
-              <Link to="/leather-goods" className="text-sm uppercase tracking-wide border-b border-white pb-1 hover:border-transparent transition-colors">
-                View All
+            <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div className="absolute bottom-8 left-8 text-white">
+              <h3 className="text-2xl font-light mb-2 tracking-wide">HANDBAGS</h3>
+              <Link to="/handbags" className="text-sm font-light underline hover:no-underline transition-all">
+                Shop now
               </Link>
             </div>
           </div>
 
           {/* Accessories */}
           <div className="relative group overflow-hidden">
-            <div className="aspect-square bg-gray-200">
+            <div className="h-[calc(100vh-7rem)] bg-gray-200">
               <img 
-                src="https://images.unsplash.com/photo-1611652022419-a9419f74343d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" 
+                src="https://images.unsplash.com/photo-1611652022419-a9419f74343d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
                 alt="Accessories" 
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
             </div>
-            <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-center">
-              <h3 className="text-4xl font-light mb-4 tracking-wide">ACCESSORIES</h3>
-              <Link to="/accessories" className="text-sm uppercase tracking-wide border-b border-white pb-1 hover:border-transparent transition-colors">
-                View All
+            <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div className="absolute bottom-8 left-8 text-white">
+              <h3 className="text-2xl font-light mb-2 tracking-wide">ACCESSORIES</h3>
+              <Link to="/accessories" className="text-sm font-light underline hover:no-underline transition-all">
+                Shop now
               </Link>
             </div>
           </div>
@@ -391,6 +450,11 @@ export default function Home() {
                     </div>
                     <div className="absolute inset-0 bg-white/50 opacity-0 group-hover/container:opacity-100 group-hover:!opacity-0 transition-opacity duration-300"></div>
                     <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <button className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <svg className="w-5 h-5 text-white hover:text-black transition-colors" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                      </svg>
+                    </button>
                   </div>
                   <div className="bg-gray-50 text-black pl-0.5 pr-4 py-4">
                     <h3 className="text-sm font-light mb-4 tracking-wide text-left">{product.name.toUpperCase()}</h3>
@@ -413,41 +477,36 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Product Categories Section */}
+      {/* Category Tiles */}
       <section className="py-0">
         <div className="grid grid-cols-1 md:grid-cols-2">
-          {/* Leather Goods */}
           <div className="relative group overflow-hidden">
-            <div className="aspect-square bg-gray-200">
+            <div className="h-[calc(100vh-7rem)] bg-gray-200">
               <img 
-                src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" 
+                src="https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=800&q=80" 
                 alt="Leather Goods" 
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
             </div>
-            <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-center">
-              <h3 className="text-4xl font-light mb-4 tracking-wide">LEATHER GOODS</h3>
-              <Link to="/leather-goods" className="text-sm uppercase tracking-wide border-b border-white pb-1 hover:border-transparent transition-colors">
-                View All
+            <div className="absolute bottom-8 left-8 text-white">
+              <h3 className="text-2xl font-light mb-2 tracking-wide">LEATHER GOODS</h3>
+              <Link to="/leather" className="text-sm font-light underline hover:no-underline transition-all">
+                Explore Collection
               </Link>
             </div>
           </div>
-
-          {/* Accessories */}
           <div className="relative group overflow-hidden">
-            <div className="aspect-square bg-gray-200">
+            <div className="h-[calc(100vh-7rem)] bg-gray-200">
               <img 
-                src="https://images.unsplash.com/photo-1611652022419-a9419f74343d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" 
-                alt="Accessories" 
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=800&q=80" 
+                alt="Gift Sets" 
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
             </div>
-            <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-center">
-              <h3 className="text-4xl font-light mb-4 tracking-wide">ACCESSORIES</h3>
-              <Link to="/accessories" className="text-sm uppercase tracking-wide border-b border-white pb-1 hover:border-transparent transition-colors">
-                View All
+            <div className="absolute bottom-8 left-8 text-white">
+              <h3 className="text-2xl font-light mb-2 tracking-wide">GIFT SETS</h3>
+              <Link to="/gifts" className="text-sm font-light underline hover:no-underline transition-all">
+                Find Perfect Gift
               </Link>
             </div>
           </div>
@@ -455,7 +514,7 @@ export default function Home() {
       </section>
 
       {/* @lancaster Section */}
-      <section className="bg-white py-20">
+      <section className="bg-white py-12">
         <div className="max-w-full mx-auto px-2 sm:px-4 lg:px-6">
           <div className="text-left mb-8">
             <h2 className="text-4xl md:text-5xl font-light mb-6 tracking-wide">
@@ -527,7 +586,7 @@ export default function Home() {
       </section>
 
       {/* Services Bar */}
-      <section className="bg-white py-12">
+      <section className="bg-white py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="flex flex-col items-center text-center space-y-4">
@@ -536,7 +595,8 @@ export default function Home() {
                   <path fill="#000" fillRule="evenodd" d="M4.795 5.333h12.936c.74 0 1.324 0 1.795.038.481.039.885.12 1.254.304.6.3 1.089.781 1.396 1.374l.069.128c.097.177.193.353.236.6.045.252.045.615.044 1.275v.67h4.93c.15 0 .294.07.385.19l4.06 5.326c.065.084.1.187.1.294v7.987a.485.485 0 0 1-.485.485h-2.26c-.236 1.513-1.564 2.663-3.154 2.663-1.59 0-2.917-1.15-3.154-2.663H9.053c-.237 1.513-1.565 2.663-3.154 2.663-1.6 0-2.936-1.165-3.16-2.694C1.198 23.757 0 22.45 0 20.857V9.1c0-.53 0-1.375.35-2.051a3.17 3.17 0 0 1 1.396-1.374c.368-.185.773-.265 1.253-.304.471-.038 1.056-.038 1.796-.038Zm.021.97c-.766 0-1.312 0-1.739.035-.422.034-.686.098-.897.204a2.2 2.2 0 0 0-.97.953C.98 7.94.97 8.559.97 9.141v11.716c0 1.049.76 1.934 1.782 2.135.254-1.492 1.572-2.62 3.147-2.62 1.59 0 2.917 1.15 3.154 2.662h12.503V9.141c0-.774-.002-1.04-.03-1.196-.014-.08-.024-.1-.093-.226-.028-.053-.066-.123-.118-.224a2.2 2.2 0 0 0-.97-.953c-.21-.106-.474-.17-.896-.204-.428-.035-.974-.035-1.74-.035H4.816Zm18.13 16.731c.238-1.513 1.566-2.662 3.155-2.662 1.59 0 2.918 1.15 3.154 2.662h1.775v-7.017h-8.505v7.017h.422Zm-.42-7.987h8.01l-3.321-4.356h-4.69v4.356ZM5.899 21.342c-1.235 0-2.222.982-2.222 2.177 0 1.196.987 2.178 2.222 2.178 1.235 0 2.222-.982 2.222-2.178 0-1.195-.987-2.177-2.222-2.177Zm20.202 0c-1.235 0-2.222.982-2.222 2.177 0 1.196.987 2.178 2.222 2.178 1.235 0 2.222-.982 2.222-2.178 0-1.195-.987-2.177-2.222-2.177ZM4.762 10.502c0-.268.217-.485.485-.485h11.43a.485.485 0 0 1 0 .97H5.247a.485.485 0 0 1-.485-.485Zm5.247 2.326a.485.485 0 0 0 0 .97h6.668a.485.485 0 1 0 0-.97h-6.668Z" clipRule="evenodd" />
                 </svg>
               </div>
-              <p className="text-sm font-light text-black">Delivery in 48h to 72h</p>
+              <p className="text-sm font-light text-black">Delivery in 72h</p>
+              <div className="w-8 h-px bg-gray-300 mx-auto mt-2"></div>
             </div>
             
             <div className="flex flex-col items-center text-center space-y-4">

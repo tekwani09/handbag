@@ -2,9 +2,13 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import CountrySwitcher from './CountrySwitcher'
 import SearchDropdown from './SearchDropdown'
+import LoginModal from './LoginModal'
+import NavigationModal from './NavigationModal'
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isLoginOpen, setIsLoginOpen] = useState(false)
+  const [activeNavModal, setActiveNavModal] = useState<string | null>(null)
 
   return (
     <header className="sticky top-0 z-50">
@@ -56,11 +60,11 @@ const Header = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                 </svg>
               </Link>
-              <Link to="/account" className="text-black transition-colors group">
+              <button onClick={() => setIsLoginOpen(true)} className="text-black transition-colors group">
                 <svg className="w-5 h-5 group-hover:fill-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
-              </Link>
+              </button>
               <Link to="/cart" className="text-black transition-colors relative group">
                 <svg className="w-5 h-5 group-hover:fill-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l-1 12H6L5 9z" />
@@ -79,15 +83,15 @@ const Header = () => {
         <div className="max-w-full mx-auto px-2 sm:px-4 lg:px-6">
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex justify-center space-x-12 py-4">
-            <Link to="/handbags" className="text-xs font-light text-black hover:text-gray-600 transition-colors uppercase tracking-wide">
+            <button onClick={() => setActiveNavModal('handbags')} className="text-xs font-light text-black hover:text-gray-600 transition-colors uppercase tracking-wide">
               Handbags
-            </Link>
-            <Link to="/accessories" className="text-xs font-light text-black hover:text-gray-600 transition-colors uppercase tracking-wide">
+            </button>
+            <button onClick={() => setActiveNavModal('accessories')} className="text-xs font-light text-black hover:text-gray-600 transition-colors uppercase tracking-wide">
               Accessories
-            </Link>
-            <Link to="/gifts" className="text-xs font-light text-black hover:text-gray-600 transition-colors uppercase tracking-wide">
+            </button>
+            <button onClick={() => setActiveNavModal('gifts')} className="text-xs font-light text-black hover:text-gray-600 transition-colors uppercase tracking-wide">
               Gifts
-            </Link>
+            </button>
             <Link to="/sale" className="text-xs font-light text-red-600 hover:text-red-700 transition-colors uppercase tracking-wide">
               Sale
             </Link>
@@ -119,6 +123,16 @@ const Header = () => {
           </div>
         </div>
       )}
+      
+      {/* Login Modal */}
+      <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
+      
+      {/* Navigation Modal */}
+      <NavigationModal 
+        isOpen={activeNavModal !== null} 
+        onClose={() => setActiveNavModal(null)} 
+        section={activeNavModal || ''} 
+      />
     </header>
   )
 }
