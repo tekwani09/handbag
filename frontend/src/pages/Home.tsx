@@ -224,8 +224,17 @@ export default function Home() {
           
           {/* Scroll Indicator */}
           <div className="mt-6 flex justify-center">
-            <div className="relative w-[500px] h-px bg-black">
-              <div className="absolute top-1/2 transform -translate-y-1/2 w-4 h-4 bg-black rounded-full transition-all duration-300" id="scroll-dot" style={{left: '0%'}}></div>
+            <div className="relative w-[500px] h-px bg-black cursor-pointer" onClick={(e) => {
+              const rect = e.currentTarget.getBoundingClientRect();
+              const x = e.clientX - rect.left;
+              const percentage = (x / rect.width) * 100;
+              const container = document.getElementById('families-scroll');
+              if (container) {
+                const maxScroll = container.scrollWidth - container.clientWidth;
+                container.scrollLeft = (percentage / 100) * maxScroll;
+              }
+            }}>
+              <div className="absolute top-1/2 transform -translate-y-1/2 w-4 h-4 bg-black rounded-full transition-all duration-300 cursor-grab active:cursor-grabbing" id="scroll-dot" style={{left: '0%'}}></div>
             </div>
           </div>
         </div>
@@ -277,8 +286,17 @@ export default function Home() {
           
           {/* Scroll Indicator */}
           <div className="mt-6 flex justify-center">
-            <div className="relative w-[500px] h-px bg-black">
-              <div className="absolute top-1/2 transform -translate-y-1/2 w-4 h-4 bg-black rounded-full transition-all duration-300" id="collection-scroll-dot" style={{left: '0%'}}></div>
+            <div className="relative w-[500px] h-px bg-black cursor-pointer" onClick={(e) => {
+              const rect = e.currentTarget.getBoundingClientRect();
+              const x = e.clientX - rect.left;
+              const percentage = (x / rect.width) * 100;
+              const container = document.getElementById('collection-scroll');
+              if (container) {
+                const maxScroll = container.scrollWidth - container.clientWidth;
+                container.scrollLeft = (percentage / 100) * maxScroll;
+              }
+            }}>
+              <div className="absolute top-1/2 transform -translate-y-1/2 w-4 h-4 bg-black rounded-full transition-all duration-300 cursor-grab active:cursor-grabbing" id="collection-scroll-dot" style={{left: '0%'}}></div>
             </div>
           </div>
         </div>
@@ -329,8 +347,17 @@ export default function Home() {
           
           {/* Scroll Indicator */}
           <div className="mt-6 flex justify-center">
-            <div className="relative w-[500px] h-px bg-black">
-              <div className="absolute top-1/2 transform -translate-y-1/2 w-4 h-4 bg-black rounded-full transition-all duration-300" id="stories-scroll-dot" style={{left: '0%'}}></div>
+            <div className="relative w-[500px] h-px bg-black cursor-pointer" onClick={(e) => {
+              const rect = e.currentTarget.getBoundingClientRect();
+              const x = e.clientX - rect.left;
+              const percentage = (x / rect.width) * 100;
+              const container = document.getElementById('stories-scroll');
+              if (container) {
+                const maxScroll = container.scrollWidth - container.clientWidth;
+                container.scrollLeft = (percentage / 100) * maxScroll;
+              }
+            }}>
+              <div className="absolute top-1/2 transform -translate-y-1/2 w-4 h-4 bg-black rounded-full transition-all duration-300 cursor-grab active:cursor-grabbing" id="stories-scroll-dot" style={{left: '0%'}}></div>
             </div>
           </div>
         </div>
