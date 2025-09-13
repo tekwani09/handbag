@@ -91,17 +91,17 @@ export default function Home() {
           />
         </div>
         <div className="absolute inset-0 bg-black/30">
-          <div className="h-full flex items-center justify-center pt-16">
+          <div className="h-full flex items-center justify-center pt-32">
             <div className="text-center text-white px-4">
-              <h1 className="text-3xl md:text-5xl font-bold mb-8 tracking-wide">
-                LUXURY HANDBAGS
-              </h1>
-              <p className="text-xl md:text-2xl font-light mb-12 max-w-2xl mx-auto">
+              <p className="text-xl md:text-2xl font-light mb-8 max-w-2xl mx-auto">
                 British luxury leather goods since 2013
               </p>
+              <h1 className="text-3xl md:text-5xl font-bold mb-12 tracking-wide">
+                LUXURY HANDBAGS
+              </h1>
               <Link 
                 to="/products" 
-                className="inline-block bg-transparent border-2 border-white text-white px-12 py-4 text-sm font-medium uppercase tracking-widest hover:bg-white hover:text-black transition-all duration-300"
+                className="text-white text-sm font-medium uppercase tracking-widest underline hover:no-underline transition-all duration-300"
               >
                 Discover
               </Link>
