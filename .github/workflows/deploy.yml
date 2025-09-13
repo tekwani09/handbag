@@ -43,7 +43,11 @@ jobs:
         command_timeout: 60s
         script: |
           set -e
-          cd /home/ec2-user/handbag-store || exit 1
+          if [ ! -d "/home/ec2-user/handbag-store" ]; then
+            cd /home/ec2-user
+            git clone https://github.com/tekwani09/handbag.git handbag-store
+          fi
+          cd /home/ec2-user/handbag-store
           git fetch origin clean-main
           git reset --hard origin/clean-main
           
