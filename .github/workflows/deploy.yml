@@ -41,7 +41,8 @@ jobs:
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
           cd /home/ec2-user/handbag-store
-          git pull origin clean-main
+          git fetch origin clean-main
+          git reset --hard origin/clean-main
           
           # Build and restart backend
           cd backend
