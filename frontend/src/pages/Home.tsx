@@ -49,6 +49,23 @@ export default function Home() {
     }
   }, [stories])
 
+  useEffect(() => {
+    const scrollContainer = document.getElementById('collection-scroll')
+    const scrollDot = document.getElementById('collection-scroll-dot')
+    
+    if (scrollContainer && scrollDot) {
+      const handleScroll = () => {
+        const scrollLeft = scrollContainer.scrollLeft
+        const maxScroll = scrollContainer.scrollWidth - scrollContainer.clientWidth
+        const scrollPercentage = maxScroll > 0 ? (scrollLeft / maxScroll) * 100 : 0
+        scrollDot.style.left = `${Math.min(scrollPercentage, 100)}%`
+      }
+      
+      scrollContainer.addEventListener('scroll', handleScroll)
+      return () => scrollContainer.removeEventListener('scroll', handleScroll)
+    }
+  }, [featuredProducts])
+
   const fetchFeaturedProducts = async () => {
     try {
       const response = await fetch('/api/products')
@@ -226,31 +243,43 @@ export default function Home() {
             </button>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 group/container">
-            {featuredProducts.map((product: any) => (
-              <Link key={product.id} to={`/products/${product.id}`} className="group">
-                <div className="relative overflow-hidden bg-gray-100 aspect-square mb-6">
-                  {product.images?.[0] ? (
-                    <img 
-                      src={product.images[0]} 
-                      alt={product.name} 
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center">
-                      <span className="text-gray-500 font-light">{product.name.toUpperCase()}</span>
+          <div className="overflow-x-auto scrollbar-hide" id="collection-scroll">
+            <div className="flex gap-1 group/container">
+              {featuredProducts.map((product: any) => (
+                <Link key={product.id} to={`/products/${product.id}`} className="group flex-shrink-0 transition-all duration-300" style={{ width: 'calc(100vw / 5.5)' }}>
+                  <div className="relative overflow-hidden">
+                    <div className="aspect-[3/4] bg-gray-200">
+                      {product.images?.[0] ? (
+                        <img 
+                          src={product.images[0]} 
+                          alt={product.name} 
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <span className="text-gray-500 font-light">{product.name.toUpperCase()}</span>
+                        </div>
+                      )}
                     </div>
-                  )}
-                  <div className="absolute inset-0 bg-white/50 opacity-0 group-hover/container:opacity-100 group-hover:!opacity-0 transition-opacity duration-300"></div>
-                  <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                </div>
-                <div className="text-center">
-                  <h3 className="text-lg font-light text-black mb-2">{product.name}</h3>
-                  <p className="text-sm text-gray-600 mb-2">{product.category?.name}</p>
-                  <p className="text-lg font-light text-black">{formatPrice(getProductPrice(product, selectedCountry.currency), selectedCountry.currency)}</p>
-                </div>
-              </Link>
-            ))}
+                    <div className="absolute inset-0 bg-white/50 opacity-0 group-hover/container:opacity-100 group-hover:!opacity-0 transition-opacity duration-300"></div>
+                    <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  </div>
+                  <div className="bg-gray-50 text-black pl-0.5 pr-4 py-4">
+                    <h3 className="text-sm font-light mb-4 tracking-wide text-left">{product.name.toUpperCase()}</h3>
+                    <div className="flex items-center relative">
+                      <p className="text-sm font-light text-black opacity-0 group-hover:opacity-100 transition-opacity duration-300">{formatPrice(getProductPrice(product, selectedCountry.currency), selectedCountry.currency)}</p>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+          
+          {/* Scroll Indicator */}
+          <div className="mt-6 flex justify-center">
+            <div className="relative w-[500px] h-px bg-black">
+              <div className="absolute top-1/2 transform -translate-y-1/2 w-4 h-4 bg-black rounded-full transition-all duration-300" id="collection-scroll-dot" style={{left: '0%'}}></div>
+            </div>
           </div>
         </div>
       </section>
