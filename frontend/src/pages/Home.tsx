@@ -572,7 +572,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="bg-white">
         {/* Top Section - Social & Newsletter */}
-        <div className="py-12 border-t border-gray-200">
+        <div className="py-12 border-t border-gray-200" style={{backgroundColor: '#fcfcfb'}}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
               {/* Social Media */}
@@ -640,7 +640,7 @@ export default function Home() {
         </div>
         
         {/* Middle Section */}
-        <div className="border-t border-gray-200 py-16">
+        <div className="border-t border-gray-200 py-16" style={{backgroundColor: '#f0eee9'}}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
               {/* Customer Care */}
@@ -691,7 +691,7 @@ export default function Home() {
         </div>
         
         {/* Bottom Section */}
-        <div className="border-t border-gray-200 py-8">
+        <div className="border-t border-gray-200 py-8" style={{backgroundColor: '#f0eee9'}}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
               {/* Country Selector */}
