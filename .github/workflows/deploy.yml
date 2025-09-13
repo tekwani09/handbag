@@ -69,7 +69,7 @@ jobs:
           # Quick frontend restart  
           cd ../frontend
           npm ci
-          npm run build
+          npx vite build
           pm2 restart handbag-frontend || pm2 serve dist 3000 --name handbag-frontend
           
           echo "✅ Deployment completed!"
