@@ -1,6 +1,8 @@
 import { Routes, Route } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
 import Header from './components/Header'
+import CartSidebar from './components/CartSidebar'
+import ErrorBoundary from './components/ErrorBoundary'
 
 import AdminLayout from './components/AdminLayout'
 import ProtectedRoute from './components/ProtectedRoute'
@@ -23,15 +25,16 @@ import AccountAddresses from './pages/account/Addresses'
 
 function App() {
   return (
-    <CurrencyProvider>
-      <div className="min-h-screen" style={{backgroundColor: '#fcfcfb', minHeight: '100vh'}}>
-        <Helmet>
-          <title>Luxury Handbags - Premium Collection</title>
-          <meta name="description" content="Discover our premium collection of luxury handbags crafted with finest materials" />
-        </Helmet>
-        
-        <Header />
-        <ScrollToTop />
+    <ErrorBoundary>
+      <CurrencyProvider>
+        <div className="min-h-screen" style={{backgroundColor: '#fcfcfb', minHeight: '100vh'}}>
+          <Helmet>
+            <title>Luxury Handbags - Premium Collection</title>
+            <meta name="description" content="Discover our premium collection of luxury handbags crafted with finest materials" />
+          </Helmet>
+          
+          <Header />
+          <ScrollToTop />
       
       <main>
         <Routes>
@@ -62,9 +65,10 @@ function App() {
         </Routes>
       </main>
         
-
-      </div>
-    </CurrencyProvider>
+          <CartSidebar />
+        </div>
+      </CurrencyProvider>
+    </ErrorBoundary>
   )
 }
 

@@ -4,18 +4,41 @@ import { useCurrency } from '../components/CountrySwitcher'
 import { getProductPrice, formatPrice } from '../utils/currency'
 import { API_BASE_URL } from '../config/api'
 import Footer from '../components/Footer'
+import { useCartStore } from '../store/cartStore'
+import { useWishlistStore } from '../store/wishlistStore'
 
 export default function ProductDetail() {
   const { id } = useParams()
   const { selectedCountry } = useCurrency()
   const [product, setProduct] = useState<any>(null)
   const [selectedImageIndex, setSelectedImageIndex] = useState(0)
-  const [isWishlisted, setIsWishlisted] = useState(false)
   const [quantity, setQuantity] = useState(1)
   const [relatedProducts, setRelatedProducts] = useState([])
   const [showSizeFitModal, setShowSizeFitModal] = useState(false)
   const [showFeaturesCareModal, setShowFeaturesCareModal] = useState(false)
   const [showDeliveryReturnsModal, setShowDeliveryReturnsModal] = useState(false)
+  
+  const { addItem, toggleCart } = useCartStore()
+  const { toggleItem, isWishlisted } = useWishlistStore()
+
+  const handleAddToCart = () => {
+    addItem({
+      id: product.id,
+      name: product.name,
+      image: productImages[0],
+      product: product
+    })
+    toggleCart()
+  }
+
+  const handleWishlist = () => {
+    toggleItem({
+      id: product.id,
+      name: product.name,
+      price: getProductPrice(product, selectedCountry.currency),
+      image: productImages[0]
+    })
+  }
 
   useEffect(() => {
     fetchProduct()
@@ -47,10 +70,6 @@ export default function ProductDetail() {
   }
 
   const productImages = product.images || ['https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800']
-  
-  // Debug: Log the images
-  console.log('Product images:', productImages)
-  console.log('Number of images:', productImages.length)
 
   return (
     <main className="min-h-screen">
@@ -76,14 +95,14 @@ export default function ProductDetail() {
               <div className="font-light text-3xl relative">
                 {product.name}
                 <button 
-                  onClick={() => setIsWishlisted(!isWishlisted)}
+                  onClick={handleWishlist}
                   className="absolute translate-x-1 -translate-y-1/4 p-2 -m-2 group"
                 >
                   <svg 
                     className={`w-4 h-4 transition-all group-hover:scale-110 ${
-                      isWishlisted ? 'fill-black text-black' : 'text-white hover:text-black'
+                      isWishlisted(product.id) ? 'fill-black text-black' : 'text-white hover:text-black'
                     }`} 
-                    fill={isWishlisted ? 'currentColor' : 'none'} 
+                    fill={isWishlisted(product.id) ? 'currentColor' : 'none'} 
                     viewBox="0 0 24 24"
                   >
                     <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
@@ -98,8 +117,6 @@ export default function ProductDetail() {
                 {formatPrice(getProductPrice(product, selectedCountry.currency), selectedCountry.currency)}
               </div>
             </div>
-
-
 
             {/* Description */}
             <div className="mb-8 hidden lg:block">
@@ -122,14 +139,17 @@ export default function ProductDetail() {
 
             {/* Add to Cart */}
             <div className="mb-8">
-              <button className="w-full bg-black text-white py-4 px-6 text-sm uppercase tracking-wide hover:bg-gray-800 transition-colors">
-                Pre-Order
+              <button 
+                onClick={handleAddToCart}
+                className="w-full bg-black text-white py-4 px-6 text-sm uppercase tracking-wide hover:bg-gray-800 transition-colors"
+              >
+                Add to Bag
               </button>
             </div>
 
             {/* Accordion */}
             <div className="space-y-0 border-t border-gray-200">
-              {['Size & Fit', 'Features & Care', 'Delivery & Returns', 'Reviews'].map((item, index) => (
+              {['Size & Fit', 'Features & Care', 'Delivery & Returns'].map((item, index) => (
                 <div key={index} className="border-b border-gray-200">
                   <button 
                     className="w-full py-4 flex items-center justify-between text-sm hover:opacity-70"
@@ -190,21 +210,36 @@ export default function ProductDetail() {
         </div>
         <div className="grid grid-cols-4 gap-2">
           {relatedProducts.slice(0, 4).map((relatedProduct: any) => (
-            <Link key={relatedProduct.id} to={`/products/${relatedProduct.id}`} className="group">
-              <div className="aspect-square bg-gray-200 mb-4 overflow-hidden">
-                <img 
-                  src={relatedProduct.images?.[0] || 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400'}
-                  alt={relatedProduct.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-              </div>
+            <div key={relatedProduct.id} className="group">
+              <Link to={`/products/${relatedProduct.id}`}>
+                <div className="aspect-square bg-gray-200 mb-4 overflow-hidden">
+                  <img 
+                    src={relatedProduct.images?.[0] || 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400'}
+                    alt={relatedProduct.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+              </Link>
               <div className="px-2">
-                <h3 className="text-sm font-light mb-4">{relatedProduct.name}</h3>
-                <button className="text-xs uppercase tracking-wide underline hover:no-underline">
+                <Link to={`/products/${relatedProduct.id}`}>
+                  <h3 className="text-sm font-light mb-4 hover:underline">{relatedProduct.name}</h3>
+                </Link>
+                <button 
+                  onClick={() => {
+                    addItem({
+                      id: relatedProduct.id,
+                      name: relatedProduct.name,
+                      image: relatedProduct.images?.[0] || 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400',
+                      product: relatedProduct
+                    })
+                    toggleCart()
+                  }}
+                  className="text-xs uppercase tracking-wide underline hover:no-underline"
+                >
                   add to bag
                 </button>
               </div>
-            </Link>
+            </div>
           ))}
         </div>
       </section>
@@ -301,26 +336,36 @@ export default function ProductDetail() {
         </div>
         <div className="grid grid-cols-4 gap-2">
           {relatedProducts.slice(0, 4).map((relatedProduct: any) => (
-            <Link key={`also-${relatedProduct.id}`} to={`/products/${relatedProduct.id}`} className="group">
-              <div className="aspect-square bg-gray-200 mb-4 overflow-hidden relative">
-                <img 
-                  src={relatedProduct.images?.[0] || 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400'}
-                  alt={relatedProduct.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                <button className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <svg className="w-4 h-4 text-white hover:text-black transition-colors" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                  </svg>
-                </button>
-              </div>
+            <div key={`also-${relatedProduct.id}`} className="group">
+              <Link to={`/products/${relatedProduct.id}`}>
+                <div className="aspect-square bg-gray-200 mb-4 overflow-hidden relative">
+                  <img 
+                    src={relatedProduct.images?.[0] || 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400'}
+                    alt={relatedProduct.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+              </Link>
               <div className="px-2">
-                <h3 className="text-sm font-light mb-4">{relatedProduct.name}</h3>
-                <button className="text-xs uppercase tracking-wide underline hover:no-underline">
+                <Link to={`/products/${relatedProduct.id}`}>
+                  <h3 className="text-sm font-light mb-4 hover:underline">{relatedProduct.name}</h3>
+                </Link>
+                <button 
+                  onClick={() => {
+                    addItem({
+                      id: relatedProduct.id,
+                      name: relatedProduct.name,
+                      image: relatedProduct.images?.[0] || 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400',
+                      product: relatedProduct
+                    })
+                    toggleCart()
+                  }}
+                  className="text-xs uppercase tracking-wide underline hover:no-underline"
+                >
                   add to bag
                 </button>
               </div>
-            </Link>
+            </div>
           ))}
         </div>
       </section>

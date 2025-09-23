@@ -4,11 +4,16 @@ import CountrySwitcher from './CountrySwitcher'
 import SearchDropdown from './SearchDropdown'
 import LoginModal from './LoginModal'
 import NavigationModal from './NavigationModal'
+import { useCartStore } from '../store/cartStore'
+import { useWishlistStore } from '../store/wishlistStore'
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isLoginOpen, setIsLoginOpen] = useState(false)
   const [activeNavModal, setActiveNavModal] = useState<string | null>(null)
+  
+  const { getTotalItems, toggleCart } = useCartStore()
+  const { items: wishlistItems } = useWishlistStore()
 
   return (
     <header className="sticky top-0 z-50">
@@ -55,24 +60,31 @@ const Header = () => {
                   <div className="absolute bottom-0 left-6 h-px bg-black w-0 group-hover:w-5/6 focus-within:w-5/6 transition-all duration-500 ease-out"></div>
                 </div>
               </div>
-              <Link to="/wishlist" className="text-black transition-colors group">
+              <Link to="/wishlist" className="text-black transition-colors relative group">
                 <svg className="w-5 h-5 group-hover:fill-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                 </svg>
+                {wishlistItems.length > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-black text-white text-xs rounded-full h-4 w-4 flex items-center justify-center font-light">
+                    {wishlistItems.length}
+                  </span>
+                )}
               </Link>
               <button onClick={() => setIsLoginOpen(true)} className="text-black transition-colors group">
                 <svg className="w-5 h-5 group-hover:fill-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
               </button>
-              <Link to="/cart" className="text-black transition-colors relative group">
+              <button onClick={toggleCart} className="text-black transition-colors relative group">
                 <svg className="w-5 h-5 group-hover:fill-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l-1 12H6L5 9z" />
                 </svg>
-                <span className="absolute -top-2 -right-2 bg-black text-white text-xs rounded-full h-4 w-4 flex items-center justify-center font-light">
-                  0
-                </span>
-              </Link>
+                {getTotalItems() > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-black text-white text-xs rounded-full h-4 w-4 flex items-center justify-center font-light">
+                    {getTotalItems()}
+                  </span>
+                )}
+              </button>
             </div>
           </div>
         </div>

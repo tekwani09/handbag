@@ -254,31 +254,41 @@ export default function Home() {
 
   const fetchFeaturedProducts = async () => {
     try {
-      const response = await fetch('/api/products')
-      const data = await response.json()
-      setFeaturedProducts(data.products?.slice(0, 8) || [])
+      // Mock data for now
+      setFeaturedProducts([
+        { id: '1', name: 'Classic Tote', images: ['https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400'], price: 299 },
+        { id: '2', name: 'Mini Crossbody', images: ['https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=400'], price: 199 },
+        { id: '3', name: 'Evening Clutch', images: ['https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=400'], price: 149 },
+        { id: '4', name: 'Shoulder Bag', images: ['https://images.unsplash.com/photo-1509631179647-0177331693ae?w=400'], price: 249 }
+      ])
     } catch (error) {
       console.error('Failed to fetch products')
+      setFeaturedProducts([])
     }
   }
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch('/api/categories')
-      const data = await response.json()
-      setCategories(data.categories || [])
+      // Mock data for now
+      setCategories([
+        { id: '1', name: 'Totes', image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=100' },
+        { id: '2', name: 'Crossbody', image: 'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=100' },
+        { id: '3', name: 'Clutches', image: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=100' },
+        { id: '4', name: 'Shoulder Bags', image: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=100' }
+      ])
     } catch (error) {
       console.error('Failed to fetch categories')
+      setCategories([])
     }
   }
 
   const fetchStories = async () => {
     try {
-      const response = await fetch('/api/stories/featured')
-      const data = await response.json()
-      setStories(data.stories || [])
+      // Mock data for now
+      setStories([])
     } catch (error) {
       console.error('Failed to fetch stories')
+      setStories([])
     }
   }
 
