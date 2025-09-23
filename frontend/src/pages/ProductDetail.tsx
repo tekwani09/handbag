@@ -228,9 +228,9 @@ export default function ProductDetail() {
                         image: relatedProduct.images?.[0] || 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400'
                       })
                     }}
-                    className="absolute top-2 right-2 p-2 bg-white/80 rounded-full hover:bg-white transition-colors"
+                    className="absolute top-2 right-2 p-2 transition-colors"
                   >
-                    <svg className={`w-4 h-4 ${isWishlisted(relatedProduct.id) ? 'fill-black' : 'fill-none stroke-black'}`} viewBox="0 0 24 24">
+                    <svg className={`w-6 h-6 ${isWishlisted(relatedProduct.id) ? 'fill-black' : 'fill-none stroke-black hover:fill-black'}`} viewBox="0 0 24 24">
                       <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                     </svg>
                   </button>
