@@ -256,10 +256,10 @@ export default function Home() {
     try {
       // Mock data for now
       setFeaturedProducts([
-        { id: '1', name: 'Classic Tote', images: ['https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400'], price: 299 },
-        { id: '2', name: 'Mini Crossbody', images: ['https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=400'], price: 199 },
-        { id: '3', name: 'Evening Clutch', images: ['https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=400'], price: 149 },
-        { id: '4', name: 'Shoulder Bag', images: ['https://images.unsplash.com/photo-1509631179647-0177331693ae?w=400'], price: 249 }
+        { id: '1', name: 'Classic Tote', images: ['https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400'], priceGBP: 299, priceUSD: 379, priceINR: 24999 },
+        { id: '2', name: 'Mini Crossbody', images: ['https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=400'], priceGBP: 199, priceUSD: 249, priceINR: 16499 },
+        { id: '3', name: 'Evening Clutch', images: ['https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=400'], priceGBP: 149, priceUSD: 189, priceINR: 12399 },
+        { id: '4', name: 'Shoulder Bag', images: ['https://images.unsplash.com/photo-1509631179647-0177331693ae?w=400'], priceGBP: 249, priceUSD: 319, priceINR: 20699 }
       ])
     } catch (error) {
       console.error('Failed to fetch products')
