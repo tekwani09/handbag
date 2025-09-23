@@ -32,4 +32,21 @@
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
+  
+  .fadeIn {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+  
+  .aspect-image {
+    aspect-ratio: 4 / 5;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }

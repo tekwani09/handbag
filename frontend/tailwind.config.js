@@ -14,9 +14,14 @@ export default {
           600: '#0d1117',
           900: '#000000',
         },
+        'surface-image': '#f5f5f5',
+        'surface-secondary': '#e5e5e5',
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
+      },
+      aspectRatio: {
+        'image': '4 / 5',
       },
     },
   },
