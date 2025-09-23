@@ -382,7 +382,7 @@ export default function Home() {
                 ]
                 
                 return (
-                  <div key={category.id} className="group flex-shrink-0 transition-all duration-300" style={{ width: 'calc(100vw / 5.5)' }}>
+                  <Link key={category.id} to={`/collections/${category.slug}`} className="group flex-shrink-0 transition-all duration-300" style={{ width: 'calc(100vw / 5.5)' }}>
                     <div className="relative overflow-hidden">
                       <div className="aspect-[3/4] bg-gray-200">
                         <img 
@@ -405,7 +405,7 @@ export default function Home() {
                         <div className="absolute inset-0 bg-white/50 opacity-0 group-hover/container:opacity-100 group-hover:!opacity-0 transition-opacity duration-300"></div>
                       </div>
                     </div>
-                  </div>
+                  </Link>
                 )
               })}
             </div>

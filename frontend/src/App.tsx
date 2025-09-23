@@ -11,6 +11,8 @@ import ScrollToTop from './components/ScrollToTop'
 import Home from './pages/Home'
 import Products from './pages/Products'
 import ProductDetail from './pages/ProductDetail'
+import Collection from './pages/Collection'
+import Search from './pages/Search'
 import Wishlist from './pages/Wishlist'
 import Cart from './pages/Cart'
 import Checkout from './pages/Checkout'
@@ -41,6 +43,8 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/products" element={<Products />} />
           <Route path="/products/:id" element={<ProductDetail />} />
+          <Route path="/collections/:slug" element={<Collection />} />
+          <Route path="/search" element={<Search />} />
           <Route path="/wishlist" element={<Wishlist />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />

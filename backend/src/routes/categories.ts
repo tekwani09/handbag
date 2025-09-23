@@ -24,4 +24,32 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Get category by slug
+router.get('/:slug', async (req, res) => {
+  try {
+    const { slug } = req.params;
+    const category = await prisma.category.findUnique({
+      where: { slug }
+    });
+
+    if (!category) {
+      return res.status(404).json({
+        success: false,
+        message: 'Category not found'
+      });
+    }
+
+    res.json({
+      success: true,
+      category
+    });
+  } catch (error) {
+    console.error('Error fetching category:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch category'
+    });
+  }
+});
+
 export default router;

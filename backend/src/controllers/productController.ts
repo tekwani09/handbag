@@ -5,8 +5,24 @@ const prisma = new PrismaClient()
 
 export const getProducts = async (req: Request, res: Response) => {
   try {
+    const { search, category } = req.query
+    
+    const whereClause: any = { active: true }
+    
+    if (search) {
+      whereClause.OR = [
+        { name: { contains: search as string, mode: 'insensitive' } },
+        { description: { contains: search as string, mode: 'insensitive' } },
+        { category: { name: { contains: search as string, mode: 'insensitive' } } }
+      ]
+    }
+    
+    if (category) {
+      whereClause.category = { slug: category as string }
+    }
+    
     const products = await prisma.product.findMany({
-      where: { active: true },
+      where: whereClause,
       include: { category: true },
       orderBy: { createdAt: 'desc' }
     })

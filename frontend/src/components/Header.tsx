@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import CountrySwitcher from './CountrySwitcher'
 import SearchDropdown from './SearchDropdown'
 import LoginModal from './LoginModal'
@@ -11,6 +11,8 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isLoginOpen, setIsLoginOpen] = useState(false)
   const [activeNavModal, setActiveNavModal] = useState<string | null>(null)
+  const [searchQuery, setSearchQuery] = useState('')
+  const navigate = useNavigate()
   
   const { getTotalItems, toggleCart } = useCartStore()
   const { items: wishlistItems } = useWishlistStore()
@@ -45,7 +47,10 @@ const Header = () => {
                 <div className="relative group">
                   <div className="flex items-center">
                     <div className="flex items-center overflow-hidden">
-                      <button className="text-black hover:text-gray-600 transition-colors">
+                      <button 
+                        onClick={() => searchQuery && navigate(`/search?q=${encodeURIComponent(searchQuery)}`)}
+                        className="text-black hover:text-gray-600 transition-colors"
+                      >
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
@@ -53,6 +58,9 @@ const Header = () => {
                       <input 
                         type="text" 
                         placeholder="Search our collections" 
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onKeyPress={(e) => e.key === 'Enter' && searchQuery && navigate(`/search?q=${encodeURIComponent(searchQuery)}`)}
                         className="w-0 group-hover:w-64 focus:w-64 transition-all duration-500 ease-out bg-transparent outline-none text-sm font-light pl-0 group-hover:pl-3 focus:pl-3 pr-2 py-2 text-black placeholder-gray-400 placeholder:opacity-0 group-hover:placeholder:opacity-100 focus:placeholder:opacity-60"
                       />
                     </div>
