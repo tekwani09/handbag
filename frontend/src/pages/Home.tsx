@@ -4,12 +4,16 @@ import { useCurrency } from '../components/CountrySwitcher'
 import CountrySwitcher from '../components/CountrySwitcher'
 import { getProductPrice, formatPrice } from '../utils/currency'
 import { API_BASE_URL } from '../config/api'
+import { useCartStore } from '../store/cartStore'
+import { useWishlistStore } from '../store/wishlistStore'
 
 export default function Home() {
   const { selectedCountry } = useCurrency()
   const [featuredProducts, setFeaturedProducts] = useState([])
   const [categories, setCategories] = useState([])
   const [stories, setStories] = useState([])
+  const { addItem, toggleCart } = useCartStore()
+  const { toggleItem, isWishlisted } = useWishlistStore()
 
   useEffect(() => {
     fetchFeaturedProducts()
@@ -453,8 +457,19 @@ export default function Home() {
                     </div>
                     <div className="absolute inset-0 bg-white/50 opacity-0 group-hover/container:opacity-100 group-hover:!opacity-0 transition-opacity duration-300"></div>
                     <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    <button className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <svg className="w-5 h-5 text-white hover:text-black transition-colors" fill="currentColor" viewBox="0 0 24 24">
+                    <button 
+                      onClick={(e) => {
+                        e.preventDefault()
+                        toggleItem({
+                          id: product.id,
+                          name: product.name,
+                          price: getProductPrice(product, selectedCountry.currency),
+                          image: product.images?.[0] || 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400'
+                        })
+                      }}
+                      className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-2 bg-white/80 rounded-full hover:bg-white"
+                    >
+                      <svg className={`w-4 h-4 ${isWishlisted(product.id) ? 'fill-black' : 'fill-none stroke-black'}`} viewBox="0 0 24 24">
                         <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                       </svg>
                     </button>

@@ -212,12 +212,28 @@ export default function ProductDetail() {
           {relatedProducts.slice(0, 4).map((relatedProduct: any) => (
             <div key={relatedProduct.id} className="group">
               <Link to={`/products/${relatedProduct.id}`}>
-                <div className="aspect-square bg-gray-200 mb-4 overflow-hidden">
+                <div className="aspect-square bg-gray-200 mb-4 overflow-hidden relative">
                   <img 
                     src={relatedProduct.images?.[0] || 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400'}
                     alt={relatedProduct.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
+                  <button 
+                    onClick={(e) => {
+                      e.preventDefault()
+                      toggleItem({
+                        id: relatedProduct.id,
+                        name: relatedProduct.name,
+                        price: getProductPrice(relatedProduct, selectedCountry.currency),
+                        image: relatedProduct.images?.[0] || 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400'
+                      })
+                    }}
+                    className="absolute top-2 right-2 p-2 bg-white/80 rounded-full hover:bg-white transition-colors"
+                  >
+                    <svg className={`w-4 h-4 ${isWishlisted(relatedProduct.id) ? 'fill-black' : 'fill-none stroke-black'}`} viewBox="0 0 24 24">
+                      <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
+                  </button>
                 </div>
               </Link>
               <div className="px-2">
@@ -260,9 +276,9 @@ export default function ProductDetail() {
           </div>
         </div>
         <div className="block lg:flex lg:w-[35%] flex-none">
-          <div className="flex flex-col xl:pb-8 md:pb-6 xl:px-10 lg:px-8 md:px-6 px-4 pt-10 xl:pt-14 pb-10">
+          <div className="flex flex-col xl:pb-8 md:pb-6 xl:px-10 lg:px-8 md:px-6 px-4 pt-4 xl:pt-6 pb-10">
             <div className="mb-8 xl:mb-10">
-              <h2 className="xl:text-5xl text-4xl font-light mb-8 xl:mb-10 mt-4 lg:mt-0">What Fits?</h2>
+              <h2 className="xl:text-5xl text-4xl font-light mb-8 xl:mb-10">What Fits?</h2>
               <div className="text-sm mt-10 mb-6 w-[90%] md:w-2/3 lg:w-[90%]">
                 <p>Large enough to carry your laptop, keys, wallet and more – the {product.name} is perfect for your 9-to-5.</p>
               </div>

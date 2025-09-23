@@ -4,6 +4,7 @@ import { useCurrency } from '../components/CountrySwitcher'
 import { getProductPrice, formatPrice } from '../utils/currency'
 import { API_BASE_URL } from '../config/api'
 import { useCartStore } from '../store/cartStore'
+import { useWishlistStore } from '../store/wishlistStore'
 
 export default function Collection() {
   const { slug } = useParams()
@@ -12,6 +13,7 @@ export default function Collection() {
   const [category, setCategory] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const { addItem, toggleCart } = useCartStore()
+  const { toggleItem, isWishlisted } = useWishlistStore()
 
   useEffect(() => {
     if (slug) {
@@ -144,12 +146,27 @@ export default function Collection() {
                         {formatPrice(getProductPrice(product, selectedCountry.currency), selectedCountry.currency)}
                       </p>
                       
-                      <button 
-                        onClick={() => handleAddToCart(product)}
-                        className="text-xs uppercase tracking-wide underline hover:no-underline transition-all"
-                      >
-                        Add to Bag
-                      </button>
+                      <div className="flex items-center justify-between">
+                        <button 
+                          onClick={() => handleAddToCart(product)}
+                          className="text-xs uppercase tracking-wide underline hover:no-underline transition-all"
+                        >
+                          Add to Bag
+                        </button>
+                        <button 
+                          onClick={() => toggleItem({
+                            id: product.id,
+                            name: product.name,
+                            price: getProductPrice(product, selectedCountry.currency),
+                            image: product.images?.[0] || 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400'
+                          })}
+                          className="p-1 hover:scale-110 transition-transform"
+                        >
+                          <svg className={`w-4 h-4 ${isWishlisted(product.id) ? 'fill-black' : 'fill-none stroke-black'}`} viewBox="0 0 24 24">
+                            <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                          </svg>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))}

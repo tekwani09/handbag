@@ -1,47 +1,101 @@
 import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
+import { API_BASE_URL } from '../config/api'
 
 interface User {
   id: string
   email: string
   firstName: string
   lastName: string
-  role: 'CUSTOMER' | 'ADMIN'
+  createdAt: string
 }
 
-interface AuthState {
+interface AuthStore {
   user: User | null
   token: string | null
-  isAuthenticated: boolean
-  isAdmin: boolean
-  login: (token: string, user: User) => void
+  isLoading: boolean
+  login: (email: string, password: string) => Promise<boolean>
+  register: (firstName: string, lastName: string, email: string, password: string) => Promise<boolean>
   logout: () => void
+  checkAuth: () => void
 }
 
-export const useAuthStore = create<AuthState>()(
-  persist(
-    (set) => ({
-      user: null,
-      token: null,
-      isAuthenticated: false,
-      isAdmin: false,
-      login: (token: string, user: User) =>
-        set({
-          user,
-          token,
-          isAuthenticated: true,
-          isAdmin: user.role === 'ADMIN'
-        }),
-      logout: () =>
-        set({
-          user: null,
-          token: null,
-          isAuthenticated: false,
-          isAdmin: false
-        })
-    }),
-    {
-      name: 'auth-storage'
+export const useAuthStore = create<AuthStore>((set, get) => ({
+  user: null,
+  token: localStorage.getItem('token'),
+  isLoading: false,
+
+  login: async (email: string, password: string) => {
+    set({ isLoading: true })
+    try {
+      const response = await fetch(`${API_BASE_URL}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      })
+      
+      const data = await response.json()
+      
+      if (response.ok) {
+        localStorage.setItem('token', data.token)
+        set({ user: data.user, token: data.token, isLoading: false })
+        return true
+      } else {
+        set({ isLoading: false })
+        return false
+      }
+    } catch (error) {
+      set({ isLoading: false })
+      return false
     }
-  )
-)
+  },
+
+  register: async (firstName: string, lastName: string, email: string, password: string) => {
+    set({ isLoading: true })
+    try {
+      const response = await fetch(`${API_BASE_URL}/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ firstName, lastName, email, password })
+      })
+      
+      const data = await response.json()
+      
+      if (response.ok) {
+        localStorage.setItem('token', data.token)
+        set({ user: data.user, token: data.token, isLoading: false })
+        return true
+      } else {
+        set({ isLoading: false })
+        return false
+      }
+    } catch (error) {
+      set({ isLoading: false })
+      return false
+    }
+  },
+
+  logout: () => {
+    localStorage.removeItem('token')
+    set({ user: null, token: null })
+  },
+
+  checkAuth: async () => {
+    const token = get().token
+    if (!token) return
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/auth/profile`, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      
+      if (response.ok) {
+        const data = await response.json()
+        set({ user: data.user })
+      } else {
+        get().logout()
+      }
+    } catch (error) {
+      get().logout()
+    }
+  }
+}))

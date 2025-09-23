@@ -16,6 +16,7 @@ import Search from './pages/Search'
 import Wishlist from './pages/Wishlist'
 import Cart from './pages/Cart'
 import Checkout from './pages/Checkout'
+import Profile from './pages/Profile'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import AdminDashboard from './pages/admin/Dashboard'
@@ -48,6 +49,7 @@ function App() {
           <Route path="/wishlist" element={<Wishlist />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/account" element={<Account />} />

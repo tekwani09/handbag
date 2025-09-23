@@ -4,6 +4,7 @@ import { useCurrency } from '../components/CountrySwitcher'
 import { getProductPrice, formatPrice } from '../utils/currency'
 import { API_BASE_URL } from '../config/api'
 import { useCartStore } from '../store/cartStore'
+import { useWishlistStore } from '../store/wishlistStore'
 
 export default function Search() {
   const [searchParams] = useSearchParams()
@@ -12,6 +13,7 @@ export default function Search() {
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(false)
   const { addItem, toggleCart } = useCartStore()
+  const { toggleItem, isWishlisted } = useWishlistStore()
 
   useEffect(() => {
     if (query) {
@@ -87,12 +89,28 @@ export default function Search() {
             {products.map((product: any) => (
               <div key={product.id} className="group">
                 <Link to={`/products/${product.id}`}>
-                  <div className="aspect-square bg-gray-100 mb-4 overflow-hidden">
+                  <div className="aspect-square bg-gray-100 mb-4 overflow-hidden relative">
                     <img 
                       src={product.images?.[0] || 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400'}
                       alt={product.name}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
+                    <button 
+                      onClick={(e) => {
+                        e.preventDefault()
+                        toggleItem({
+                          id: product.id,
+                          name: product.name,
+                          price: getProductPrice(product, selectedCountry.currency),
+                          image: product.images?.[0] || 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400'
+                        })
+                      }}
+                      className="absolute top-2 right-2 p-2 bg-white/80 rounded-full hover:bg-white transition-colors"
+                    >
+                      <svg className={`w-4 h-4 ${isWishlisted(product.id) ? 'fill-black' : 'fill-none stroke-black'}`} viewBox="0 0 24 24">
+                        <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                      </svg>
+                    </button>
                   </div>
                 </Link>
                 
