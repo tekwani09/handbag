@@ -92,17 +92,16 @@ export default function ProductDetail() {
             {/* Product Title */}
             <div className="mb-6">
               <h1 className="sr-only">{product.name}</h1>
-              <div className="font-light text-3xl relative">
+              <div className="font-light text-3xl flex items-center gap-3">
                 {product.name}
                 <button 
                   onClick={handleWishlist}
-                  className="absolute translate-x-1 -translate-y-1/4 p-2 -m-2 group"
+                  className="p-1 group flex-shrink-0"
                 >
                   <svg 
-                    className={`w-4 h-4 transition-all group-hover:scale-110 ${
-                      isWishlisted(product.id) ? 'fill-black text-black' : 'text-white hover:text-black'
+                    className={`w-6 h-6 transition-all group-hover:scale-110 ${
+                      isWishlisted(product.id) ? 'fill-black' : 'fill-none stroke-black hover:fill-black'
                     }`} 
-                    fill={isWishlisted(product.id) ? 'currentColor' : 'none'} 
                     viewBox="0 0 24 24"
                   >
                     <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
