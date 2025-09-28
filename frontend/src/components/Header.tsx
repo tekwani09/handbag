@@ -139,9 +139,6 @@ const Header = () => {
                 Gifts
               </button>
             </div>
-            <Link to="/sale" className="text-xs font-light text-red-600 hover:text-red-700 transition-colors uppercase tracking-wide">
-              Sale
-            </Link>
           </nav>
         </div>
       </div>
