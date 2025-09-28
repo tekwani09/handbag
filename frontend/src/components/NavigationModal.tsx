@@ -12,86 +12,178 @@ export default function NavigationModal({ isOpen, onClose, section }: Navigation
   const getNavigationItems = (section: string) => {
     switch (section) {
       case 'handbags':
-        return [
-          { name: 'ALL HANDBAGS', href: '/handbags' },
-          { name: 'TOTE BAGS', href: '/handbags/totes' },
-          { name: 'CROSSBODY BAGS', href: '/handbags/crossbody' },
-          { name: 'SHOULDER BAGS', href: '/handbags/shoulder' },
-          { name: 'CLUTCHES', href: '/handbags/clutches' },
-          { name: 'MINI BAGS', href: '/handbags/mini' }
-        ]
-      case 'accessories':
-        return [
-          { name: 'ALL ACCESSORIES', href: '/accessories' },
-          { name: 'WALLETS & PURSES', href: '/accessories/wallets' },
-          { name: 'SILKS', href: '/accessories/silks' },
-          { name: 'STRAPS', href: '/accessories/straps' },
-          { name: 'LIFESTYLE', href: '/accessories/lifestyle' },
-          { name: 'BELTS', href: '/accessories/belts' },
-          { name: 'GLOVES', href: '/accessories/gloves' }
-        ]
+        return {
+          columns: [
+            {
+              title: 'Our selection',
+              items: [
+                { name: 'NEW ARRIVALS', href: '/handbags/new' },
+                { name: 'BEST SELLERS', href: '/handbags/bestsellers' },
+                { name: 'THE ICONICS', href: '/handbags/iconics' },
+                { name: 'MADE IN BRITAIN', href: '/handbags/british' }
+              ]
+            },
+            {
+              title: 'Bags',
+              items: [
+                { name: 'Tote bags', href: '/handbags/totes', icon: true },
+                { name: 'Crossbody bags', href: '/handbags/crossbody', icon: true },
+                { name: 'Shoulder bags', href: '/handbags/shoulder', icon: true },
+                { name: 'Clutches', href: '/handbags/clutches', icon: true },
+                { name: 'Mini bags', href: '/handbags/mini', icon: true },
+                { name: 'Backpacks', href: '/handbags/backpacks', icon: true },
+                { name: 'See all', href: '/handbags', highlight: true }
+              ]
+            },
+            {
+              title: 'Small leather goods',
+              items: [
+                { name: 'Card holders', href: '/accessories/cards', icon: true },
+                { name: 'Wallets', href: '/accessories/wallets', icon: true },
+                { name: 'Purses', href: '/accessories/purses', icon: true },
+                { name: 'See all', href: '/accessories', highlight: true }
+              ]
+            },
+            {
+              title: 'Accessories',
+              items: [
+                { name: 'Belts', href: '/accessories/belts', icon: true },
+                { name: 'Gloves', href: '/accessories/gloves', icon: true },
+                { name: 'Straps', href: '/accessories/straps', icon: true },
+                { name: 'See all', href: '/accessories', highlight: true }
+              ]
+            }
+          ]
+        }
+      case 'collections':
+        return {
+          columns: [
+            {
+              title: 'Our selection',
+              items: [
+                { name: 'NEW ARRIVALS', href: '/accessories/new' },
+                { name: 'BEST SELLERS', href: '/accessories/bestsellers' },
+                { name: 'GIFT SETS', href: '/accessories/gifts' }
+              ]
+            },
+            {
+              title: 'Small leather goods',
+              items: [
+                { name: 'Wallets', href: '/accessories/wallets', icon: true },
+                { name: 'Card holders', href: '/accessories/cards', icon: true },
+                { name: 'Purses', href: '/accessories/purses', icon: true },
+                { name: 'See all', href: '/accessories', highlight: true }
+              ]
+            },
+            {
+              title: 'Accessories',
+              items: [
+                { name: 'Belts', href: '/accessories/belts', icon: true },
+                { name: 'Gloves', href: '/accessories/gloves', icon: true },
+                { name: 'Straps', href: '/accessories/straps', icon: true },
+                { name: 'Keyrings', href: '/accessories/keyrings', icon: true },
+                { name: 'See all', href: '/accessories', highlight: true }
+              ]
+            }
+          ]
+        }
       case 'gifts':
-        return [
-          { name: 'ALL GIFTS', href: '/gifts' },
-          { name: 'GIFT CARDS', href: '/gifts/cards' },
-          { name: 'UNDER £200', href: '/gifts/under-200' },
-          { name: 'UNDER £500', href: '/gifts/under-500' },
-          { name: 'LUXURY GIFTS', href: '/gifts/luxury' }
-        ]
+        return {
+          columns: [
+            {
+              title: 'Gift Ideas',
+              items: [
+                { name: 'GIFT CARDS', href: '/gifts/cards' },
+                { name: 'UNDER £200', href: '/gifts/under-200' },
+                { name: 'UNDER £500', href: '/gifts/under-500' },
+                { name: 'LUXURY GIFTS', href: '/gifts/luxury' }
+              ]
+            },
+            {
+              title: 'Collections',
+              items: [
+                { name: 'Gift sets', href: '/gifts/sets', icon: true },
+                { name: 'For her', href: '/gifts/her', icon: true },
+                { name: 'For him', href: '/gifts/him', icon: true },
+                { name: 'See all', href: '/gifts', highlight: true }
+              ]
+            }
+          ]
+        }
       default:
-        return []
+        return { columns: [] }
     }
   }
 
-  const items = getNavigationItems(section)
+  const navigationData = getNavigationItems(section)
 
   return (
-    <div className="fixed inset-0 z-50">
-      <div className="absolute inset-0 bg-black/20" onClick={onClose}></div>
-      
-      <div className="flex md:flex-row md:justify-start flex-col relative min-h-full max-h-screen">
-        <div className="bg-gray-50 h-screen block flex-none relative z-20 xl2:max-w-[499px] xl:max-w-[419px] lg:max-w-[397px] w-1/2">
-          <div className="flex gap-2 justify-between items-center bg-gray-50 py-1.5 z-20 min-h-16 xl:px-8 md:px-6 px-4">
-            <div>
-              <nav>
-                <ul className="flex items-center group max-w-max">
-                  <li className="py-2 px-1.5 xl:px-2 text-center duration-300 group-hover:opacity-70 hover:!opacity-100 transition-opacity">
-                    <button className="relative cursor-pointer transition-all uppercase whitespace-nowrap text-xs">
-                      <div className="transition-opacity w-full">{section.toUpperCase()}</div>
-                    </button>
-                  </li>
-                </ul>
-              </nav>
-            </div>
-            <button onClick={onClose} className="relative hover:opacity-70 cursor-pointer transition-all inline-block uppercase text-left text-xs z-20 p-2 -m-2">
-              <svg viewBox="0 0 16 16" fill="none" width="16" height="16">
-                <path d="M2 2L13.9987 13.9987" stroke="currentColor" strokeLinecap="round" />
-                <path d="M14 2L2.00128 13.9987" stroke="currentColor" strokeLinecap="round" />
-              </svg>
-            </button>
-          </div>
-          
-          <div className="xl:px-8 md:px-6 px-4 xl:pt-14 lg:pt-12 pt-8">
-            <ul className="group block space-y-4">
-              {items.map((item, index) => (
-                <li key={index} className="navigation-item leading-none">
+    <div 
+      className="absolute top-[111px] left-0 right-0 z-50"
+      onMouseEnter={() => {}}
+      onMouseLeave={onClose}
+    >
+        <div className="bg-white shadow-lg">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex">
+              {navigationData.columns.map((column, columnIndex) => (
+                <div key={columnIndex} className="flex-1 p-8 border-r border-gray-100 last:border-r-0">
                   <Link 
-                    to={item.href}
+                    to={`/${section}`}
                     onClick={onClose}
-                    className="hover:opacity-70 cursor-pointer transition-all px-0 py-0 uppercase text-left text-sm md:text-xs relative space-x-2 inline-block"
+                    className="block mb-6 text-sm font-medium text-black hover:opacity-70 transition-opacity"
                   >
-                    <div className="transition-opacity w-full space-x-2 leading-none">
-                      <div className="flex items-center">
-                        <div className="inline">{item.name}</div>
+                    {column.title}
+                  </Link>
+                  
+                  <ul className="space-y-3">
+                    {column.items.map((item, itemIndex) => (
+                      <li key={itemIndex}>
+                        <Link 
+                          to={item.href}
+                          onClick={onClose}
+                          className={`flex items-center text-sm hover:opacity-70 transition-opacity ${
+                            item.highlight ? 'font-medium' : 'font-light'
+                          }`}
+                        >
+                          {item.icon && (
+                            <div className="w-6 h-6 mr-3 bg-gray-100 rounded flex-shrink-0"></div>
+                          )}
+                          <span>{item.name}</span>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+              
+              {/* Gift Card Promo Section for Handbags */}
+              {section === 'handbags' && (
+                <div className="w-80 p-8">
+                  <Link to="/gifts/cards" onClick={onClose} className="block group">
+                    <div className="relative overflow-hidden rounded-lg">
+                      <img 
+                        src="https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400&h=200&fit=crop" 
+                        alt="Gift Card" 
+                        className="w-full h-32 object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                      <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
+                        <div className="text-center text-white">
+                          <div className="w-8 h-8 mx-auto mb-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                              <path d="M20 6H4c-1.11 0-2 .89-2 2v8c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm0 2v2H4V8h16zm0 6v2H4v-2h16z"/>
+                            </svg>
+                          </div>
+                          <div className="text-sm font-medium">Gift card</div>
+                        </div>
                       </div>
                     </div>
                   </Link>
-                </li>
-              ))}
-            </ul>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      </div>
     </div>
   )
 }

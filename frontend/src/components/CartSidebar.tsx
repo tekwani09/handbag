@@ -69,12 +69,23 @@ export default function CartSidebar() {
                         </button>
                       </div>
                     </div>
-                    <button 
-                      onClick={() => removeItem(item.id)}
-                      className="text-xs hover:opacity-70"
-                    >
-                      Remove
-                    </button>
+                    <div className="flex flex-col gap-2">
+                      <button className="hover:opacity-70 transition-opacity">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
+                      </button>
+                      <button 
+                        onClick={() => removeItem(item.id)}
+                        className="hover:opacity-70 transition-opacity"
+                      >
+                        <svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 13" className="w-5 h-5">
+                          <path d="M13.9998 3.10059H0.799805" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"></path>
+                          <path d="M4.40137 0.700195H10.4014" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"></path>
+                          <path d="M11.7975 2.7002V11.8202C11.7975 11.9475 11.7483 12.0696 11.6608 12.1596C11.5733 12.2496 11.4546 12.3002 11.3308 12.3002H3.86413C3.74036 12.3002 3.62166 12.2496 3.53414 12.1596C3.44663 12.0696 3.39746 11.9475 3.39746 11.8202V2.7002" stroke="currentColor" strokeLinecap="square" strokeLinejoin="round"></path>
+                        </svg>
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>
