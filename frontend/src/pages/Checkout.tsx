@@ -1,19 +1,23 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useCartStore } from '../store/cartStore'
 import { useCurrency } from '../components/CountrySwitcher'
 import { formatPrice, getProductPrice } from '../utils/currency'
+import DummyPayment from '../components/DummyPayment'
+import { API_BASE_URL } from '../config/api'
 
 export default function Checkout() {
-  const { items, getTotalPrice } = useCartStore()
+  const { items, getTotalPrice, clearCart } = useCartStore()
   const { selectedCountry } = useCurrency()
   const [step, setStep] = useState(1)
+  const [orderId, setOrderId] = useState<string | null>(null)
   const [formData, setFormData] = useState({
     email: '',
     firstName: '',
     lastName: '',
     address: '',
     city: '',
+    state: '',
     postalCode: '',
     country: selectedCountry.code,
     phone: '',
@@ -31,13 +35,81 @@ export default function Checkout() {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const navigate = useNavigate()
+
+  const createOrder = async () => {
+    try {
+      const token = localStorage.getItem('token')
+      console.log('Frontend - Token exists:', !!token)
+      
+      if (!token) {
+        alert('Please login first to place an order')
+        navigate('/login')
+        return
+      }
+      
+      console.log('Frontend - API URL:', `${API_BASE_URL}/orders`)
+      
+      const orderData = {
+        items: items.map(item => ({
+          productId: item.id,
+          quantity: item.quantity,
+          price: getProductPrice(item.product, selectedCountry.currency)
+        })),
+        shippingAddress: {
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          address1: formData.address,
+          city: formData.city,
+          state: formData.state,
+          zipCode: formData.postalCode,
+          country: formData.country,
+          phone: formData.phone
+        },
+        total,
+        subtotal,
+        shipping,
+        tax: 0
+      }
+      
+      console.log('Frontend - Order data:', orderData)
+      
+      const response = await fetch(`${API_BASE_URL}/orders`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(orderData)
+      })
+      
+      console.log('Frontend - Response status:', response.status)
+      
+      if (response.ok) {
+        const { order } = await response.json()
+        console.log('Frontend - Order created:', order)
+        setOrderId(order.id)
+      } else {
+        const errorData = await response.json()
+        console.error('Frontend - Order creation failed:', errorData)
+        alert(`Failed to create order: ${errorData.error}`)
+      }
+    } catch (error) {
+      console.error('Frontend - Order creation error:', error)
+      alert('Failed to create order')
+    }
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (step < 3) {
-      setStep(step + 1)
-    } else {
-      // Process order
-      alert('Order placed successfully!')
+      if (step === 2) {
+        // Moving to payment step - create order automatically
+        setStep(step + 1)
+        setTimeout(() => createOrder(), 100) // Small delay to show step transition
+      } else {
+        setStep(step + 1)
+      }
     }
   }
 
@@ -142,14 +214,23 @@ export default function Checkout() {
                       />
                       <input
                         type="text"
-                        name="postalCode"
-                        placeholder="Postal code"
-                        value={formData.postalCode}
+                        name="state"
+                        placeholder="State/Province"
+                        value={formData.state}
                         onChange={handleInputChange}
                         className="w-full p-4 border border-gray-300 focus:border-black focus:outline-none text-sm"
                         required
                       />
                     </div>
+                    <input
+                      type="text"
+                      name="postalCode"
+                      placeholder="Postal code"
+                      value={formData.postalCode}
+                      onChange={handleInputChange}
+                      className="w-full p-4 border border-gray-300 focus:border-black focus:outline-none text-sm"
+                      required
+                    />
                     <select
                       name="country"
                       value={formData.country}
@@ -171,66 +252,49 @@ export default function Checkout() {
               {step === 3 && (
                 <div>
                   <h2 className="text-xl font-light mb-6">Payment Information</h2>
-                  <div className="space-y-4">
-                    <input
-                      type="text"
-                      name="cardNumber"
-                      placeholder="Card number"
-                      value={formData.cardNumber}
-                      onChange={handleInputChange}
-                      className="w-full p-4 border border-gray-300 focus:border-black focus:outline-none text-sm"
-                      required
-                    />
-                    <input
-                      type="text"
-                      name="nameOnCard"
-                      placeholder="Name on card"
-                      value={formData.nameOnCard}
-                      onChange={handleInputChange}
-                      className="w-full p-4 border border-gray-300 focus:border-black focus:outline-none text-sm"
-                      required
-                    />
-                    <div className="grid grid-cols-2 gap-4">
-                      <input
-                        type="text"
-                        name="expiryDate"
-                        placeholder="MM/YY"
-                        value={formData.expiryDate}
-                        onChange={handleInputChange}
-                        className="w-full p-4 border border-gray-300 focus:border-black focus:outline-none text-sm"
-                        required
-                      />
-                      <input
-                        type="text"
-                        name="cvv"
-                        placeholder="CVV"
-                        value={formData.cvv}
-                        onChange={handleInputChange}
-                        className="w-full p-4 border border-gray-300 focus:border-black focus:outline-none text-sm"
-                        required
-                      />
+                  {!orderId ? (
+                    <div className="text-center">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-black mx-auto mb-4"></div>
+                      <p className="text-gray-600">Creating your order...</p>
                     </div>
-                  </div>
+                  ) : (
+                    <DummyPayment
+                      amount={total}
+                      currency={selectedCountry.currency}
+                      orderId={orderId}
+                      onSuccess={() => {
+                        console.log('Payment successful - clearing cart')
+                        clearCart()
+                        navigate(`/payment-success?orderId=${orderId}`)
+                      }}
+                      onError={(error) => {
+                        console.error('Payment error:', error)
+                        navigate('/payment-failed')
+                      }}
+                    />
+                  )}
                 </div>
               )}
 
-              <div className="flex justify-between mt-8">
-                {step > 1 && (
+              {step < 3 && (
+                <div className="flex justify-between mt-8">
+                  {step > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => setStep(step - 1)}
+                      className="text-sm uppercase tracking-wide underline hover:no-underline"
+                    >
+                      Back
+                    </button>
+                  )}
                   <button
-                    type="button"
-                    onClick={() => setStep(step - 1)}
-                    className="text-sm uppercase tracking-wide underline hover:no-underline"
+                    type="submit"
+                    className="bg-black text-white px-8 py-4 text-sm uppercase tracking-wide hover:bg-gray-800 transition-colors ml-auto"
                   >
-                    Back
+                    Continue
                   </button>
-                )}
-                <button
-                  type="submit"
-                  className="bg-black text-white px-8 py-4 text-sm uppercase tracking-wide hover:bg-gray-800 transition-colors ml-auto"
-                >
-                  {step === 3 ? 'Complete Order' : 'Continue'}
-                </button>
-              </div>
+                </div>
+              )}
             </form>
           </div>
 

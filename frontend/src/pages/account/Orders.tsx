@@ -1,22 +1,62 @@
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { API_BASE_URL } from '../../config/api'
+import { formatPrice } from '../../utils/currency'
+
+interface Order {
+  id: string
+  orderNumber: string
+  status: string
+  paymentStatus: string
+  total: number
+  createdAt: string
+  items: {
+    id: string
+    quantity: number
+    product: {
+      name: string
+      images: string[]
+    }
+  }[]
+}
 
 export default function AccountOrders() {
-  const orders = [
-    {
-      id: '#STR001',
-      date: '2024-01-15',
-      status: 'Delivered',
-      total: '£295.00',
-      items: [{ name: 'The Constance - Black', image: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=100&h=100&fit=crop' }]
-    },
-    {
-      id: '#STR002',
-      date: '2024-01-10',
-      status: 'Shipped',
-      total: '£450.00',
-      items: [{ name: 'The Adeline - Cognac', image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=100&h=100&fit=crop' }]
+  const [orders, setOrders] = useState<Order[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetchOrders()
+  }, [])
+
+  const fetchOrders = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/orders`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      })
+      
+      if (response.ok) {
+        const data = await response.json()
+        setOrders(data.orders)
+      }
+    } catch (error) {
+      console.error('Failed to fetch orders:', error)
+    } finally {
+      setLoading(false)
     }
-  ]
+  }
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'CONFIRMED': return 'bg-green-100 text-green-800'
+      case 'PENDING': return 'bg-yellow-100 text-yellow-800'
+      case 'SHIPPED': return 'bg-blue-100 text-blue-800'
+      case 'DELIVERED': return 'bg-green-100 text-green-800'
+      case 'CANCELLED': return 'bg-red-100 text-red-800'
+      default: return 'bg-gray-100 text-gray-800'
+    }
+  }
 
   return (
     <div className="min-h-screen bg-white">
@@ -36,50 +76,71 @@ export default function AccountOrders() {
           </p>
         </div>
 
-        <div className="space-y-8">
-          {orders.map((order) => (
-            <div key={order.id} className="border border-gray-200 p-6">
-              <div className="flex justify-between items-start mb-4">
-                <div>
-                  <h3 className="text-lg font-light text-black mb-1">{order.id}</h3>
-                  <p className="text-sm font-light text-gray-600">Placed on {order.date}</p>
+        {loading ? (
+          <div className="text-center py-12">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-black mx-auto"></div>
+          </div>
+        ) : orders.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-gray-600 mb-4">You haven't placed any orders yet.</p>
+            <Link to="/products" className="text-sm uppercase tracking-wide underline hover:no-underline">
+              Start Shopping
+            </Link>
+          </div>
+        ) : (
+          <div className="space-y-8">
+            {orders.map((order) => (
+              <div key={order.id} className="border border-gray-200 p-6">
+                <div className="flex justify-between items-start mb-4">
+                  <div>
+                    <h3 className="text-lg font-light text-black mb-1">#{order.orderNumber}</h3>
+                    <p className="text-sm font-light text-gray-600">
+                      Placed on {new Date(order.createdAt).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                      })}
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-lg font-light text-black mb-1">{formatPrice(order.total, 'GBP')}</p>
+                    <span className={`px-3 py-1 text-xs font-light uppercase tracking-wide ${getStatusColor(order.status)}`}>
+                      {order.status}
+                    </span>
+                  </div>
                 </div>
-                <div className="text-right">
-                  <p className="text-lg font-light text-black mb-1">{order.total}</p>
-                  <span className={`px-3 py-1 text-xs font-light uppercase tracking-wide ${
-                    order.status === 'Delivered' ? 'bg-green-100 text-green-800' :
-                    order.status === 'Shipped' ? 'bg-blue-100 text-blue-800' :
-                    'bg-yellow-100 text-yellow-800'
-                  }`}>
-                    {order.status}
-                  </span>
-                </div>
-              </div>
 
-              <div className="flex items-center space-x-4 mb-4">
-                <img 
-                  src={order.items[0].image} 
-                  alt={order.items[0].name}
-                  className="w-16 h-16 object-cover"
-                />
-                <div>
-                  <p className="text-sm font-light text-black">{order.items[0].name}</p>
+                <div className="flex items-center space-x-4 mb-4">
+                  <img 
+                    src={order.items[0]?.product.images[0]} 
+                    alt={order.items[0]?.product.name}
+                    className="w-16 h-16 object-cover rounded"
+                  />
+                  <div>
+                    <p className="text-sm font-light text-black">{order.items[0]?.product.name}</p>
+                    {order.items.length > 1 && (
+                      <p className="text-xs text-gray-600">+{order.items.length - 1} more item{order.items.length > 2 ? 's' : ''}</p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex space-x-4">
+                  <Link 
+                    to={`/orders/${order.id}`}
+                    className="border border-black text-black px-6 py-2 text-xs font-light uppercase tracking-wide hover:bg-black hover:text-white transition-colors"
+                  >
+                    View Details
+                  </Link>
+                  {order.status === 'SHIPPED' && (
+                    <button className="border border-black text-black px-6 py-2 text-xs font-light uppercase tracking-wide hover:bg-black hover:text-white transition-colors">
+                      Track Order
+                    </button>
+                  )}
                 </div>
               </div>
-
-              <div className="flex space-x-4">
-                <button className="border border-black text-black px-6 py-2 text-xs font-light uppercase tracking-wide hover:bg-black hover:text-white transition-colors">
-                  View Details
-                </button>
-                {order.status === 'Shipped' && (
-                  <button className="border border-black text-black px-6 py-2 text-xs font-light uppercase tracking-wide hover:bg-black hover:text-white transition-colors">
-                    Track Order
-                  </button>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   )

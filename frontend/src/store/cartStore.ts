@@ -21,39 +21,46 @@ interface CartStore {
 }
 
 export const useCartStore = create<CartStore>((set, get) => ({
-  items: [],
+  items: JSON.parse(localStorage.getItem('cart-items') || '[]'),
   isOpen: false,
   addItem: (item) => {
     const items = get().items
     const existingItem = items.find(i => i.id === item.id)
     
+    let newItems
     if (existingItem) {
-      set({
-        items: items.map(i => 
-          i.id === item.id 
-            ? { ...i, quantity: i.quantity + 1 }
-            : i
-        )
-      })
+      newItems = items.map(i => 
+        i.id === item.id 
+          ? { ...i, quantity: i.quantity + 1 }
+          : i
+      )
     } else {
-      set({ items: [...items, { ...item, quantity: 1 }] })
+      newItems = [...items, { ...item, quantity: 1 }]
     }
+    
+    localStorage.setItem('cart-items', JSON.stringify(newItems))
+    set({ items: newItems })
   },
   removeItem: (id) => {
-    set({ items: get().items.filter(item => item.id !== id) })
+    const newItems = get().items.filter(item => item.id !== id)
+    localStorage.setItem('cart-items', JSON.stringify(newItems))
+    set({ items: newItems })
   },
   updateQuantity: (id, quantity) => {
     if (quantity <= 0) {
       get().removeItem(id)
       return
     }
-    set({
-      items: get().items.map(item =>
-        item.id === id ? { ...item, quantity } : item
-      )
-    })
+    const newItems = get().items.map(item =>
+      item.id === id ? { ...item, quantity } : item
+    )
+    localStorage.setItem('cart-items', JSON.stringify(newItems))
+    set({ items: newItems })
   },
-  clearCart: () => set({ items: [] }),
+  clearCart: () => {
+    localStorage.removeItem('cart-items')
+    set({ items: [] })
+  },
   toggleCart: () => set({ isOpen: !get().isOpen }),
   getTotalItems: () => get().items.reduce((total, item) => total + item.quantity, 0),
   getTotalPrice: (currency, getProductPrice) => {

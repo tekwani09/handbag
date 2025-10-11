@@ -1,6 +1,6 @@
 import express from 'express'
 import { auth } from '../middleware/auth'
-import { getCart, addToCart, updateCartItem, removeFromCart } from '../controllers/cartController'
+import { getCart, addToCart, updateCartItem, removeFromCart, clearCart } from '../controllers/cartController'
 
 const router = express.Router()
 
@@ -11,5 +11,6 @@ router.get('/', getCart)
 router.post('/', addToCart)
 router.put('/:itemId', updateCartItem)
 router.delete('/:itemId', removeFromCart)
+router.delete('/', clearCart)
 
 export default router

@@ -6,6 +6,7 @@ interface User {
   email: string
   firstName: string
   lastName: string
+  role: string
   createdAt: string
 }
 
@@ -13,6 +14,8 @@ interface AuthStore {
   user: User | null
   token: string | null
   isLoading: boolean
+  isAuthenticated: boolean
+  isAdmin: boolean
   login: (email: string, password: string) => Promise<boolean>
   register: (firstName: string, lastName: string, email: string, password: string) => Promise<boolean>
   logout: () => void
@@ -23,6 +26,12 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
   user: null,
   token: localStorage.getItem('token'),
   isLoading: false,
+  get isAuthenticated() {
+    return !!get().token
+  },
+  get isAdmin() {
+    return get().user?.role === 'ADMIN'
+  },
 
   login: async (email: string, password: string) => {
     set({ isLoading: true })
