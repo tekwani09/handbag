@@ -17,40 +17,20 @@ export default function NavigationModal({ isOpen, onClose, section }: Navigation
             {
               title: 'Our selection',
               items: [
-                { name: 'NEW ARRIVALS', href: '/handbags/new' },
-                { name: 'BEST SELLERS', href: '/handbags/bestsellers' },
-                { name: 'THE ICONICS', href: '/handbags/iconics' },
-                { name: 'MADE IN BRITAIN', href: '/handbags/british' }
+                { name: 'ALL HANDBAGS', href: '/products' },
+                { name: 'COLLECTIONS', href: '/products' },
+                { name: 'NEW ARRIVALS', href: '/products' }
               ]
             },
             {
               title: 'Bags',
               items: [
-                { name: 'Tote bags', href: '/handbags/totes', icon: true },
-                { name: 'Crossbody bags', href: '/handbags/crossbody', icon: true },
-                { name: 'Shoulder bags', href: '/handbags/shoulder', icon: true },
-                { name: 'Clutches', href: '/handbags/clutches', icon: true },
-                { name: 'Mini bags', href: '/handbags/mini', icon: true },
-                { name: 'Backpacks', href: '/handbags/backpacks', icon: true },
-                { name: 'See all', href: '/handbags', highlight: true }
-              ]
-            },
-            {
-              title: 'Small leather goods',
-              items: [
-                { name: 'Card holders', href: '/accessories/cards', icon: true },
-                { name: 'Wallets', href: '/accessories/wallets', icon: true },
-                { name: 'Purses', href: '/accessories/purses', icon: true },
-                { name: 'See all', href: '/accessories', highlight: true }
-              ]
-            },
-            {
-              title: 'Accessories',
-              items: [
-                { name: 'Belts', href: '/accessories/belts', icon: true },
-                { name: 'Gloves', href: '/accessories/gloves', icon: true },
-                { name: 'Straps', href: '/accessories/straps', icon: true },
-                { name: 'See all', href: '/accessories', highlight: true }
+                { name: 'Tote bags', href: '/products?filter=Totes', icon: true },
+                { name: 'Crossbody bags', href: '/products?filter=Crossbody', icon: true },
+                { name: 'Shoulder bags', href: '/products?filter=Shoulder', icon: true },
+                { name: 'Clutches', href: '/products?filter=Clutches', icon: true },
+                { name: 'Mini bags', href: '/products?filter=Mini', icon: true },
+                { name: 'See all', href: '/products', highlight: true }
               ]
             }
           ]
@@ -61,28 +41,17 @@ export default function NavigationModal({ isOpen, onClose, section }: Navigation
             {
               title: 'Our selection',
               items: [
-                { name: 'NEW ARRIVALS', href: '/accessories/new' },
-                { name: 'BEST SELLERS', href: '/accessories/bestsellers' },
-                { name: 'GIFT SETS', href: '/accessories/gifts' }
+                { name: 'ALL PRODUCTS', href: '/products' },
+                { name: 'FEATURED', href: '/products' },
+                { name: 'NEW ARRIVALS', href: '/products' }
               ]
             },
             {
-              title: 'Small leather goods',
+              title: 'Categories',
               items: [
-                { name: 'Wallets', href: '/accessories/wallets', icon: true },
-                { name: 'Card holders', href: '/accessories/cards', icon: true },
-                { name: 'Purses', href: '/accessories/purses', icon: true },
-                { name: 'See all', href: '/accessories', highlight: true }
-              ]
-            },
-            {
-              title: 'Accessories',
-              items: [
-                { name: 'Belts', href: '/accessories/belts', icon: true },
-                { name: 'Gloves', href: '/accessories/gloves', icon: true },
-                { name: 'Straps', href: '/accessories/straps', icon: true },
-                { name: 'Keyrings', href: '/accessories/keyrings', icon: true },
-                { name: 'See all', href: '/accessories', highlight: true }
+                { name: 'Handbags', href: '/products?category=handbags', icon: true },
+                { name: 'Accessories', href: '/products?category=accessories', icon: true },
+                { name: 'See all', href: '/products', highlight: true }
               ]
             }
           ]
@@ -93,18 +62,17 @@ export default function NavigationModal({ isOpen, onClose, section }: Navigation
             {
               title: 'Gift Ideas',
               items: [
-                { name: 'GIFT CARDS', href: '/gifts/cards' },
-                { name: 'UNDER £200', href: '/gifts/under-200' },
-                { name: 'UNDER £500', href: '/gifts/under-500' },
-                { name: 'LUXURY GIFTS', href: '/gifts/luxury' }
+                { name: 'ALL PRODUCTS', href: '/products' },
+                { name: 'FEATURED GIFTS', href: '/products' },
+                { name: 'LUXURY COLLECTION', href: '/products' }
               ]
             },
             {
               title: 'Collections',
               items: [
-                { name: 'Gift sets', href: '/gifts/sets', icon: true },
-                { name: 'For her', href: '/gifts/her', icon: true },
-                { name: 'For him', href: '/gifts/him', icon: true },
+                { name: 'Under £150', href: '/gifts?filter=Under150', icon: true },
+                { name: 'Under £500', href: '/gifts?filter=Under500', icon: true },
+                { name: 'Under £800', href: '/gifts?filter=Under800', icon: true },
                 { name: 'See all', href: '/gifts', highlight: true }
               ]
             }
@@ -160,7 +128,7 @@ export default function NavigationModal({ isOpen, onClose, section }: Navigation
               {/* Gift Card Promo Section for Handbags */}
               {section === 'handbags' && (
                 <div className="w-80 p-8">
-                  <Link to="/gifts/cards" onClick={onClose} className="block group">
+                  <Link to="/products" onClick={onClose} className="block group">
                     <div className="relative overflow-hidden rounded-lg">
                       <img 
                         src="https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400&h=200&fit=crop" 

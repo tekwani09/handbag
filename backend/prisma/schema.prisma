@@ -52,6 +52,7 @@ model Product {
   sku         String   @unique
   inventory   Int      @default(0)
   images      String[]
+  productModelImage String?
   featured    Boolean  @default(false)
   active      Boolean  @default(true)
   createdAt   DateTime @default(now())

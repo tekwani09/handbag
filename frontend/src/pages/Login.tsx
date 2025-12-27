@@ -1,10 +1,40 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useCurrency } from '../components/CountrySwitcher'
 
 export default function Login() {
   const { selectedCountry } = useCurrency()
   const [isLogin, setIsLogin] = useState(true)
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: ''
+  })
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value })
+  }
+
+  const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+    e.target.parentElement?.classList.add('active-input')
+  }
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    if (!e.target.value) {
+      e.target.parentElement?.classList.remove('active-input')
+    }
+  }
+
+  useEffect(() => {
+    // Set active state for inputs with values on mount
+    Object.entries(formData).forEach(([key, value]) => {
+      if (value) {
+        const input = document.querySelector(`input[name="${key}"]`)
+        input?.parentElement?.classList.add('active-input')
+      }
+    })
+  }, [formData])
 
   return (
     <div className="flex flex-col text-left align-middle transition-all transform h-screen overflow-auto bg-gray-50 xl2:max-w-[499px] xl:max-w-[419px] lg:max-w-[397px] w-screen max-w-none fixed right-0 top-0 z-50 shadow-lg">
@@ -65,8 +95,13 @@ export default function Login() {
                         First name<span>*</span>
                       </label>
                       <input 
-                        type="text" 
-                        className="w-full bg-transparent border-solid border-t-0 border-x-0 border-black placeholder-black text-black outline-none focus:ring-0 focus:ring-transparent focus:border-black focus:shadow-none px-0 py-2 text-base md:text-sm" 
+                        type="text"
+                        name="firstName"
+                        value={formData.firstName}
+                        onChange={handleInputChange}
+                        onFocus={handleFocus}
+                        onBlur={handleBlur}
+                        className="w-full bg-transparent border-solid border-t-0 border-x-0 border-black placeholder-transparent text-black outline-none focus:ring-0 focus:ring-transparent focus:border-black focus:shadow-none px-0 py-2 text-base md:text-sm" 
                       />
                     </div>
                     <div className="group relative flex-1">
@@ -74,8 +109,13 @@ export default function Login() {
                         Last name<span>*</span>
                       </label>
                       <input 
-                        type="text" 
-                        className="w-full bg-transparent border-solid border-t-0 border-x-0 border-black placeholder-black text-black outline-none focus:ring-0 focus:ring-transparent focus:border-black focus:shadow-none px-0 py-2 text-base md:text-sm" 
+                        type="text"
+                        name="lastName"
+                        value={formData.lastName}
+                        onChange={handleInputChange}
+                        onFocus={handleFocus}
+                        onBlur={handleBlur}
+                        className="w-full bg-transparent border-solid border-t-0 border-x-0 border-black placeholder-transparent text-black outline-none focus:ring-0 focus:ring-transparent focus:border-black focus:shadow-none px-0 py-2 text-base md:text-sm" 
                       />
                     </div>
                   </div>
@@ -87,8 +127,13 @@ export default function Login() {
                       Email<span>*</span>
                     </label>
                     <input 
-                      type="email" 
-                      className="w-full bg-transparent border-solid border-t-0 border-x-0 border-black placeholder-black text-black outline-none focus:ring-0 focus:ring-transparent focus:border-black focus:shadow-none px-0 py-2 text-base md:text-sm" 
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      onFocus={handleFocus}
+                      onBlur={handleBlur}
+                      className="w-full bg-transparent border-solid border-t-0 border-x-0 border-black placeholder-transparent text-black outline-none focus:ring-0 focus:ring-transparent focus:border-black focus:shadow-none px-0 py-2 text-base md:text-sm" 
                     />
                   </div>
                   <div className="group relative flex-1">
@@ -96,8 +141,13 @@ export default function Login() {
                       Password<span>*</span>
                     </label>
                     <input 
-                      type="password" 
-                      className="w-full bg-transparent border-solid border-t-0 border-x-0 border-black placeholder-black text-black outline-none focus:ring-0 focus:ring-transparent focus:border-black focus:shadow-none px-0 py-2 text-base md:text-sm" 
+                      type="password"
+                      name="password"
+                      value={formData.password}
+                      onChange={handleInputChange}
+                      onFocus={handleFocus}
+                      onBlur={handleBlur}
+                      className="w-full bg-transparent border-solid border-t-0 border-x-0 border-black placeholder-transparent text-black outline-none focus:ring-0 focus:ring-transparent focus:border-black focus:shadow-none px-0 py-2 text-base md:text-sm" 
                     />
                   </div>
                 </div>

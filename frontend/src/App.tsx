@@ -29,6 +29,7 @@ import AccountOrders from './pages/account/Orders'
 import AccountAddresses from './pages/account/Addresses'
 import PaymentSuccess from './pages/PaymentSuccess'
 import PaymentFailed from './pages/PaymentFailed'
+import Gifts from './pages/Gifts'
 import OrderDetail from './pages/OrderDetail'
 
 function App() {
@@ -55,6 +56,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/products" element={<Products />} />
           <Route path="/products/:id" element={<ProductDetail />} />
+          <Route path="/gifts" element={<Gifts />} />
           <Route path="/collections/:slug" element={<Collection />} />
           <Route path="/search" element={<Search />} />
           <Route path="/wishlist" element={<Wishlist />} />

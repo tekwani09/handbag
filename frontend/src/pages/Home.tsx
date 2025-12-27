@@ -444,19 +444,26 @@ export default function Home() {
                   <div className="relative overflow-hidden">
                     <div className="aspect-[3/4] bg-gray-200">
                       {product.images?.[0] ? (
-                        <img 
-                          src={product.images[0]} 
-                          alt={product.name} 
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        />
+                        <>
+                          <img 
+                            src={product.images[0]} 
+                            alt={product.name} 
+                            className="w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-500"
+                          />
+                          {product.productModelImage && (
+                            <img 
+                              src={product.productModelImage} 
+                              alt={`${product.name} model`} 
+                              className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                            />
+                          )}
+                        </>
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">
                           <span className="text-gray-500 font-light">{product.name.toUpperCase()}</span>
                         </div>
                       )}
                     </div>
-                    <div className="absolute inset-0 bg-white/50 opacity-0 group-hover/container:opacity-100 group-hover:!opacity-0 transition-opacity duration-300"></div>
-                    <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     <button 
                       onClick={(e) => {
                         e.preventDefault()

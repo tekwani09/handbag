@@ -3,7 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom'
 import { useCurrency } from '../components/CountrySwitcher'
 import { getProductPrice, formatPrice } from '../utils/currency'
 
-export default function Products() {
+export default function Gifts() {
   const { selectedCountry } = useCurrency()
   const [searchParams, setSearchParams] = useSearchParams()
   const [products, setProducts] = useState([])
@@ -17,11 +17,8 @@ export default function Products() {
 
   useEffect(() => {
     const filterParam = searchParams.get('filter')
-    const categoryParam = searchParams.get('category')
     if (filterParam) {
       setActiveFilter(filterParam)
-    } else if (categoryParam) {
-      setActiveFilter(categoryParam)
     }
   }, [searchParams])
 
@@ -45,11 +42,23 @@ export default function Products() {
     if (activeFilter === 'All') {
       setFilteredProducts(products)
     } else {
-      const filtered = products.filter((product: any) => 
-        product.category?.name?.toLowerCase().includes(activeFilter.toLowerCase()) ||
-        activeFilter.toLowerCase() === 'handbags' && product.category?.name?.toLowerCase().includes('handbag') ||
-        activeFilter.toLowerCase() === 'accessories' && (product.category?.name?.toLowerCase().includes('accessory') || product.category?.name?.toLowerCase().includes('belt') || product.category?.name?.toLowerCase().includes('wallet'))
-      )
+      const filtered = products.filter((product: any) => {
+        const price = parseFloat(product.priceGBP)
+        switch (activeFilter) {
+          case 'Under150':
+            return price < 150
+          case 'Under500':
+            return price < 500
+          case 'Under800':
+            return price < 800
+          case 'Evening':
+            return product.category?.name?.toLowerCase().includes('evening')
+          case 'Her':
+            return product.category?.name?.toLowerCase().includes('handbag') || product.category?.name?.toLowerCase().includes('clutch')
+          default:
+            return product.category?.name?.toLowerCase().includes(activeFilter.toLowerCase())
+        }
+      })
       setFilteredProducts(filtered)
     }
   }
@@ -68,28 +77,63 @@ export default function Products() {
       <div className="border-b border-gray-200 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-3xl font-light tracking-wider text-center text-black">
-            HANDBAGS
+            GIFTS
           </h1>
         </div>
       </div>
 
-      {/* Filters */}
-      <div className="border-b border-gray-200 py-6">
+      {/* Horizontal Filters */}
+      <div className="border-b border-gray-200 py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-wrap justify-center gap-8 text-sm font-light">
-            {['All', 'Totes', 'Crossbody', 'Clutches', 'Mini Bags'].map((filter) => (
-              <button 
-                key={filter}
-                onClick={() => setActiveFilter(filter)}
-                className={`uppercase tracking-wide ${
-                  activeFilter === filter 
-                    ? 'text-black border-b border-black pb-1' 
-                    : 'text-gray-600 hover:text-black'
-                }`}
-              >
-                {filter}
-              </button>
-            ))}
+          <div className="flex flex-wrap gap-x-8 gap-y-6 justify-center">
+            <button 
+              onClick={() => setActiveFilter('Under150')}
+              className={`hover:opacity-70 cursor-pointer transition-all uppercase tracking-wide text-sm ${
+                activeFilter === 'Under150' ? 'text-black border-b border-black pb-1' : 'text-gray-600'
+              }`}
+            >
+              GIFTS UNDER £150
+            </button>
+            <button 
+              onClick={() => setActiveFilter('Under500')}
+              className={`hover:opacity-70 cursor-pointer transition-all uppercase tracking-wide text-sm ${
+                activeFilter === 'Under500' ? 'text-black border-b border-black pb-1' : 'text-gray-600'
+              }`}
+            >
+              GIFTS UNDER £500
+            </button>
+            <button 
+              onClick={() => setActiveFilter('Under800')}
+              className={`hover:opacity-70 cursor-pointer transition-all uppercase tracking-wide text-sm ${
+                activeFilter === 'Under800' ? 'text-black border-b border-black pb-1' : 'text-gray-600'
+              }`}
+            >
+              GIFTS UNDER £800
+            </button>
+            <button 
+              onClick={() => setActiveFilter('Her')}
+              className={`hover:opacity-70 cursor-pointer transition-all uppercase tracking-wide text-sm ${
+                activeFilter === 'Her' ? 'text-black border-b border-black pb-1' : 'text-gray-600'
+              }`}
+            >
+              GIFTS FOR HER
+            </button>
+            <button 
+              onClick={() => setActiveFilter('Evening')}
+              className={`hover:opacity-70 cursor-pointer transition-all uppercase tracking-wide text-sm ${
+                activeFilter === 'Evening' ? 'text-black border-b border-black pb-1' : 'text-gray-600'
+              }`}
+            >
+              EVENING BAGS
+            </button>
+            <button 
+              onClick={() => setActiveFilter('All')}
+              className={`hover:opacity-70 cursor-pointer transition-all uppercase tracking-wide text-sm ${
+                activeFilter === 'All' ? 'text-black border-b border-black pb-1' : 'text-gray-600'
+              }`}
+            >
+              ALL GIFTS
+            </button>
           </div>
         </div>
       </div>

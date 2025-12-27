@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { API_BASE_URL } from '../config/api'
 
 interface SearchModalProps {
   isOpen: boolean
@@ -9,31 +10,33 @@ interface SearchModalProps {
 export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
   const [searchInput, setSearchInput] = useState('')
   const [products, setProducts] = useState<any[]>([])
-
-  const mockProducts = [
-    { id: 1, name: 'Nano Tote', image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400' },
-    { id: 2, name: 'Mini Tote', image: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=400' },
-    { id: 3, name: 'Nano Tote', image: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=400' },
-    { id: 4, name: 'Nano Tote', image: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400' },
-    { id: 5, name: 'Mini Tote', image: 'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=400' },
-    { id: 6, name: 'Nano Tote', image: 'https://images.unsplash.com/photo-1591561954557-26941169b49e?w=400' },
-    { id: 7, name: 'Mini Tote', image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400' },
-    { id: 8, name: 'Midi Tote', image: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=400' },
-    { id: 9, name: 'Mini Tote', image: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=400' },
-    { id: 10, name: 'Nano Tote', image: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400' },
-    { id: 11, name: 'Mini Tote', image: 'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=400' },
-    { id: 12, name: 'Mini Tote', image: 'https://images.unsplash.com/photo-1591561954557-26941169b49e?w=400' }
-  ]
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     if (searchInput.trim()) {
-      setProducts(mockProducts.filter(p => 
-        p.name.toLowerCase().includes(searchInput.toLowerCase())
-      ))
+      searchProducts(searchInput)
     } else {
       setProducts([])
     }
   }, [searchInput])
+
+  const searchProducts = async (query: string) => {
+    if (!query.trim()) {
+      setProducts([])
+      return
+    }
+    setLoading(true)
+    try {
+      const response = await fetch(`${API_BASE_URL}/products?search=${encodeURIComponent(query)}`)
+      const data = await response.json()
+      setProducts(data.products || [])
+    } catch (error) {
+      console.error('Search failed:', error)
+      setProducts([])
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const clearSearch = () => {
     setSearchInput('')
@@ -145,7 +148,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                               <img 
                                 alt=""
                                 loading="lazy"
-                                src={product.image}
+                                src={product.images?.[0] || 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400'}
                                 className="h-full w-full object-cover opacity-100 transition-opacity group-hover:opacity-0"
                                 style={{ width: '100%' }}
                               />
@@ -153,8 +156,8 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                                 <img 
                                   alt=""
                                   loading="lazy"
-                                  src="https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=400"
-                                  className="hidden group-hover:block"
+                                  src={product.productModelImage || product.images?.[1] || 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=400'}
+                                  className="hidden group-hover:block h-full w-full object-cover"
                                   style={{ width: '100%' }}
                                 />
                               </div>
