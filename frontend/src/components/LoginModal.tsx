@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuthStore } from '../store/authStore'
+import BaseModal from './BaseModal'
 
 interface LoginModalProps {
   isOpen: boolean
@@ -45,30 +46,9 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
     onClose()
   }
 
-  if (!isOpen) return null
-
   return (
-    <div className="fixed inset-0 z-50">
-      {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/20" onClick={onClose}></div>
-      
-      {/* Modal */}
-      <div className="flex flex-col text-left align-middle transition-all transform h-screen overflow-auto bg-gray-50 xl2:max-w-[499px] xl:max-w-[419px] lg:max-w-[397px] w-screen max-w-none absolute right-0 top-0 shadow-lg">
-        <div className="relative">
-          {/* Header */}
-          <div className="flex gap-2 justify-between items-center bg-gray-50 py-1.5 z-20 min-h-16 xl:px-8 md:px-6 px-4">
-            <div></div>
-            <div></div>
-            <button onClick={handleClose} className="relative hover:opacity-70 cursor-pointer transition-all inline-block uppercase text-left text-xs z-20 p-2 -m-2">
-              <svg viewBox="0 0 16 16" fill="none" width="16" height="16">
-                <path d="M2 2L13.9987 13.9987" stroke="currentColor" strokeLinecap="round" />
-                <path d="M14 2L2.00128 13.9987" stroke="currentColor" strokeLinecap="round" />
-              </svg>
-            </button>
-          </div>
-
-          {/* Main Content */}
-          <section className="min-h-[calc(100vh-4rem)] flex flex-col w-full bg-gray-50 transition-opacity sticky lg:static top-16 z-[1] xl:px-8 md:px-6 px-4">
+    <BaseModal isOpen={isOpen} onClose={handleClose}>
+      <section className="min-h-[calc(100vh-4rem)] flex flex-col w-full bg-gray-50 transition-opacity sticky lg:static top-16 z-[1] xl:px-8 md:px-6 px-4">
             {showWelcome ? (
               <div className="flex flex-col min-h-[calc(100vh-4rem)] w-full">
                 <h2 className="text-lg hidden lg:block xl:my-8 md:my-6 my-4">Account</h2>
@@ -227,8 +207,6 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
               </>
             )}
           </section>
-        </div>
-      </div>
-    </div>
+    </BaseModal>
   )
 }

@@ -6,22 +6,23 @@ import LoginModal from './LoginModal'
 import NavigationModal from './NavigationModal'
 import SearchModal from './SearchModal'
 import WishlistModal from './WishlistModal'
+import CartModal from './CartModal'
+import CountryModal from './CountryModal'
 import { useCartStore } from '../store/cartStore'
 import { useWishlistStore } from '../store/wishlistStore'
 import { useAuthStore } from '../store/authStore'
+import { useModalStore } from '../store/modalStore'
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [isLoginOpen, setIsLoginOpen] = useState(false)
-  const [isSearchOpen, setIsSearchOpen] = useState(false)
-  const [isWishlistOpen, setIsWishlistOpen] = useState(false)
   const [activeNavModal, setActiveNavModal] = useState<string | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
   const navigate = useNavigate()
   
-  const { getTotalItems, toggleCart } = useCartStore()
+  const { getTotalItems } = useCartStore()
   const { items: wishlistItems } = useWishlistStore()
   const { user, checkAuth } = useAuthStore()
+  const { activeModal, openModal, closeModal } = useModalStore()
   
   useEffect(() => {
     checkAuth()
@@ -55,16 +56,16 @@ const Header = () => {
             <div className="flex items-center space-x-5 ml-auto">
               <div className="hidden lg:flex items-center">
                 <button 
-                  onClick={() => setIsSearchOpen(true)}
-                  className="text-black hover:text-gray-600 transition-colors"
+                  onClick={() => openModal('search')}
+                  className="text-black transition-colors group"
                 >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5 group-hover:fill-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
                 </button>
               </div>
               <button 
-                onClick={() => setIsWishlistOpen(true)}
+                onClick={() => openModal('wishlist')}
                 className="text-black transition-colors relative group"
               >
                 <svg className="w-5 h-5 group-hover:fill-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -83,13 +84,13 @@ const Header = () => {
                   </svg>
                 </Link>
               ) : (
-                <button onClick={() => setIsLoginOpen(true)} className="text-black transition-colors group">
+                <button onClick={() => openModal('account')} className="text-black transition-colors group">
                   <svg className="w-5 h-5 group-hover:fill-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                   </svg>
                 </button>
               )}
-              <button onClick={toggleCart} className="text-black transition-colors relative group">
+              <button onClick={() => openModal('cart')} className="text-black transition-colors relative group">
                 <svg className="w-5 h-5 group-hover:fill-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l-1 12H6L5 9z" />
                 </svg>
@@ -131,6 +132,16 @@ const Header = () => {
             </div>
             <div 
               className="relative"
+              onMouseEnter={() => setActiveNavModal('new')}
+            >
+              <button className={`text-xs font-light text-black transition-colors uppercase tracking-wide ${
+                activeNavModal === 'new' ? 'border-b border-black' : 'hover:text-gray-600'
+              }`}>
+                New
+              </button>
+            </div>
+            <div 
+              className="relative"
               onMouseEnter={() => setActiveNavModal('gifts')}
             >
               <button className={`text-xs font-light text-black transition-colors uppercase tracking-wide ${
@@ -154,11 +165,11 @@ const Header = () => {
               <Link to="/collections" className="block text-sm font-light text-black hover:text-gray-600 uppercase tracking-wide">
                 Collections
               </Link>
+              <Link to="/new" className="block text-sm font-light text-black hover:text-gray-600 uppercase tracking-wide">
+                New
+              </Link>
               <Link to="/gifts" className="block text-sm font-light text-black hover:text-gray-600 uppercase tracking-wide">
                 Gifts
-              </Link>
-              <Link to="/sale" className="block text-sm font-light text-red-600 hover:text-red-700 uppercase tracking-wide">
-                Sale
               </Link>
               <div className="pt-4 border-t border-gray-200">
                 <CountrySwitcher />
@@ -169,7 +180,7 @@ const Header = () => {
       )}
       
       {/* Login Modal */}
-      <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
+      <LoginModal isOpen={activeModal === 'account'} onClose={closeModal} />
       
       {/* Navigation Modal */}
       <NavigationModal 
@@ -180,14 +191,26 @@ const Header = () => {
       
       {/* Search Modal */}
       <SearchModal 
-        isOpen={isSearchOpen} 
-        onClose={() => setIsSearchOpen(false)} 
+        isOpen={activeModal === 'search'} 
+        onClose={closeModal} 
       />
       
       {/* Wishlist Modal */}
       <WishlistModal 
-        isOpen={isWishlistOpen} 
-        onClose={() => setIsWishlistOpen(false)} 
+        isOpen={activeModal === 'wishlist'} 
+        onClose={closeModal} 
+      />
+      
+      {/* Cart Modal */}
+      <CartModal 
+        isOpen={activeModal === 'cart'} 
+        onClose={closeModal} 
+      />
+      
+      {/* Country Modal */}
+      <CountryModal 
+        isOpen={activeModal === 'country'} 
+        onClose={closeModal} 
       />
     </header>
   )

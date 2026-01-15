@@ -320,6 +320,67 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Our Families Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-full mx-auto px-2 sm:px-4 lg:px-6">
+          <div className="text-left mb-8">
+            <h2 className="text-4xl md:text-5xl font-light mb-6 tracking-wide">
+              OUR FAMILIES
+            </h2>
+            <button className="text-black font-light underline hover:text-gray-600 transition-colors">
+              Discover More
+            </button>
+          </div>
+          
+          <div className="overflow-x-auto scrollbar-hide" id="families-scroll">
+            <div className="flex gap-0.5 group/container">
+              {categories.map((category: any, index: number) => {
+                const modelImages = [
+                  'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=600',
+                  'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=600',
+                  'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=600',
+                  'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600',
+                  'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600',
+                  'https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?w=600'
+                ]
+                
+                return (
+                  <Link key={category.id} to={`/collections/${category.slug}`} className="group flex-shrink-0 transition-all duration-300" style={{ width: 'calc((100vw - 4rem) / 5.5)' }}>
+                    <div className="relative overflow-hidden mb-4">
+                      <div className="w-full max-w-[600px]" style={{ aspectRatio: '600/750' }}>
+                        <img 
+                          src={modelImages[index % modelImages.length]} 
+                          alt={`Model with ${category.name}`} 
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                      </div>
+                      <div className="absolute inset-0 bg-white/50 opacity-0 group-hover/container:opacity-100 group-hover:!opacity-0 transition-opacity duration-300"></div>
+                      <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </div>
+                    <p className="text-sm capitalize mt-6 mb-1 font-light tracking-wide">{category.name}</p>
+                    <div className="flex h-[100px] lg:h-[80px] xl:h-[90px] w-auto">
+                      <img 
+                        src={category.image || `https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=235`} 
+                        alt={category.name} 
+                        className="w-auto h-full object-contain"
+                      />
+                    </div>
+                  </Link>
+                )
+              })}
+            </div>
+          </div>
+          
+          {/* Scroll Indicator */}
+          <div className="mt-6 flex justify-center">
+            <div className="relative w-[500px] h-4 bg-transparent cursor-pointer flex items-center">
+              <div className="w-full h-px bg-black rounded-full"></div>
+              <div className="absolute top-1/2 transform -translate-y-1/2 w-5 h-5 bg-black rounded-full transition-all duration-200 cursor-grab active:cursor-grabbing hover:scale-110 shadow-md" id="scroll-dot" style={{left: '0%'}}></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Product Categories Grid */}
       <section className="py-0">
         <div className="grid grid-cols-1 md:grid-cols-2">
@@ -361,70 +422,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Our Families Section */}
-      <section className="py-20 bg-white">
-        <div className="max-w-full mx-auto px-2 sm:px-4 lg:px-6">
-          <div className="text-left mb-8">
-            <h2 className="text-4xl md:text-5xl font-light mb-6 tracking-wide">
-              OUR FAMILIES
-            </h2>
-            <button className="text-black font-light underline hover:text-gray-600 transition-colors">
-              Discover More
-            </button>
-          </div>
-          
-          <div className="overflow-x-auto scrollbar-hide" id="families-scroll">
-            <div className="flex gap-1 group/container">
-              {categories.map((category: any, index: number) => {
-                const modelImages = [
-                  'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=800',
-                  'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=800',
-                  'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=800',
-                  'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800',
-                  'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=800',
-                  'https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?w=800'
-                ]
-                
-                return (
-                  <Link key={category.id} to={`/collections/${category.slug}`} className="group flex-shrink-0 transition-all duration-300" style={{ width: 'calc(100vw / 5.5)' }}>
-                    <div className="relative overflow-hidden">
-                      <div className="aspect-[3/4] bg-gray-200">
-                        <img 
-                          src={modelImages[index % modelImages.length]} 
-                          alt={`Model with ${category.name}`} 
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        />
-                      </div>
-                      <div className="absolute inset-0 bg-white/50 opacity-0 group-hover/container:opacity-100 group-hover:!opacity-0 transition-opacity duration-300"></div>
-                      <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    </div>
-                    <div className="bg-white text-black pl-0.5 pr-4 py-4">
-                      <h3 className="text-sm font-light mb-4 tracking-wide text-left">{category.name.toUpperCase()}</h3>
-                      <div className="flex items-center relative">
-                        <img 
-                          src={category.image || `https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=100`} 
-                          alt={category.name} 
-                          className="w-16 max-h-12 object-cover"
-                        />
-                        <div className="absolute inset-0 bg-white/50 opacity-0 group-hover/container:opacity-100 group-hover:!opacity-0 transition-opacity duration-300"></div>
-                      </div>
-                    </div>
-                  </Link>
-                )
-              })}
-            </div>
-          </div>
-          
-          {/* Scroll Indicator */}
-          <div className="mt-6 flex justify-center">
-            <div className="relative w-[500px] h-4 bg-transparent cursor-pointer flex items-center">
-              <div className="w-full h-px bg-black rounded-full"></div>
-              <div className="absolute top-1/2 transform -translate-y-1/2 w-5 h-5 bg-black rounded-full transition-all duration-200 cursor-grab active:cursor-grabbing hover:scale-110 shadow-md" id="scroll-dot" style={{left: '0%'}}></div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Featured Collection */}
       <section className="py-20 bg-gray-50">
         <div className="max-w-full mx-auto px-2 sm:px-4 lg:px-6">
@@ -438,11 +435,11 @@ export default function Home() {
           </div>
           
           <div className="overflow-x-auto scrollbar-hide" id="collection-scroll">
-            <div className="flex gap-1 group/container">
+            <div className="flex gap-0.5 group/container">
               {featuredProducts.map((product: any) => (
-                <Link key={product.id} to={`/products/${product.id}`} className="group flex-shrink-0 transition-all duration-300" style={{ width: 'calc(100vw / 5.5)' }}>
-                  <div className="relative overflow-hidden">
-                    <div className="aspect-[3/4] bg-gray-200">
+                <Link key={product.id} to={`/products/${product.id}`} className="group flex-shrink-0 transition-all duration-300" style={{ width: 'calc((100vw - 4rem) / 4.5)' }}>
+                  <div className="relative overflow-hidden mb-4">
+                    <div className="w-full max-w-[600px]" style={{ aspectRatio: '600/750' }}>
                       {product.images?.[0] ? (
                         <>
                           <img 
@@ -459,7 +456,7 @@ export default function Home() {
                           )}
                         </>
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center">
+                        <div className="w-full h-full flex items-center justify-center bg-gray-200">
                           <span className="text-gray-500 font-light">{product.name.toUpperCase()}</span>
                         </div>
                       )}
@@ -481,12 +478,8 @@ export default function Home() {
                       </svg>
                     </button>
                   </div>
-                  <div className="bg-gray-50 text-black pl-0.5 pr-4 py-4">
-                    <h3 className="text-sm font-light mb-4 tracking-wide text-left">{product.name.toUpperCase()}</h3>
-                    <div className="flex items-center relative">
-                      <p className="text-sm font-light text-black opacity-0 group-hover:opacity-100 transition-opacity duration-300">{formatPrice(getProductPrice(product, selectedCountry.currency), selectedCountry.currency)}</p>
-                    </div>
-                  </div>
+                  <h3 className="text-sm font-light mb-2 tracking-wide uppercase">{product.name}</h3>
+                  <p className="text-sm font-light text-black opacity-0 group-hover:opacity-100 transition-opacity duration-300">{formatPrice(getProductPrice(product, selectedCountry.currency), selectedCountry.currency)}</p>
                 </Link>
               ))}
             </div>
@@ -577,7 +570,7 @@ export default function Home() {
             </button>
             
             <div className="overflow-x-auto scrollbar-hide" id="lancaster-scroll">
-              <div className="flex gap-2">
+              <div className="flex">
                 {[
                   'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=300&h=300&fit=crop',
                   'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=300&h=300&fit=crop',
@@ -588,7 +581,7 @@ export default function Home() {
                   'https://images.unsplash.com/photo-1611652022419-a9419f74343d?w=300&h=300&fit=crop',
                   'https://images.unsplash.com/photo-1594736797933-d0401ba2fe65?w=300&h=300&fit=crop'
                 ].map((image, index) => (
-                  <div key={index} className="group relative overflow-hidden aspect-square bg-gray-100 flex-shrink-0" style={{ width: '280px' }}>
+                  <div key={index} className="group relative overflow-hidden aspect-square bg-gray-100 flex-shrink-0" style={{ width: 'calc(100vw / 5.8)' }}>
                     <img 
                       src={image} 
                       alt={`Lancaster community style ${index + 1}`} 

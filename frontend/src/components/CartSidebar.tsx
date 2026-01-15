@@ -1,11 +1,14 @@
 import { Link } from 'react-router-dom'
 import { useCartStore } from '../store/cartStore'
+import { useWishlistStore } from '../store/wishlistStore'
+import { useModalStore } from '../store/modalStore'
 import { formatPrice, getProductPrice } from '../utils/currency'
 import { useCurrency } from './CountrySwitcher'
 
 export default function CartSidebar() {
   const { items, isOpen, toggleCart, removeItem, updateQuantity, getTotalPrice } = useCartStore()
   const { selectedCountry } = useCurrency()
+  const { openModal } = useModalStore()
 
   if (!isOpen) return null
 
@@ -13,7 +16,29 @@ export default function CartSidebar() {
     <div className="fixed inset-0 z-50 flex items-center justify-end bg-black bg-opacity-50">
       <div className="flex shadow-sm">
         <div className="flex flex-col text-left align-middle transition-all transform h-screen bg-white overflow-auto xl:max-w-[419px] lg:max-w-[355px] w-[100vw]">
-          <header className="xl:p-8 md:p-6 p-4 z-20 flex justify-between sticky top-0 bg-white border-b">
+          <header className="xl:p-8 md:p-6 p-4 z-20 flex justify-between items-center sticky top-0 bg-white border-b">
+            <div className="flex items-center gap-4">
+              <button onClick={() => openModal('search')} className="text-sm cursor-pointer group relative flex items-center justify-center p-1 hover:opacity-80 transition-opacity">
+                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </button>
+              <button onClick={() => openModal('account')} className="text-sm cursor-pointer group relative flex items-center justify-center p-1 hover:opacity-80 transition-opacity">
+                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+              </button>
+              <button onClick={() => openModal('wishlist')} className="text-sm cursor-pointer group relative flex items-center justify-center p-1 hover:opacity-80 transition-opacity">
+                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+              </button>
+              <button className="group relative flex items-center justify-center p-1 hover:opacity-80 transition-opacity">
+                <svg className="w-5 h-5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l-1 12H6L5 9z" />
+                </svg>
+              </button>
+            </div>
             <h2 className="text-lg">Shopping Bag ({items.length})</h2>
             <button 
               className="hover:opacity-70 cursor-pointer transition-all p-2 -m-2"

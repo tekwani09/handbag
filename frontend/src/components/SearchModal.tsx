@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { API_BASE_URL } from '../config/api'
+import BaseModal from './BaseModal'
 
 interface SearchModalProps {
   isOpen: boolean
@@ -43,62 +44,9 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
     setProducts([])
   }
 
-  if (!isOpen) return null
-
   return (
-    <div className="fixed inset-0 z-50">
-      {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/20" onClick={onClose}></div>
-      
-      {/* Right Sidebar */}
-      <div className="absolute top-0 right-0 h-screen w-[499px] max-w-[499px] bg-gray-50 shadow-lg">
-        {/* Header */}
-        <div className="bg-gray-50 mt-2.5">
-          <div className="flex min-h-16 items-center justify-between gap-2 py-1.5 px-4">
-            <nav>
-              <ul className="group flex max-w-max items-center">
-                <li className="px-1.5 py-2 text-center duration-300 xl:px-2 group-hover:opacity-70 hover:opacity-100 transition-opacity opacity-70">
-                  <button className="relative cursor-pointer transition-all text-xs uppercase tracking-wide whitespace-nowrap">
-                    <div className="w-full transition-opacity">Bags</div>
-                  </button>
-                </li>
-                <li className="px-1.5 py-2 text-center duration-300 xl:px-2 group-hover:opacity-70 hover:opacity-100 transition-opacity opacity-70">
-                  <button className="relative cursor-pointer transition-all text-xs uppercase tracking-wide whitespace-nowrap">
-                    <div className="w-full transition-opacity">Accessories</div>
-                  </button>
-                </li>
-                <li className="px-1.5 py-2 text-center duration-300 xl:px-2 group-hover:opacity-70 hover:opacity-100 transition-opacity opacity-70">
-                  <button className="relative cursor-pointer transition-all text-xs uppercase tracking-wide whitespace-nowrap">
-                    <div className="w-full transition-opacity">New</div>
-                  </button>
-                </li>
-                <li className="px-1.5 py-2 text-center duration-300 xl:px-2 group-hover:opacity-70 hover:opacity-100 transition-opacity opacity-70">
-                  <button className="relative cursor-pointer transition-all text-xs uppercase tracking-wide whitespace-nowrap">
-                    <div className="w-full transition-opacity">Cashmere</div>
-                  </button>
-                </li>
-                <li className="px-1.5 py-2 text-center duration-300 xl:px-2 group-hover:opacity-70 hover:opacity-100 transition-opacity opacity-70">
-                  <button className="relative cursor-pointer transition-all text-xs uppercase tracking-wide whitespace-nowrap">
-                    <div className="w-full transition-opacity">Gifts</div>
-                  </button>
-                </li>
-                <li className="pl-3">
-                  <button type="button" onClick={onClose} className="relative text-sm cursor-pointer transition-opacity flex items-center group-hover:opacity-70 hover:opacity-100">
-                    <div className="w-full transition-opacity">
-                      <svg viewBox="0 0 16 16" fill="none" className="size-4">
-                        <path d="M2 2L13.9987 13.9987" stroke="currentColor" strokeLinecap="round" />
-                        <path d="M14 2L2.00128 13.9987" stroke="currentColor" strokeLinecap="round" />
-                      </svg>
-                    </div>
-                  </button>
-                </li>
-              </ul>
-            </nav>
-          </div>
-        </div>
-          
-        {/* Search Form */}
-        <div className="bg-gray-50 px-4 py-4">
+    <BaseModal isOpen={isOpen} onClose={onClose}>
+      <div className="bg-gray-50 px-4 py-4">
           <form className="flex w-full flex-col" onSubmit={(e) => e.preventDefault()}>
             <div className="group relative w-full">
               <div className="flex w-full flex-col">
@@ -197,7 +145,6 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
             )}
           </div>
         </div>
-      </div>
-    </div>
+    </BaseModal>
   )
 }

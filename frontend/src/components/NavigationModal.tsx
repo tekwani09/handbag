@@ -15,22 +15,30 @@ export default function NavigationModal({ isOpen, onClose, section }: Navigation
         return {
           columns: [
             {
-              title: 'Our selection',
+              title: 'Bags By Style',
               items: [
-                { name: 'ALL HANDBAGS', href: '/products' },
-                { name: 'COLLECTIONS', href: '/products' },
-                { name: 'NEW ARRIVALS', href: '/products' }
+                { name: 'CROSSBODY BAGS', href: '/products?style=crossbody' },
+                { name: 'TOTES & TOP-HANDLE BAGS', href: '/products?style=totes' },
+                { name: 'SMALL & MINI BAGS', href: '/products?style=mini' },
+                { name: 'SHOULDER BAGS', href: '/products?style=shoulder' },
+                { name: 'EVENING BAGS', href: '/products?style=evening' },
+                { name: 'TRAVEL BAGS', href: '/products?style=travel' },
+                { name: 'RAFFIA BAGS', href: '/products?style=raffia' },
+                { name: 'EMBOSSED BAGS', href: '/products?style=embossed' },
+                { name: 'SUEDE BAGS', href: '/products?style=suede' }
               ]
             },
             {
-              title: 'Bags',
+              title: 'Bags By Family',
               items: [
-                { name: 'Tote bags', href: '/products?filter=Totes', icon: true },
-                { name: 'Crossbody bags', href: '/products?filter=Crossbody', icon: true },
-                { name: 'Shoulder bags', href: '/products?filter=Shoulder', icon: true },
-                { name: 'Clutches', href: '/products?filter=Clutches', icon: true },
-                { name: 'Mini bags', href: '/products?filter=Mini', icon: true },
-                { name: 'See all', href: '/products', highlight: true }
+                { name: 'Kite', href: '/products?family=kite' },
+                { name: 'Mosaic', href: '/products?family=mosaic' },
+                { name: 'Tote', href: '/products?family=tote' },
+                { name: 'Osette', href: '/products?family=osette' },
+                { name: 'East/West', href: '/products?family=east-west' },
+                { name: 'Multrees', href: '/products?family=multrees' },
+                { name: 'Lana', href: '/products?family=lana' },
+                { name: 'Crescent', href: '/products?family=crescent' }
               ]
             }
           ]
@@ -52,6 +60,19 @@ export default function NavigationModal({ isOpen, onClose, section }: Navigation
                 { name: 'Handbags', href: '/products?category=handbags', icon: true },
                 { name: 'Accessories', href: '/products?category=accessories', icon: true },
                 { name: 'See all', href: '/products', highlight: true }
+              ]
+            }
+          ]
+        }
+      case 'new':
+        return {
+          columns: [
+            {
+              title: 'New In',
+              items: [
+                { name: 'NEW ARRIVALS', href: '/collections/new-arrivals' },
+                { name: 'NEW SILHOUETTES', href: '/collections/new-silhouettes' },
+                { name: 'BESTSELLERS', href: '/collections/bestsellers' }
               ]
             }
           ]
@@ -110,13 +131,10 @@ export default function NavigationModal({ isOpen, onClose, section }: Navigation
                         <Link 
                           to={item.href}
                           onClick={onClose}
-                          className={`flex items-center text-sm hover:opacity-70 transition-opacity ${
+                          className={`text-sm hover:opacity-70 transition-opacity ${
                             item.highlight ? 'font-medium' : 'font-light'
-                          }`}
+                          } ${section === 'gifts' || section === 'collections' ? '' : 'uppercase tracking-wide'}`}
                         >
-                          {item.icon && (
-                            <div className="w-6 h-6 mr-3 bg-gray-100 rounded flex-shrink-0"></div>
-                          )}
                           <span>{item.name}</span>
                         </Link>
                       </li>
@@ -125,28 +143,155 @@ export default function NavigationModal({ isOpen, onClose, section }: Navigation
                 </div>
               ))}
               
-              {/* Gift Card Promo Section for Handbags */}
+              {/* Collections Grid for Handbags */}
               {section === 'handbags' && (
-                <div className="w-80 p-8">
-                  <Link to="/products" onClick={onClose} className="block group">
-                    <div className="relative overflow-hidden rounded-lg">
-                      <img 
-                        src="https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400&h=200&fit=crop" 
-                        alt="Gift Card" 
-                        className="w-full h-32 object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
-                      <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
-                        <div className="text-center text-white">
-                          <div className="w-8 h-8 mx-auto mb-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                              <path d="M20 6H4c-1.11 0-2 .89-2 2v8c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm0 2v2H4V8h16zm0 6v2H4v-2h16z"/>
-                            </svg>
+                <div className="p-8">
+                  <ul className="grid grid-cols-4 gap-x-1 gap-y-3 group">
+                    <li>
+                      <Link
+                        to="/products?collection=kite"
+                        onClick={onClose}
+                        className="transition-opacity group-hover:opacity-75 hover:opacity-100!"
+                      >
+                        <div className="max-w-20 pt-4">
+                          <div className="max-w-20 transition-transform hover:-translate-y-2 overflow-hidden relative w-full">
+                            <img
+                              src="https://dato-cdn.strathberry.com/1745228778-family-kite.webp?w=200&auto=compress%2Cenhance"
+                              alt="Kite Collection"
+                              className="w-full h-auto object-cover"
+                            />
                           </div>
-                          <div className="text-sm font-medium">Gift card</div>
+                          <div className="mt-2 text-center text-wrap text-sm">Kite</div>
                         </div>
-                      </div>
-                    </div>
-                  </Link>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to="/products?collection=mosaic"
+                        onClick={onClose}
+                        className="transition-opacity group-hover:opacity-75 hover:opacity-100!"
+                      >
+                        <div className="max-w-20 pt-4">
+                          <div className="max-w-20 transition-transform hover:-translate-y-2 overflow-hidden relative w-full">
+                            <img
+                              src="https://dato-cdn.strathberry.com/1736358730-family-mosaic.webp?w=200&auto=compress%2Cenhance"
+                              alt="Mosaic Collection"
+                              className="w-full h-auto object-cover"
+                            />
+                          </div>
+                          <div className="mt-2 text-center text-wrap text-sm">Mosaic</div>
+                        </div>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to="/products?collection=tote"
+                        onClick={onClose}
+                        className="transition-opacity group-hover:opacity-75 hover:opacity-100!"
+                      >
+                        <div className="max-w-20 pt-4">
+                          <div className="max-w-20 transition-transform hover:-translate-y-2 overflow-hidden relative w-full">
+                            <img
+                              src="https://dato-cdn.strathberry.com/1736423684-strathberry-mini-tote-black-crossbody-bag-producttype.webp?w=200&auto=compress%2Cenhance"
+                              alt="Tote Collection"
+                              className="w-full h-auto object-cover"
+                            />
+                          </div>
+                          <div className="mt-2 text-center text-wrap text-sm">Tote</div>
+                        </div>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to="/products?collection=osette"
+                        onClick={onClose}
+                        className="transition-opacity group-hover:opacity-75 hover:opacity-100!"
+                      >
+                        <div className="max-w-20 pt-4">
+                          <div className="max-w-20 transition-transform hover:-translate-y-2 overflow-hidden relative w-full">
+                            <img
+                              src="https://dato-cdn.strathberry.com/1736423741-strathberry-osette-midi-pouch-black-crossbody-bag-producttype.webp?w=200&auto=compress%2Cenhance"
+                              alt="Osette Collection"
+                              className="w-full h-auto object-cover"
+                            />
+                          </div>
+                          <div className="mt-2 text-center text-wrap text-sm">Osette</div>
+                        </div>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to="/products?collection=east-west"
+                        onClick={onClose}
+                        className="transition-opacity group-hover:opacity-75 hover:opacity-100!"
+                      >
+                        <div className="max-w-20 pt-4">
+                          <div className="max-w-20 transition-transform hover:-translate-y-2 overflow-hidden relative w-full">
+                            <img
+                              src="https://dato-cdn.strathberry.com/1736423769-strathberry-stylist-black-crossbody-bag-producttype.webp?w=200&auto=compress%2Cenhance"
+                              alt="East/West Collection"
+                              className="w-full h-auto object-cover"
+                            />
+                          </div>
+                          <div className="mt-2 text-center text-wrap text-sm">East/West</div>
+                        </div>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to="/products?collection=multrees"
+                        onClick={onClose}
+                        className="transition-opacity group-hover:opacity-75 hover:opacity-100!"
+                      >
+                        <div className="max-w-20 pt-4">
+                          <div className="max-w-20 transition-transform hover:-translate-y-2 overflow-hidden relative w-full">
+                            <img
+                              src="https://dato-cdn.strathberry.com/1736358821-family-multrees.webp?w=200&auto=compress%2Cenhance"
+                              alt="Multrees Collection"
+                              className="w-full h-auto object-cover"
+                            />
+                          </div>
+                          <div className="mt-2 text-center text-wrap text-sm">Multrees</div>
+                        </div>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to="/products?collection=lana"
+                        onClick={onClose}
+                        className="transition-opacity group-hover:opacity-75 hover:opacity-100!"
+                      >
+                        <div className="max-w-20 pt-4">
+                          <div className="max-w-20 transition-transform hover:-translate-y-2 overflow-hidden relative w-full">
+                            <img
+                              src="https://dato-cdn.strathberry.com/1736423665-strathberry-lana-hobo-black-handbag-producttype.webp?w=200&auto=compress%2Cenhance"
+                              alt="Lana Collection"
+                              className="w-full h-auto object-cover"
+                            />
+                          </div>
+                          <div className="mt-2 text-center text-wrap text-sm">Lana</div>
+                        </div>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to="/products?collection=crescent"
+                        onClick={onClose}
+                        className="transition-opacity group-hover:opacity-75 hover:opacity-100!"
+                      >
+                        <div className="max-w-20 pt-4">
+                          <div className="max-w-20 transition-transform hover:-translate-y-2 overflow-hidden relative w-full">
+                            <img
+                              src="https://dato-cdn.strathberry.com/1744981364-family-crescent-moon.webp?w=200&auto=compress%2Cenhance"
+                              alt="Crescent Collection"
+                              className="w-full h-auto object-cover"
+                            />
+                          </div>
+                          <div className="mt-2 text-center text-wrap text-sm">Crescent</div>
+                        </div>
+                      </Link>
+                    </li>
+                  </ul>
                 </div>
               )}
             </div>
