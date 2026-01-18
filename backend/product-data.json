@@ -1,0 +1,35 @@
+{
+  "name": "Mini Tote",
+  "description": "The perfect in-between. Inspired by a vintage music folio discovered by our founders, the Mini Tote introduces a highly requested size, bridging the gap between the Nano and the Midi. Defined by its understated silhouette, this timeless design features the signature Music Bar closure that elegantly secures the top handle. Handcrafted with versatility in mind, it can be carried by hand or styled crossbody with the detachable chain strap—ideal for everyday elegance.",
+  "priceGBP": 495,
+  "priceUSD": 645,
+  "priceINR": 52000,
+  "sku": "MINI-TOTE-NAVY",
+  "inventory": 50,
+  "color": "Croc-Embossed Leather Navy",
+  "colorHex": "#1e3a5f",
+  "images": [
+    "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-hero-20261-170-150-300-HykEXbjETG-GbteXdBuy4Q_c2534d59-e904-47b5-afc0-d399ce9341e0.jpg?v=1768468396&width=1200",
+    "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20261-170-150-300-d_PHD2gMTimTK3wZi3OzrQ_7226c6c9-27f0-429d-9514-1aee18f51023.jpg?v=1768468396&width=1200",
+    "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20261-170-150-300-J1hjf_PFQAiJubKzxkC_8Q_32c9ca5c-2cbb-427d-9b2a-a0d8b30cac3e.jpg?v=1768468396&width=1200",
+    "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20261-170-150-300-SswEHk--QT2bop8FctyFTg_4b774e4f-f368-495d-9e38-55a2e44e7d06.jpg?v=1768468396&width=1200",
+    "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20261-170-150-300-M48yE9JRSheL_saGlywbaw_6fe20ba6-b174-4ccb-a9b8-e2b354724b47.jpg?v=1768468396&width=1200",
+    "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20261-170-150-300-DMD-fbYGRmijUPLBl4tzVw_2cc91744-8951-42e4-b6f7-83dda885eb1a.jpg?v=1768468396&width=1200",
+    "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20261-170-150-300-XSE3e8guS6W8yKymK5umow_c5b60a71-6903-4d60-b704-ac8cab7ff089.jpg?v=1768468396&width=1200",
+    "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20261-170-150-300-cF_t385uTs6ann7x2RJrbA_56bf3465-132f-4601-b6f5-8a6be69fcb72.jpg?v=1768468396&width=1200"
+  ],
+  "features": [
+    "Signature Hardware - Finished with Strathberry's iconic hardware detailing",
+    "Top-Handle - Sleek leather top-handle for comfortable hand-carrying",
+    "Internal Pocket - Interior slip pocket for convenient storage, with soft lining",
+    "Chain Strap - Detachable strap with leather insert for comfort"
+  ],
+  "whatFits": [
+    "iPhone 16 Pro",
+    "Melville Street Wallet",
+    "Multrees Passport Holder",
+    "Airpods",
+    "Lipstick",
+    "Keys"
+  ]
+}

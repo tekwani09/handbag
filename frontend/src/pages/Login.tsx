@@ -199,7 +199,7 @@ export default function Login() {
                       <path d="M9.46536 2.61504C9.67723 2.16107 10.3228 2.16107 10.5346 2.61504L12.6567 7.16193C12.7967 7.46203 13.038 7.70326 13.3381 7.84332L17.885 9.96536C18.3389 10.1772 18.3389 10.8228 17.885 11.0346L13.3381 13.1567C13.038 13.2967 12.7967 13.538 12.6567 13.8381L10.5346 18.385C10.3228 18.8389 9.67723 18.8389 9.46536 18.385L7.34332 13.8381C7.20326 13.538 6.96203 13.2967 6.66193 13.1567L2.11504 11.0346C1.66107 10.8228 1.66107 10.1772 2.11504 9.96536L6.66193 7.84332C6.96203 7.70326 7.20326 7.46203 7.34332 7.16193L9.46536 2.61504Z" stroke="currentColor" strokeWidth="0.82" strokeLinejoin="round" />
                     </svg>
                   </div>
-                  <span className="text-sm font-light">View your Strathberry Insider perks & rewards</span>
+                  <span className="text-sm font-light">View your HEGĒTT Insider perks & rewards</span>
                 </div>
               </div>
 

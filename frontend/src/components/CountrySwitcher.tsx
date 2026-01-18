@@ -10,7 +10,7 @@ interface Country {
 }
 
 const countries: Country[] = [
-  { code: 'GB', name: 'United Kingdom', currency: 'GBP', symbol: '£', flag: '🇬🇧' },
+  { code: 'UK', name: 'United Kingdom', currency: 'GBP', symbol: '£', flag: '🇬🇧' },
   { code: 'US', name: 'United States', currency: 'USD', symbol: '$', flag: '🇺🇸' },
   { code: 'IN', name: 'India', currency: 'INR', symbol: '₹', flag: '🇮🇳' }
 ]
@@ -19,14 +19,14 @@ const CurrencyContext = createContext<{
   selectedCountry: Country
   setSelectedCountry: (country: Country) => void
 }>({ 
-  selectedCountry: countries[0], 
+  selectedCountry: countries[2], 
   setSelectedCountry: () => {} 
 })
 
 export const useCurrency = () => useContext(CurrencyContext)
 
 export const CurrencyProvider = ({ children }: { children: React.ReactNode }) => {
-  const [selectedCountry, setSelectedCountry] = useState(countries[0])
+  const [selectedCountry, setSelectedCountry] = useState(countries[2])
   
   return (
     <CurrencyContext.Provider value={{ selectedCountry, setSelectedCountry }}>

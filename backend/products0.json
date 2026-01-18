@@ -1,0 +1,84 @@
+[
+  {
+    "id": 1,
+    "name": "Melody Tote",
+    "description": "Luxury handbag with premium materials and exquisite craftsmanship",
+    "price": 542,
+    "category": "Handbags",
+    "stock": 57,
+    "images": [
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-hero-20251-128-099-100-bq5JKG73S9S7IAeNpL18lA.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20251-128-099-100-WiPeZCBOTCikI_t_0mU7jw.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20251-128-099-100-bHtlca8uQAOO7fZiMLOl3A.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20251-128-099-100-K8jJDPB9RvOSmkH_Xk2LPA.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20251-128-099-100-KKhAM5c-Ro-ILfqzlUSLsw.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20251-128-099-100-ddPGv3OsRIah6Cbdf7ENKQ.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20251-128-099-100-TdL1adD3TeWwB6dbvIlv3g.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20251-128-099-100-Ia2aBJ9MSbuYGZQ04QULVQ.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20251-128-099-100-PVPMAUODQfqAwiGB7y5PjQ.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20251-128-099-100-Q69zfLNJS-ClaYFsGe5LuQ.jpg"
+    ],
+    "mainImage": "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-hero-20251-128-099-100-bq5JKG73S9S7IAeNpL18lA.jpg",
+    "createdAt": "2026-01-15T09:47:08.431Z"
+  },
+  {
+    "id": 2,
+    "name": "Melody Tote",
+    "description": "Luxury handbag with premium materials and exquisite craftsmanship",
+    "price": 207,
+    "category": "Handbags",
+    "stock": 25,
+    "images": [
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-hero-20251-128-099-425-Bi2eMU48RbqBiskcjiyj0A.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20251-128-099-425-UVBvH9NHSCinERAKmwZdeA.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20251-128-099-425-XGgPHCHjTomnAcQNiFsHRg.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20251-128-099-425-Ta45uZMvS-iHNoC-aoaA6g.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20251-128-099-425-BPAypNQRR0iYU04hR9SVTA.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20251-128-099-425-cUxUAXdRTy-oIs8gWOYYUw.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20251-128-099-425-IB6zdx7cS8aLvhBlj047Ig.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20251-128-099-425-T5cfM6WPQlCGqxyXLrIMQA.jpg"
+    ],
+    "mainImage": "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-hero-20251-128-099-425-Bi2eMU48RbqBiskcjiyj0A.jpg",
+    "createdAt": "2026-01-15T09:47:44.553Z"
+  },
+  {
+    "id": 3,
+    "name": "Melody Tote",
+    "description": "Luxury handbag with premium materials and exquisite craftsmanship",
+    "price": 599,
+    "category": "Handbags",
+    "stock": 47,
+    "images": [
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-hero-20251-128-099-440-AR_FhtGnSNCufK9JESdelA.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20251-128-099-440-WbS4QzWiRBSjMzC60uXRXA.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20251-128-099-440-Yy1BRr7zR2-n4SZ0w-YT3A.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20251-128-099-440-CnVxvu4XTNizGqxB42LizQ.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20251-128-099-440-ByBGywvUQDaMyN53_KeKYg.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20251-128-099-440-SNJQpVxuSxKRIi5OftPaAQ.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20251-128-099-440-M-AbkBcJRB61KX1kNWhEiQ.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20251-128-099-440-QynOzBvHRgen0JEJkEyraw.jpg"
+    ],
+    "mainImage": "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-hero-20251-128-099-440-AR_FhtGnSNCufK9JESdelA.jpg",
+    "createdAt": "2026-01-15T09:48:21.866Z"
+  },
+  {
+    "id": 4,
+    "name": "Melody Tote",
+    "description": "Luxury handbag with premium materials and exquisite craftsmanship",
+    "price": 698,
+    "category": "Handbags",
+    "stock": 29,
+    "images": [
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-hero-20252-475-099-450-XPyJsIDYReCny9wnrchvJA.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20252-475-099-450-Aap0JWIhRg-eaIUh68N0aQ.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20252-475-099-450-PH6pXoWJSROzZ3JueD9zsA.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20252-475-099-450-aSdcuXb6Qx-lkByAw-xGyQ.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20252-475-099-450-IiTCXZa0TtWZaayHMBxT7w.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20252-475-099-450-Lv-xe4XVT0ytD-eedtJDnw.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20252-475-099-450-RhptApGmQh-j9jSj0xZPdQ.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20252-475-099-450-JPmnBBWpQDu25qBrpcpvyA.jpg"
+    ],
+    "mainImage": "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-hero-20252-475-099-450-XPyJsIDYReCny9wnrchvJA.jpg",
+    "createdAt": "2026-01-15T09:49:15.902Z"
+  }
+]

@@ -12,6 +12,7 @@ import { useCartStore } from '../store/cartStore'
 import { useWishlistStore } from '../store/wishlistStore'
 import { useAuthStore } from '../store/authStore'
 import { useModalStore } from '../store/modalStore'
+import { bgClasses } from '../styles/colors'
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -31,7 +32,7 @@ const Header = () => {
   return (
     <header className="sticky top-0 z-50">
       {/* Upper header with logo */}
-      <div style={{backgroundColor: '#fcfcfb'}}>
+      <div className={bgClasses.primary}>
         <div className="max-w-full mx-auto px-2 sm:px-4 lg:px-6">
           <div className="flex items-center h-16 relative">
             {/* Left - Ship, Country and Menu */}
@@ -48,7 +49,7 @@ const Header = () => {
             {/* Center - Logo */}
             <div className="absolute left-1/2 transform -translate-x-1/2">
               <Link to="/" className="text-xl font-light tracking-widest text-black">
-                STRATHBERRY
+                HEGĒTT
               </Link>
             </div>
 
@@ -106,7 +107,7 @@ const Header = () => {
       </div>
 
       {/* Lower header with navigation */}
-      <div style={{backgroundColor: '#f0eee9'}}>
+      <div className={bgClasses.secondary}>
         <div className="max-w-full mx-auto px-2 sm:px-4 lg:px-6">
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex justify-center space-x-12 py-4">
@@ -156,7 +157,7 @@ const Header = () => {
 
       {/* Mobile Navigation */}
       {isMenuOpen && (
-        <div className="lg:hidden" style={{backgroundColor: '#f0eee9'}}>
+        <div className={`lg:hidden ${bgClasses.secondary}`}>
           <div className="max-w-full mx-auto px-2 sm:px-4 lg:px-6">
             <nav className="py-6 space-y-6 border-t border-gray-200">
               <Link to="/handbags" className="block text-sm font-light text-black hover:text-gray-600 uppercase tracking-wide">

@@ -1,4 +1,6 @@
 import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
+import { API_BASE_URL } from '../config/api'
 
 interface CartItem {
   id: string
@@ -16,53 +18,92 @@ interface CartStore {
   clearCart: () => void
   getTotalItems: () => number
   getTotalPrice: (currency: string, getProductPrice: (product: any, currency: string) => number) => number
+  syncWithServer: (token: string) => Promise<void>
+  mergeLocalWithServer: (serverItems: CartItem[]) => void
 }
 
-export const useCartStore = create<CartStore>((set, get) => ({
-  items: JSON.parse(localStorage.getItem('cart-items') || '[]'),
-  addItem: (item) => {
-    const items = get().items
-    const existingItem = items.find(i => i.id === item.id)
-    
-    let newItems
-    if (existingItem) {
-      newItems = items.map(i => 
-        i.id === item.id 
-          ? { ...i, quantity: i.quantity + 1 }
-          : i
+export const useCartStore = create<CartStore>()(persist(
+  (set, get) => ({
+    items: [],
+    addItem: (item) => {
+      const items = get().items
+      const existingItem = items.find(i => i.id === item.id)
+      
+      let newItems
+      if (existingItem) {
+        newItems = items.map(i => 
+          i.id === item.id 
+            ? { ...i, quantity: i.quantity + 1 }
+            : i
+        )
+      } else {
+        newItems = [...items, { ...item, quantity: 1 }]
+      }
+      
+      set({ items: newItems })
+    },
+    removeItem: (id) => {
+      const newItems = get().items.filter(item => item.id !== id)
+      set({ items: newItems })
+    },
+    updateQuantity: (id, quantity) => {
+      if (quantity <= 0) {
+        get().removeItem(id)
+        return
+      }
+      const newItems = get().items.map(item =>
+        item.id === id ? { ...item, quantity } : item
       )
-    } else {
-      newItems = [...items, { ...item, quantity: 1 }]
+      set({ items: newItems })
+    },
+    clearCart: () => {
+      set({ items: [] })
+    },
+    getTotalItems: () => get().items.reduce((total, item) => total + item.quantity, 0),
+    getTotalPrice: (currency, getProductPrice) => {
+      return get().items.reduce((total, item) => {
+        const price = getProductPrice(item.product, currency)
+        return total + (price * item.quantity)
+      }, 0)
+    },
+    syncWithServer: async (token) => {
+      try {
+        // Get server cart
+        const response = await fetch(`${API_BASE_URL}/users/cart`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        })
+        if (response.ok) {
+          const serverData = await response.json()
+          const serverItems = serverData.items || []
+          get().mergeLocalWithServer(serverItems)
+        }
+      } catch (error) {
+        console.error('Failed to sync cart with server:', error)
+      }
+    },
+    mergeLocalWithServer: (serverItems) => {
+      const localItems = get().items
+      const mergedItems = [...serverItems]
+      
+      // Add local items that aren't on server or merge quantities
+      localItems.forEach(localItem => {
+        const serverItem = serverItems.find(item => item.id === localItem.id)
+        if (serverItem) {
+          // Merge quantities for existing items
+          const index = mergedItems.findIndex(item => item.id === localItem.id)
+          if (index !== -1) {
+            mergedItems[index].quantity += localItem.quantity
+          }
+        } else {
+          // Add local items not on server
+          mergedItems.push(localItem)
+        }
+      })
+      
+      set({ items: mergedItems })
     }
-    
-    localStorage.setItem('cart-items', JSON.stringify(newItems))
-    set({ items: newItems })
-  },
-  removeItem: (id) => {
-    const newItems = get().items.filter(item => item.id !== id)
-    localStorage.setItem('cart-items', JSON.stringify(newItems))
-    set({ items: newItems })
-  },
-  updateQuantity: (id, quantity) => {
-    if (quantity <= 0) {
-      get().removeItem(id)
-      return
-    }
-    const newItems = get().items.map(item =>
-      item.id === id ? { ...item, quantity } : item
-    )
-    localStorage.setItem('cart-items', JSON.stringify(newItems))
-    set({ items: newItems })
-  },
-  clearCart: () => {
-    localStorage.removeItem('cart-items')
-    set({ items: [] })
-  },
-  getTotalItems: () => get().items.reduce((total, item) => total + item.quantity, 0),
-  getTotalPrice: (currency, getProductPrice) => {
-    return get().items.reduce((total, item) => {
-      const price = getProductPrice(item.product, currency)
-      return total + (price * item.quantity)
-    }, 0)
+  }),
+  {
+    name: 'cart-storage'
   }
-}))
+))

@@ -83,7 +83,7 @@ export default function Register() {
               CREATE ACCOUNT
             </h1>
             <p className="text-sm font-light text-gray-600">
-              Join the Strathberry family
+              Join the HEGĒTT family
             </p>
           </div>
 

@@ -8,11 +8,13 @@ export const getCurrencySymbol = (currency: string) => {
 }
 
 export const getProductPrice = (product: any, currency: string) => {
+  if (!product) return 0
+  
   switch (currency) {
-    case 'GBP': return product.priceGBP
-    case 'USD': return product.priceUSD
-    case 'INR': return product.priceINR
-    default: return product.priceGBP
+    case 'GBP': return product.priceGBP || 0
+    case 'USD': return product.priceUSD || 0
+    case 'INR': return product.priceINR || 0
+    default: return product.priceGBP || 0
   }
 }
 

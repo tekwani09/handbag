@@ -1,0 +1,64 @@
+[
+  {
+    "id": 1,
+    "name": "Melody Tote",
+    "description": "Luxury handbag with premium materials and exquisite craftsmanship",
+    "price": 698,
+    "category": "Handbags",
+    "stock": 59,
+    "images": [
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-hero-20174-100-500-100-XHIom8kpTdGvfpz0l1YtEA_78a33ad9-2055-4128-a918-e39b0618bbc9.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20174-100-500-100-emzYzbQCTr-fDcKDhRtJUw_0b9989b8-fb81-487e-bbd1-70bde901335a.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20174-100-500-100-Un9S-xzKT-S4LYNOd6VEDg_ce4da3b6-d67d-454b-b94b-89071241c7fa.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20174-100-500-100-P70o2S-GTI2LUWxUycFXzA_e1fbdaed-fb6f-4c50-84d1-9d42952b40db.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20174-100-500-100-SOah4i5YS7SWtpbLmhebFw_8e5a3ad7-2c0b-4ec0-a796-9e7d4d816b26.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20174-100-500-100-B8EGJIdzRRq6f6oFN3q1CA_bd279a6a-0f75-4161-8af6-ca38bda5f76c.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20174-100-500-100-bhck5MmfTtKUCh-fmQ2Rug_8dc67f68-7849-43cb-8cf0-080d1768d757.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20174-100-500-100-W9bP_CXNRi6cOG-ARx_cvA_27badcda-e18f-48fe-85ba-8763733dc22f.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20174-100-500-100-XirbwdWtRSq5KGW87XO85A_98ea4a16-fd9d-4483-bc70-df3a173a87b8.jpg"
+    ],
+    "mainImage": "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-hero-20174-100-500-100-XHIom8kpTdGvfpz0l1YtEA_78a33ad9-2055-4128-a918-e39b0618bbc9.jpg",
+    "createdAt": "2026-01-15T10:07:53.776Z"
+  },
+  {
+    "id": 2,
+    "name": "Melody Tote",
+    "description": "Luxury handbag with premium materials and exquisite craftsmanship",
+    "price": 501,
+    "category": "Handbags",
+    "stock": 13,
+    "images": [
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-hero-20194-100-500-900-VsMhx6s8Tki75K5PI-qmTQ_65454b0a-45ba-482a-a3dd-cf210e5f7d94.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20194-100-500-900-Cr3EYIZIRXCV9iQV-KZ5LA_f8009f77-b930-4306-97fa-801be83312af.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20194-100-500-900-bcQ-yfj0SFetfx_aebTkBA_1fb5817c-76b3-4805-ac90-dc57d959c6b2.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20194-100-500-900-F4cD9xH4QLiuRzAtZLTuUA_d8e5281e-fcee-465c-9edf-d7f8c7deaba4.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20194-100-500-900-dYzSav_tSva9UUqy5KUbpA_b6f7a56c-4207-40c2-ad48-d363efe2dfd5.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20194-100-500-900-amh4FPU-QbKHR8YWhA9h1A_050fd8c8-9793-4f51-aa19-da8c2fb92bde.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20194-100-500-900-HTyqyhLgRXq3yk2Pi6JvJA_78b5cf00-1bee-4cf4-9c23-a5488b2e7dc3.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20194-100-500-900-CCpYAu-pT-aKovW61UZ9fw_a3329787-d973-4506-aa3c-3e4a66b98d7b.jpg"
+    ],
+    "mainImage": "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-hero-20194-100-500-900-VsMhx6s8Tki75K5PI-qmTQ_65454b0a-45ba-482a-a3dd-cf210e5f7d94.jpg",
+    "createdAt": "2026-01-15T10:08:28.799Z"
+  },
+  {
+    "id": 3,
+    "name": "Melody Tote",
+    "description": "Luxury handbag with premium materials and exquisite craftsmanship",
+    "price": 594,
+    "category": "Handbags",
+    "stock": 34,
+    "images": [
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-hero-20204-170-500-550-MCEmpxuwSEm3CuPfs5qTdA_ba3b1116-ddb8-43d7-892d-587a77d586eb.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20204-170-500-550-O-_X1fngQlGDV8Yx4t7tUg_bd7f4a51-db37-40ab-98de-3a1e14cdcdc9.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20204-170-500-550-TJ3bcZFXR7eufgmWBpn5tQ_048c7b51-60c5-4d13-8602-179b193eee4b.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20204-170-500-550-Jrpn79BsQ0i39viJHTIVOw_ed692a3d-75c7-4dc6-b17e-90299346aff4.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20204-170-500-550-WRdPn7kOTNKTit1JpiBPVA_f0b2ded3-bedb-4d81-be5d-99669d02fe62.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20204-170-500-550-HouCuaWWS92lFOZ5uVKyGQ_6c4cde31-d029-4b55-bcee-0c32ee9628ed.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20204-170-500-550-c5HLQDZqRCO-EWXIlk17eA_08b678ac-b166-4f81-9c59-414bd8a2301d.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20204-170-500-550-PgX0uwhHR2GGHzqe8BeKPg_98216169-c9ea-4bfc-983f-7db8b41279ba.jpg",
+      "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-gallery-20204-170-500-550-e258dURbS82CpSfIjL7XeA_a2c45a10-dcaa-4f33-ba57-657fe8b1b002.jpg"
+    ],
+    "mainImage": "https://cdn.shopify.com/s/files/1/0560/4425/files/cms-pm-hero-20204-170-500-550-MCEmpxuwSEm3CuPfs5qTdA_ba3b1116-ddb8-43d7-892d-587a77d586eb.jpg",
+    "createdAt": "2026-01-15T10:08:52.881Z"
+  }
+]

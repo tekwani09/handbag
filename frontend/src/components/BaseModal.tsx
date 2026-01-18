@@ -3,6 +3,7 @@ import { useModalStore } from '../store/modalStore'
 import { useCartStore } from '../store/cartStore'
 import { useWishlistStore } from '../store/wishlistStore'
 import { useCurrency } from './CountrySwitcher'
+import { bgClasses } from '../styles/colors'
 
 interface Country {
   code: string
@@ -41,11 +42,11 @@ export default function BaseModal({ isOpen, onClose, children }: BaseModalProps)
     <div className="fixed inset-0 z-50">
       <div className="absolute inset-0 bg-black/20" onClick={onClose}></div>
       
-      <div className="absolute top-0 right-0 h-screen w-[499px] max-w-[499px] bg-gray-50 shadow-lg flex flex-col">
+      <div className={`absolute top-0 right-0 h-screen w-screen max-w-none 2xl:max-w-[499px] xl:max-w-[419px] lg:max-w-[397px] ${bgClasses.modal} shadow-lg flex flex-col`}>
         {displayCountrySelector ? (
           /* Country Selector View */
           <>
-            <div className="sticky top-0 z-20 flex min-h-16 items-center justify-between gap-2 bg-gray-50 py-1.5 xl:px-8 md:px-6 px-4">
+            <div className={`sticky top-0 z-20 flex min-h-16 items-center justify-between gap-2 ${bgClasses.modal} py-1.5 xl:px-8 md:px-6 px-4`}>
               {!isCountryModal && (
                 <button
                   onClick={() => setShowCountrySelector(false)}
@@ -112,9 +113,9 @@ export default function BaseModal({ isOpen, onClose, children }: BaseModalProps)
         ) : (
           /* Normal Modal View */
           <>
-        <div className="sticky top-0 z-20 flex min-h-16 items-center justify-between gap-2 bg-gray-50 py-1.5 xl:px-8 md:px-6 px-4">
+        <div className={`sticky top-0 z-20 flex min-h-16 items-center justify-between gap-2 ${bgClasses.modal} py-1.5 xl:px-8 md:px-6 px-4`}>
           <div className="gap-4 sticky top-0 hidden lg:flex">
-            <div className="group flex items-center -ml-2">
+            <div className="group flex items-center -ml-2 mr-8">
               <button
                 onClick={() => setShowCountrySelector(true)}
                 className="flex items-center space-x-1 text-sm font-light text-black hover:text-gray-600 transition-colors tracking-wide"
@@ -125,7 +126,7 @@ export default function BaseModal({ isOpen, onClose, children }: BaseModalProps)
               </button>
             </div>
           </div>
-          <div className="relative flex items-center gap-4 -ml-16">
+          <div className="relative flex items-center gap-2 -ml-16">
             <button 
               onClick={() => openModal('search')}
               className="group relative -m-2 flex items-center justify-center p-2 focus:ring-black/5 lg:-m-1 lg:p-1 hover:opacity-80 transition-opacity duration-300"

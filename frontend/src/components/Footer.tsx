@@ -73,7 +73,7 @@ const Footer = () => {
             
             {/* Copyright */}
             <div className="text-sm text-gray-500">
-              © 2024 Strathberry. All rights reserved.
+              © 2024 HEGĒTT. All rights reserved.
             </div>
           </div>
         </div>

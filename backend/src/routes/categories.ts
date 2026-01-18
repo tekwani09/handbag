@@ -1,15 +1,21 @@
 import { Router } from 'express';
-import { PrismaClient } from '@prisma/client';
 
 const router = Router();
-const prisma = new PrismaClient();
 
-// Get all categories
+// Get all categories (now returns enum values)
 router.get('/', async (req, res) => {
   try {
-    const categories = await prisma.category.findMany({
-      orderBy: { name: 'asc' }
-    });
+    const categories = [
+      { id: 'CROSSBODY_BAGS', name: 'Crossbody Bags', slug: 'crossbody-bags' },
+      { id: 'TOTES_TOP_HANDLE_BAGS', name: 'Totes & Top-Handle Bags', slug: 'totes-top-handle-bags' },
+      { id: 'SMALL_MINI_BAGS', name: 'Small & Mini Bags', slug: 'small-mini-bags' },
+      { id: 'SHOULDER_BAGS', name: 'Shoulder Bags', slug: 'shoulder-bags' },
+      { id: 'EVENING_BAGS', name: 'Evening Bags', slug: 'evening-bags' },
+      { id: 'TRAVEL_BAGS', name: 'Travel Bags', slug: 'travel-bags' },
+      { id: 'RAFFIA_BAGS', name: 'Raffia Bags', slug: 'raffia-bags' },
+      { id: 'EMBOSSED_BAGS', name: 'Embossed Bags', slug: 'embossed-bags' },
+      { id: 'SUEDE_BAGS', name: 'Suede Bags', slug: 'suede-bags' }
+    ];
 
     res.json({
       success: true,
@@ -28,9 +34,20 @@ router.get('/', async (req, res) => {
 router.get('/:slug', async (req, res) => {
   try {
     const { slug } = req.params;
-    const category = await prisma.category.findUnique({
-      where: { slug }
-    });
+    
+    const categories = [
+      { id: 'CROSSBODY_BAGS', name: 'Crossbody Bags', slug: 'crossbody-bags' },
+      { id: 'TOTES_TOP_HANDLE_BAGS', name: 'Totes & Top-Handle Bags', slug: 'totes-top-handle-bags' },
+      { id: 'SMALL_MINI_BAGS', name: 'Small & Mini Bags', slug: 'small-mini-bags' },
+      { id: 'SHOULDER_BAGS', name: 'Shoulder Bags', slug: 'shoulder-bags' },
+      { id: 'EVENING_BAGS', name: 'Evening Bags', slug: 'evening-bags' },
+      { id: 'TRAVEL_BAGS', name: 'Travel Bags', slug: 'travel-bags' },
+      { id: 'RAFFIA_BAGS', name: 'Raffia Bags', slug: 'raffia-bags' },
+      { id: 'EMBOSSED_BAGS', name: 'Embossed Bags', slug: 'embossed-bags' },
+      { id: 'SUEDE_BAGS', name: 'Suede Bags', slug: 'suede-bags' }
+    ];
+    
+    const category = categories.find(cat => cat.slug === slug);
 
     if (!category) {
       return res.status(404).json({

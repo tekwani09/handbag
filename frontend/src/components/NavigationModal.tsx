@@ -50,16 +50,8 @@ export default function NavigationModal({ isOpen, onClose, section }: Navigation
               title: 'Our selection',
               items: [
                 { name: 'ALL PRODUCTS', href: '/products' },
-                { name: 'FEATURED', href: '/products' },
-                { name: 'NEW ARRIVALS', href: '/products' }
-              ]
-            },
-            {
-              title: 'Categories',
-              items: [
-                { name: 'Handbags', href: '/products?category=handbags', icon: true },
-                { name: 'Accessories', href: '/products?category=accessories', icon: true },
-                { name: 'See all', href: '/products', highlight: true }
+                { name: 'FEATURED', href: '/products?filter=featured' },
+                { name: 'NEW ARRIVALS', href: '/products?filter=new' }
               ]
             }
           ]
@@ -116,11 +108,11 @@ export default function NavigationModal({ isOpen, onClose, section }: Navigation
           <div className="max-w-7xl mx-auto">
             <div className="flex">
               {navigationData.columns.map((column, columnIndex) => (
-                <div key={columnIndex} className="flex-1 p-8 border-r border-gray-100 last:border-r-0">
+                <div key={columnIndex} className={`${section === 'collections' || section === 'new' ? 'flex-1' : 'flex-1'} py-6 px-4 border-r border-gray-100 last:border-r-0 ml-16 pr-2`}>
                   <Link 
                     to={`/${section}`}
                     onClick={onClose}
-                    className="block mb-6 text-sm font-medium text-black hover:opacity-70 transition-opacity"
+                    className="block mb-4 text-sm font-medium text-black hover:opacity-70 transition-opacity uppercase tracking-wide"
                   >
                     {column.title}
                   </Link>
@@ -131,9 +123,9 @@ export default function NavigationModal({ isOpen, onClose, section }: Navigation
                         <Link 
                           to={item.href}
                           onClick={onClose}
-                          className={`text-sm hover:opacity-70 transition-opacity ${
+                          className={`text-sm hover:opacity-70 transition-opacity uppercase tracking-wide ${
                             item.highlight ? 'font-medium' : 'font-light'
-                          } ${section === 'gifts' || section === 'collections' ? '' : 'uppercase tracking-wide'}`}
+                          }`}
                         >
                           <span>{item.name}</span>
                         </Link>
@@ -149,7 +141,7 @@ export default function NavigationModal({ isOpen, onClose, section }: Navigation
                   <ul className="grid grid-cols-4 gap-x-1 gap-y-3 group">
                     <li>
                       <Link
-                        to="/products?collection=kite"
+                        to="/products?family=kite"
                         onClick={onClose}
                         className="transition-opacity group-hover:opacity-75 hover:opacity-100!"
                       >
@@ -167,7 +159,7 @@ export default function NavigationModal({ isOpen, onClose, section }: Navigation
                     </li>
                     <li>
                       <Link
-                        to="/products?collection=mosaic"
+                        to="/products?family=mosaic"
                         onClick={onClose}
                         className="transition-opacity group-hover:opacity-75 hover:opacity-100!"
                       >
@@ -185,7 +177,7 @@ export default function NavigationModal({ isOpen, onClose, section }: Navigation
                     </li>
                     <li>
                       <Link
-                        to="/products?collection=tote"
+                        to="/products?family=tote"
                         onClick={onClose}
                         className="transition-opacity group-hover:opacity-75 hover:opacity-100!"
                       >
@@ -203,7 +195,7 @@ export default function NavigationModal({ isOpen, onClose, section }: Navigation
                     </li>
                     <li>
                       <Link
-                        to="/products?collection=osette"
+                        to="/products?family=osette"
                         onClick={onClose}
                         className="transition-opacity group-hover:opacity-75 hover:opacity-100!"
                       >
@@ -221,7 +213,7 @@ export default function NavigationModal({ isOpen, onClose, section }: Navigation
                     </li>
                     <li>
                       <Link
-                        to="/products?collection=east-west"
+                        to="/products?family=east-west"
                         onClick={onClose}
                         className="transition-opacity group-hover:opacity-75 hover:opacity-100!"
                       >
@@ -239,7 +231,7 @@ export default function NavigationModal({ isOpen, onClose, section }: Navigation
                     </li>
                     <li>
                       <Link
-                        to="/products?collection=multrees"
+                        to="/products?family=multrees"
                         onClick={onClose}
                         className="transition-opacity group-hover:opacity-75 hover:opacity-100!"
                       >
@@ -257,7 +249,7 @@ export default function NavigationModal({ isOpen, onClose, section }: Navigation
                     </li>
                     <li>
                       <Link
-                        to="/products?collection=lana"
+                        to="/products?family=lana"
                         onClick={onClose}
                         className="transition-opacity group-hover:opacity-75 hover:opacity-100!"
                       >
@@ -275,7 +267,7 @@ export default function NavigationModal({ isOpen, onClose, section }: Navigation
                     </li>
                     <li>
                       <Link
-                        to="/products?collection=crescent"
+                        to="/products?family=crescent"
                         onClick={onClose}
                         className="transition-opacity group-hover:opacity-75 hover:opacity-100!"
                       >
@@ -292,6 +284,82 @@ export default function NavigationModal({ isOpen, onClose, section }: Navigation
                       </Link>
                     </li>
                   </ul>
+                </div>
+              )}
+              
+              {/* New Images */}
+              {section === 'new' && (
+                <div className="flex-1 py-6 px-2">
+                  <Link
+                    to="/collections/new-arrivals"
+                    onClick={onClose}
+                    className="block group"
+                  >
+                    <div className="overflow-hidden">
+                      <img
+                        src="https://d1d1r0t5t0enyr.cloudfront.net/products/8fb96f3e-ade6-4347-8b0f-3e8184d95922.avif"
+                        alt="New Arrivals"
+                        className="w-full h-48 object-cover transition-transform group-hover:scale-105"
+                      />
+                    </div>
+                  </Link>
+                </div>
+              )}
+              
+              {/* Second New Image */}
+              {section === 'new' && (
+                <div className="flex-1 py-6 px-2">
+                  <Link
+                    to="/collections/new-silhouettes"
+                    onClick={onClose}
+                    className="block group"
+                  >
+                    <div className="overflow-hidden">
+                      <img
+                        src="https://d1d1r0t5t0enyr.cloudfront.net/products/8fb96f3e-ade6-4347-8b0f-3e8184d95922.avif"
+                        alt="New Silhouettes"
+                        className="w-full h-48 object-cover transition-transform group-hover:scale-105"
+                      />
+                    </div>
+                  </Link>
+                </div>
+              )}
+              
+              {/* Collections Images */}
+              {section === 'collections' && (
+                <div className="flex-1 py-6 px-2">
+                  <Link
+                    to="/products?filter=featured"
+                    onClick={onClose}
+                    className="block group"
+                  >
+                    <div className="overflow-hidden">
+                      <img
+                        src="https://d1d1r0t5t0enyr.cloudfront.net/products/8fb96f3e-ade6-4347-8b0f-3e8184d95922.avif"
+                        alt="Featured Collection"
+                        className="w-full h-48 object-cover transition-transform group-hover:scale-105"
+                      />
+                    </div>
+                  </Link>
+                </div>
+              )}
+              
+              {/* Second Collections Image */}
+              {section === 'collections' && (
+                <div className="flex-1 py-6 px-2">
+                  <Link
+                    to="/products?filter=new"
+                    onClick={onClose}
+                    className="block group"
+                  >
+                    <div className="overflow-hidden">
+                      <img
+                        src="https://d1d1r0t5t0enyr.cloudfront.net/products/8fb96f3e-ade6-4347-8b0f-3e8184d95922.avif"
+                        alt="New Arrivals"
+                        className="w-full h-48 object-cover transition-transform group-hover:scale-105"
+                      />
+                    </div>
+                  </Link>
                 </div>
               )}
             </div>

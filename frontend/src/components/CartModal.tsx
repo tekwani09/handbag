@@ -72,7 +72,7 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
                       </div>
                       <div className="flex justify-center gap-4 align-baseline text-lg">
                         <span className="text-sm flex flex-wrap-reverse justify-center gap-x-2.5 gap-y-0.5">
-                          <div>{formatPrice(getProductPrice(item.product, selectedCountry.currency), selectedCountry.currency)}</div>
+                          <div>{formatPrice(getProductPrice(item.product || item, selectedCountry.currency), selectedCountry.currency)}</div>
                         </span>
                       </div>
                     </div>
@@ -98,7 +98,7 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
               <div className="xl:ml-8 md:ml-6 ml-4 xl:mr-8 md:mr-6 mr-4">
                 <div className="flex justify-between items-center mb-4">
                   <span className="text-sm">Subtotal</span>
-                  <span className="text-sm font-medium">{formatPrice(getTotalPrice(selectedCountry.currency, getProductPrice), selectedCountry.currency)}</span>
+                  <span className="text-sm font-medium">{formatPrice(getTotalPrice(selectedCountry.currency, (product, currency) => getProductPrice(product || {}, currency)), selectedCountry.currency)}</span>
                 </div>
                 <Link 
                   to="/checkout" 

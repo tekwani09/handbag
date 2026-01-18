@@ -259,8 +259,11 @@ export default function Home() {
 
   const fetchFeaturedProducts = async () => {
     try {
+      console.log('Fetching products from:', `${API_BASE_URL}/products`)
       const response = await fetch(`${API_BASE_URL}/products`)
+      console.log('Response status:', response.status)
       const data = await response.json()
+      console.log('Products data:', data)
       setFeaturedProducts(data.products || [])
     } catch (error) {
       console.error('Failed to fetch products:', error)
@@ -295,7 +298,7 @@ export default function Home() {
       <section className="relative h-[calc(100vh-7rem)] overflow-hidden">
         <div className="absolute inset-0">
           <img 
-            src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2574&q=80" 
+            src="https://cdn.shopify.com/s/files/1/0560/4425/files/10SKU-Spotlight_Desktop.jpg?v=1768481273" 
             alt="Luxury handbags" 
             className="w-full h-full object-cover"
           />
@@ -335,21 +338,57 @@ export default function Home() {
           <div className="overflow-x-auto scrollbar-hide" id="families-scroll">
             <div className="flex gap-0.5 group/container">
               {categories.map((category: any, index: number) => {
-                const modelImages = [
-                  'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=600',
-                  'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=600',
-                  'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=600',
-                  'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600',
-                  'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600',
-                  'https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?w=600'
-                ]
+                const familyImages: { [key: string]: { main: string; product: string } } = {
+                  'crossbody bags': {
+                    main: 'https://dato-cdn.strathberry.com/1760949947-family_stylist.jpg',
+                    product: 'https://dato-cdn.strathberry.com/1753794749-family-stylist.webp'
+                  },
+                  'totes & top-handle bags': {
+                    main: 'https://dato-cdn.strathberry.com/1760628912-family_tote.jpg',
+                    product: 'https://dato-cdn.strathberry.com/1753794696-strathberry-mini-tote-black-crossbody-bag-producttype.webp'
+                  },
+                  'small & mini bags': {
+                    main: 'https://dato-cdn.strathberry.com/1760628938-family_kite.jpg',
+                    product: 'https://dato-cdn.strathberry.com/1753794736-family-kite.webp'
+                  },
+                  'shoulder bags': {
+                    main: 'https://dato-cdn.strathberry.com/1760628973-family_osette.jpg',
+                    product: 'https://dato-cdn.strathberry.com/1739554416-family-osette.webp'
+                  },
+                  'evening bags': {
+                    main: 'https://dato-cdn.strathberry.com/1760949959-family_barra.jpg',
+                    product: 'https://dato-cdn.strathberry.com/1759825052-family-barra.webp'
+                  },
+                  'travel bags': {
+                    main: 'https://dato-cdn.strathberry.com/1760628871-family_mosaic.jpg',
+                    product: 'https://dato-cdn.strathberry.com/1739554320-family-mosaic.webp'
+                  },
+                  'raffia bags': {
+                    main: 'https://dato-cdn.strathberry.com/1760628912-family_tote.jpg',
+                    product: 'https://dato-cdn.strathberry.com/1753794696-strathberry-mini-tote-black-crossbody-bag-producttype.webp'
+                  },
+                  'embossed bags': {
+                    main: 'https://dato-cdn.strathberry.com/1760628938-family_kite.jpg',
+                    product: 'https://dato-cdn.strathberry.com/1753794736-family-kite.webp'
+                  },
+                  'suede bags': {
+                    main: 'https://dato-cdn.strathberry.com/1760628973-family_osette.jpg',
+                    product: 'https://dato-cdn.strathberry.com/1739554416-family-osette.webp'
+                  }
+                }
+                
+                const categoryKey = category.name.toLowerCase()
+                const images = familyImages[categoryKey] || {
+                  main: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600',
+                  product: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=235'
+                }
                 
                 return (
                   <Link key={category.id} to={`/collections/${category.slug}`} className="group flex-shrink-0 transition-all duration-300" style={{ width: 'calc((100vw - 4rem) / 5.5)' }}>
                     <div className="relative overflow-hidden mb-4">
                       <div className="w-full max-w-[600px]" style={{ aspectRatio: '600/750' }}>
                         <img 
-                          src={modelImages[index % modelImages.length]} 
+                          src={images.main} 
                           alt={`Model with ${category.name}`} 
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         />
@@ -360,7 +399,7 @@ export default function Home() {
                     <p className="text-sm capitalize mt-6 mb-1 font-light tracking-wide">{category.name}</p>
                     <div className="flex h-[100px] lg:h-[80px] xl:h-[90px] w-auto">
                       <img 
-                        src={category.image || `https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=235`} 
+                        src={images.product} 
                         alt={category.name} 
                         className="w-auto h-full object-contain"
                       />
@@ -388,16 +427,17 @@ export default function Home() {
           <div className="relative group overflow-hidden">
             <div className="h-[calc(100vh-7rem)] bg-gray-200">
               <img 
-                src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" 
+                src="https://dato-cdn.strathberry.com/1766484148-desktop-portrait-not-top-main-newseason.jpg?w=1600&fm=webp&auto=compress%2Cenhance" 
                 alt="Handbags" 
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
             </div>
             <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             <div className="absolute bottom-8 left-8 text-white">
-              <h3 className="text-2xl font-light mb-2 tracking-wide">HANDBAGS</h3>
-              <Link to="/handbags" className="text-sm font-light underline hover:no-underline transition-all">
-                Shop now
+              <h3 className="text-2xl font-light mb-2 tracking-wide">NEW ARRIVALS</h3>
+              <p className="text-sm font-light mb-4 max-w-xs">The new year unfolds with a palette of fresh colours and warming textures.</p>
+              <Link to="/new-arrivals" className="text-sm font-light underline hover:no-underline transition-all">
+                Explore The Collection
               </Link>
             </div>
           </div>
@@ -406,16 +446,17 @@ export default function Home() {
           <div className="relative group overflow-hidden">
             <div className="h-[calc(100vh-7rem)] bg-gray-200">
               <img 
-                src="https://images.unsplash.com/photo-1611652022419-a9419f74343d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                src="https://dato-cdn.strathberry.com/1766485478-desktop-portrait-not-top-main-bestsellers-update.jpg?w=1600&fm=webp&auto=compress%2Cenhance" 
                 alt="Accessories" 
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
             </div>
             <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             <div className="absolute bottom-8 left-8 text-white">
-              <h3 className="text-2xl font-light mb-2 tracking-wide">ACCESSORIES</h3>
-              <Link to="/accessories" className="text-sm font-light underline hover:no-underline transition-all">
-                Shop now
+              <h3 className="text-2xl font-light mb-2 tracking-wide">BESTSELLERS</h3>
+              <p className="text-sm font-light mb-4 max-w-xs">The coveted styles on everybody's wishlist.</p>
+              <Link to="/bestsellers" className="text-sm font-light underline hover:no-underline transition-all">
+                Explore The Collection
               </Link>
             </div>
           </div>
@@ -440,16 +481,16 @@ export default function Home() {
                 <Link key={product.id} to={`/products/${product.id}`} className="group flex-shrink-0 transition-all duration-300" style={{ width: 'calc((100vw - 4rem) / 4.5)' }}>
                   <div className="relative overflow-hidden mb-4">
                     <div className="w-full max-w-[600px]" style={{ aspectRatio: '600/750' }}>
-                      {product.images?.[0] ? (
+                      {product.images?.[1] ? (
                         <>
                           <img 
-                            src={product.images[0]} 
+                            src={product.images[1]} 
                             alt={product.name} 
                             className="w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-500"
                           />
-                          {product.productModelImage && (
+                          {product.images?.[0] && (
                             <img 
-                              src={product.productModelImage} 
+                              src={product.images[0]} 
                               alt={`${product.name} model`} 
                               className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                             />
@@ -479,7 +520,37 @@ export default function Home() {
                     </button>
                   </div>
                   <h3 className="text-sm font-light mb-2 tracking-wide uppercase">{product.name}</h3>
-                  <p className="text-sm font-light text-black opacity-0 group-hover:opacity-100 transition-opacity duration-300">{formatPrice(getProductPrice(product, selectedCountry.currency), selectedCountry.currency)}</p>
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-xs font-light text-gray-600">{product.color || 'Color'}</span>
+                    <div className="flex gap-1 pr-3">
+                      {/* Current product color first */}
+                      {product.colorHex && (
+                        <div
+                          title={product.color}
+                          className="size-3.5 overflow-hidden rounded-full shadow cursor-pointer hover:scale-110 transition-transform"
+                          style={{ backgroundColor: product.colorHex }}
+                        >
+                        </div>
+                      )}
+                      {/* Other color variants */}
+                      {featuredProducts.filter((p: any) => 
+                        ((p.name === product.name && p.id !== product.id) ||
+                        (p.parentProductId === product.id) ||
+                        (product.parentProductId && p.parentProductId === product.parentProductId && p.id !== product.id) ||
+                        (product.parentProductId === p.id)) && p.colorHex !== product.colorHex
+                      ).map((variant: any) => (
+                        <Link
+                          key={variant.id}
+                          to={`/products/${variant.id}`}
+                          title={variant.color}
+                          className="size-3.5 overflow-hidden rounded-full shadow cursor-pointer hover:scale-110 transition-transform"
+                          style={{ backgroundColor: variant.colorHex }}
+                        >
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                  <p className="text-sm font-light text-black">{formatPrice(getProductPrice(product, selectedCountry.currency), selectedCountry.currency)}</p>
                 </Link>
               ))}
             </div>
@@ -500,9 +571,12 @@ export default function Home() {
         <div className="grid grid-cols-1 md:grid-cols-2">
           <div className="relative group overflow-hidden">
             <div className="h-[calc(100vh-7rem)] bg-gray-200">
-              <img 
-                src="https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=800&q=80" 
-                alt="Leather Goods" 
+              <video 
+                src="https://cdn.shopify.com/videos/c/o/v/9fc90a5711014cabab87ea2aba3fe526.webm" 
+                autoPlay
+                muted
+                loop
+                playsInline
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
             </div>
@@ -516,7 +590,7 @@ export default function Home() {
           <div className="relative group overflow-hidden">
             <div className="h-[calc(100vh-7rem)] bg-gray-200">
               <img 
-                src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=800&q=80" 
+                src="https://dato-cdn.strathberry.com/1766485478-desktop-portrait-not-top-main-bestsellers-update.jpg?w=1600&fm=webp&auto=compress%2Cenhance" 
                 alt="Gift Sets" 
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
@@ -531,12 +605,12 @@ export default function Home() {
         </div>
       </section>
 
-      {/* @lancaster Section */}
+      {/* @hegētt Section */}
       <section className="bg-white py-12">
         <div className="max-w-full mx-auto px-2 sm:px-4 lg:px-6">
           <div className="text-left mb-8">
             <h2 className="text-4xl md:text-5xl font-light mb-6 tracking-wide">
-              @lancaster
+              @hegētt
             </h2>
           </div>
           
@@ -544,7 +618,7 @@ export default function Home() {
             <button 
               className="absolute left-4 top-1/2 transform -translate-y-1/2 z-10 w-12 h-12 bg-white/90 rounded-full flex items-center justify-center shadow-lg hover:bg-white transition-colors"
               onClick={() => {
-                const container = document.getElementById('lancaster-scroll');
+                const container = document.getElementById('hegett-scroll');
                 if (container) {
                   container.scrollLeft -= 300;
                 }
@@ -558,7 +632,7 @@ export default function Home() {
             <button 
               className="absolute right-4 top-1/2 transform -translate-y-1/2 z-10 w-12 h-12 bg-white/90 rounded-full flex items-center justify-center shadow-lg hover:bg-white transition-colors"
               onClick={() => {
-                const container = document.getElementById('lancaster-scroll');
+                const container = document.getElementById('hegett-scroll');
                 if (container) {
                   container.scrollLeft += 300;
                 }
@@ -569,7 +643,7 @@ export default function Home() {
               </svg>
             </button>
             
-            <div className="overflow-x-auto scrollbar-hide" id="lancaster-scroll">
+            <div className="overflow-x-auto scrollbar-hide" id="hegett-scroll">
               <div className="flex">
                 {[
                   'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=300&h=300&fit=crop',
@@ -584,7 +658,7 @@ export default function Home() {
                   <div key={index} className="group relative overflow-hidden aspect-square bg-gray-100 flex-shrink-0" style={{ width: 'calc(100vw / 5.8)' }}>
                     <img 
                       src={image} 
-                      alt={`Lancaster community style ${index + 1}`} 
+                      alt={`HEGĒTT community style ${index + 1}`} 
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     />
                     <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -780,13 +854,13 @@ export default function Home() {
               {/* Logo */}
               <div className="text-center">
                 <Link to="/" className="text-2xl font-light tracking-widest text-black hover:text-gray-600 transition-colors">
-                  STRATHBERRY
+                  HEGĒTT
                 </Link>
               </div>
               
               {/* Copyright */}
               <div className="text-sm text-gray-500">
-                © 2024 Strathberry. All rights reserved.
+                © 2024 HEGĒTT. All rights reserved.
               </div>
             </div>
           </div>
