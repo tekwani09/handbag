@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import { PutObjectCommand } from '@aws-sdk/client-s3'
 import { s3Client, BUCKET_NAME, CDN_URL } from '../config/aws'
 import multer from 'multer'
-import { v4 as uuidv4 } from 'uuid'
+import { randomUUID } from 'crypto'
 
 interface AuthRequest extends Request {
   user?: any
@@ -33,7 +33,7 @@ export const uploadImage = async (req: AuthRequest, res: Response) => {
     }
 
     const fileExtension = req.file.originalname.split('.').pop()
-    const fileName = `${uuidv4()}.${fileExtension}`
+    const fileName = `${randomUUID()}.${fileExtension}`
     const key = `products/${fileName}`
 
     console.log('Uploading to S3:', { bucket: BUCKET_NAME, key })

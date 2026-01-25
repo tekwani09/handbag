@@ -384,7 +384,7 @@ export default function Home() {
                 }
                 
                 return (
-                  <Link key={category.id} to={`/collections/${category.slug}`} className="group flex-shrink-0 transition-all duration-300" style={{ width: 'calc((100vw - 4rem) / 5.5)' }}>
+                  <Link key={category.id} to={`/collections/${category.slug}`} className="group flex-shrink-0 transition-all duration-300 group-hover/container:opacity-50 hover:!opacity-100" style={{ width: 'calc((100vw - 4rem) / 5.5)' }}>
                     <div className="relative overflow-hidden mb-4">
                       <div className="w-full max-w-[600px]" style={{ aspectRatio: '600/750' }}>
                         <img 
@@ -393,7 +393,6 @@ export default function Home() {
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         />
                       </div>
-                      <div className="absolute inset-0 bg-white/50 opacity-0 group-hover/container:opacity-100 group-hover:!opacity-0 transition-opacity duration-300"></div>
                       <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     </div>
                     <p className="text-sm capitalize mt-6 mb-1 font-light tracking-wide">{category.name}</p>
