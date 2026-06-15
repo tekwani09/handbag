@@ -119,7 +119,7 @@ export default function Cart() {
               Continue Shopping
             </Link>
 
-            <div className="mt-6 text-xs text-gray-600">
+            <div className="mt-6 text-sm text-gray-600">
               <p>• Free shipping on orders over {formatPrice(200, selectedCountry.currency)}</p>
               <p>• Secure payment processing</p>
               <p>• 30-day return policy</p>

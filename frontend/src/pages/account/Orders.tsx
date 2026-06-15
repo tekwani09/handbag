@@ -62,7 +62,7 @@ export default function AccountOrders() {
     <div className="min-h-screen bg-white">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="mb-8">
-          <Link to="/account" className="text-xs font-light text-black hover:text-gray-600 uppercase tracking-wide">
+          <Link to="/account" className="text-sm font-light text-black hover:text-gray-600 uppercase tracking-wide">
             ← Back to Account
           </Link>
         </div>
@@ -104,7 +104,7 @@ export default function AccountOrders() {
                   </div>
                   <div className="text-right">
                     <p className="text-lg font-light text-black mb-1">{formatPrice(order.total, 'GBP')}</p>
-                    <span className={`px-3 py-1 text-xs font-light uppercase tracking-wide ${getStatusColor(order.status)}`}>
+                    <span className={`px-3 py-1 text-sm font-light uppercase tracking-wide ${getStatusColor(order.status)}`}>
                       {order.status}
                     </span>
                   </div>
@@ -119,7 +119,7 @@ export default function AccountOrders() {
                   <div>
                     <p className="text-sm font-light text-black">{order.items[0]?.product.name}</p>
                     {order.items.length > 1 && (
-                      <p className="text-xs text-gray-600">+{order.items.length - 1} more item{order.items.length > 2 ? 's' : ''}</p>
+                      <p className="text-sm text-gray-600">+{order.items.length - 1} more item{order.items.length > 2 ? 's' : ''}</p>
                     )}
                   </div>
                 </div>
@@ -127,12 +127,12 @@ export default function AccountOrders() {
                 <div className="flex space-x-4">
                   <Link 
                     to={`/orders/${order.id}`}
-                    className="border border-black text-black px-6 py-2 text-xs font-light uppercase tracking-wide hover:bg-black hover:text-white transition-colors"
+                    className="border border-black text-black px-6 py-2 text-sm font-light uppercase tracking-wide hover:bg-black hover:text-white transition-colors"
                   >
                     View Details
                   </Link>
                   {order.status === 'SHIPPED' && (
-                    <button className="border border-black text-black px-6 py-2 text-xs font-light uppercase tracking-wide hover:bg-black hover:text-white transition-colors">
+                    <button className="border border-black text-black px-6 py-2 text-sm font-light uppercase tracking-wide hover:bg-black hover:text-white transition-colors">
                       Track Order
                     </button>
                   )}

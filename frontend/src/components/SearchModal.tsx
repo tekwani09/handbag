@@ -63,7 +63,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                   <button 
                     type="button"
                     onClick={clearSearch}
-                    className="hover:opacity-70 cursor-pointer transition-all inline-block px-0 py-0 uppercase text-left tracking-wide absolute top-1/2 right-2 z-20 -translate-y-1/2 transform text-xs"
+                    className="hover:opacity-70 cursor-pointer transition-all inline-block px-0 py-0 uppercase text-left tracking-wide absolute top-1/2 right-2 z-20 -translate-y-1/2 transform text-sm"
                   >
                     <div className="w-full transition-opacity space-x-1 flex items-center">
                       <div className="sr-only">Clear</div>
@@ -86,7 +86,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
             {/* Results */}
             {products.length > 0 && (
               <>
-                <ul className="my-8 grid grid-cols-2 gap-x-1 gap-y-4 xs:grid-cols-3">
+                <ul className="my-8 grid grid-cols-2 gap-x-1 gap-y-4 sm:grid-cols-3">
                   {products.slice(0, 12).map((product: any) => (
                     <li key={product.id}>
                       <div className="group product-card relative flex flex-col justify-between gap-1">

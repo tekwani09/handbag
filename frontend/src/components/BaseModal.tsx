@@ -13,10 +13,20 @@ interface Country {
   flag: string
 }
 
+const FlagIcon = ({ code, className = '' }: { code: string; className?: string }) => {
+  const flagUrls: { [key: string]: string } = {
+    'gb': 'https://www.datocms-assets.com/17511/1624285088-united-kingdom-flag.svg',
+    'us': 'https://www.datocms-assets.com/17511/1624523694-united-states-flag.svg',
+    'in': 'https://nelkinda.com/blog/svg-flag-of-india/img/India.svg'
+  }
+  
+  return <img src={flagUrls[code]} alt={`${code} flag`} className={className} />
+}
+
 const countries: Country[] = [
-  { code: 'GB', name: 'United Kingdom', currency: 'GBP', symbol: '£', flag: '🇬🇧' },
-  { code: 'US', name: 'United States', currency: 'USD', symbol: '$', flag: '🇺🇸' },
-  { code: 'IN', name: 'India', currency: 'INR', symbol: '₹', flag: '🇮🇳' }
+  { code: 'GB', name: 'United Kingdom', currency: 'GBP', symbol: '£', flag: 'gb' },
+  { code: 'US', name: 'United States', currency: 'USD', symbol: '$', flag: 'us' },
+  { code: 'IN', name: 'India', currency: 'INR', symbol: '₹', flag: 'in' }
 ]
 
 interface BaseModalProps {
@@ -60,7 +70,7 @@ export default function BaseModal({ isOpen, onClose, children }: BaseModalProps)
               <button 
                 type="button" 
                 onClick={onClose} 
-                className="relative hover:opacity-70 cursor-pointer transition-all inline-block uppercase text-left tracking-wide z-20 -m-2 p-2 text-xs"
+                className="relative hover:opacity-70 cursor-pointer transition-all inline-block uppercase text-left tracking-wide z-20 -m-2 p-2 text-sm"
               >
                 <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
                   <path d="M2 2L13.9987 13.9987" stroke="currentColor" strokeLinecap="round"></path>
@@ -82,16 +92,16 @@ export default function BaseModal({ isOpen, onClose, children }: BaseModalProps)
                     }}
                     className={`w-full text-left p-4 border transition-colors ${
                       selectedCountry.code === country.code 
-                        ? 'border-black bg-gray-50' 
-                        : 'border-gray-200 hover:border-gray-300'
+                        ? 'border-black bg-black/5' 
+                        : 'border-black/20 hover:border-black'
                     }`}
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-3">
-                        <span className="text-2xl">{country.flag}</span>
+                        <FlagIcon code={country.flag} className="w-6 h-6" />
                         <div>
                           <div className="font-light text-black">{country.name}</div>
-                          <div className="text-sm text-gray-600 uppercase tracking-wide">
+                          <div className="text-sm text-black/60 uppercase tracking-wide">
                             {country.code} | {country.currency}
                           </div>
                         </div>
@@ -103,8 +113,8 @@ export default function BaseModal({ isOpen, onClose, children }: BaseModalProps)
                   </button>
                 ))}
               </div>
-              <div className="mt-12 pt-6 border-t border-gray-200">
-                <p className="text-sm text-gray-600 font-light">
+              <div className="mt-12 pt-6 border-t border-black/20">
+                <p className="text-sm text-black/60 font-light">
                   Prices will be displayed in {selectedCountry.currency} and orders will be processed in {selectedCountry.name}.
                 </p>
               </div>
@@ -118,10 +128,10 @@ export default function BaseModal({ isOpen, onClose, children }: BaseModalProps)
             <div className="group flex items-center -ml-2 mr-8">
               <button
                 onClick={() => setShowCountrySelector(true)}
-                className="flex items-center space-x-1 text-sm font-light text-black hover:text-gray-600 transition-colors tracking-wide"
+                className="flex items-center space-x-1 text-sm font-light text-black hover:text-black transition-colors tracking-wide"
               >
                 <span>Ship to:</span>
-                <span className="text-lg">{selectedCountry.flag}</span>
+                <FlagIcon code={selectedCountry.flag} className="inline-block w-5 h-5" />
                 <span className="uppercase">{selectedCountry.code}</span>
               </button>
             </div>
@@ -129,42 +139,44 @@ export default function BaseModal({ isOpen, onClose, children }: BaseModalProps)
           <div className="relative flex items-center gap-2 -ml-16">
             <button 
               onClick={() => openModal('search')}
-              className="group relative -m-2 flex items-center justify-center p-2 focus:ring-black/5 lg:-m-1 lg:p-1 hover:opacity-80 transition-opacity duration-300"
+              className="text-black group relative -m-2 flex items-center justify-center p-2 focus:ring-black/5 lg:-m-1 lg:p-1 transition-opacity duration-300"
             >
-              <svg className={`size-6 xxs:size-[1.625rem] lg:size-4 transition-all ${activeModal === 'search' ? 'fill-black text-black' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="6" strokeWidth="1.5" className={activeModal === 'search' ? 'stroke-[2]' : 'group-hover:stroke-[2]'} />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M21 21l-4.35-4.35" className={activeModal === 'search' ? 'stroke-[2]' : 'group-hover:stroke-[2]'} />
               </svg>
             </button>
             <button 
               onClick={() => openModal('wishlist')}
-              className="group relative -m-2 flex items-center justify-center p-2 focus:ring-black/5 lg:-m-1 lg:p-1 hover:opacity-80 transition-opacity duration-300"
+              className="text-black group relative -m-2 flex items-center justify-center p-2 focus:ring-black/5 lg:-m-1 lg:p-1 transition-opacity duration-300"
             >
-              <svg className={`size-6 xxs:size-[1.625rem] lg:size-4 transition-all ${activeModal === 'wishlist' ? 'fill-black text-black' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-              </svg>
+              <svg className={`w-5 h-5 ${activeModal === 'wishlist' ? 'fill-black' : 'group-hover:fill-black'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
               {wishlistItems.length > 0 && (
-                <span className="absolute -top-2 -right-2 bg-black text-white text-xs rounded-full h-4 w-4 flex items-center justify-center font-light">
-                  {wishlistItems.length}
-                </span>
-              )}
+                  <span className="absolute top-0.5 right-0 bg-black text-white text-[9px] rounded-full h-3 w-3 flex items-center justify-center font-light">
+                    {wishlistItems.length}
+                  </span>
+                )}
             </button>
             <button 
               onClick={() => openModal('account')}
-              className="group relative -m-2 flex items-center justify-center p-2 focus:ring-black/5 lg:-m-1 lg:p-1 hover:opacity-80 transition-opacity duration-300"
+              className="text-black group relative -m-2 flex items-center justify-center p-2 focus:ring-black/5 lg:-m-1 lg:p-1 transition-opacity duration-300"
             >
-              <svg className={`size-6 xxs:size-[1.625rem] lg:size-4 transition-all ${activeModal === 'account' ? 'fill-black text-black' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className={`w-5 h-5 ${activeModal === 'account' ? 'fill-black' : 'group-hover:fill-black'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
             </button>
             <button 
               onClick={() => openModal('cart')}
-              className="group relative -m-2 flex items-center justify-center p-2 focus:ring-black/5 lg:-m-1 lg:p-1 hover:opacity-80 transition-opacity duration-300"
+              className="text-black group relative -m-2 flex items-center justify-center p-2 focus:ring-black/5 lg:-m-1 lg:p-1 transition-opacity duration-300"
             >
-              <svg className={`size-6 xxs:size-[1.625rem] lg:size-4 transition-all ${activeModal === 'cart' ? 'fill-black text-black' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l-1 12H6L5 9z" />
+              <svg className="w-6 h-6" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                <path className={`transition-all duration-200 ${activeModal === 'cart' ? 'fill-black' : 'group-hover:fill-black'}`} d="M10 26 L54 26 L46 53 Q44.5 55 40 55 L24 55 Q19.5 55 18 53 Z" fill="none" stroke="currentColor" strokeWidth="3" strokeLinejoin="round"/>
+                <path d="M22 28 C22 14, 27 8, 32 8 C37 8, 42 14, 42 28" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
               </svg>
               {getTotalItems() > 0 && (
-                <span className="absolute -top-2 -right-2 bg-black text-white text-xs rounded-full h-4 w-4 flex items-center justify-center font-light">
+                <span className="absolute top-0.5 right-0 bg-black text-white text-[9px] rounded-full h-3 w-3 flex items-center justify-center font-light">
                   {getTotalItems()}
                 </span>
               )}
@@ -174,7 +186,7 @@ export default function BaseModal({ isOpen, onClose, children }: BaseModalProps)
           <button 
             type="button" 
             onClick={onClose} 
-            className="relative hover:opacity-70 cursor-pointer transition-all inline-block uppercase text-left tracking-wide z-20 -m-2 p-2 text-xs"
+            className="relative hover:opacity-70 cursor-pointer transition-all inline-block uppercase text-left tracking-wide z-20 -m-2 p-2 text-sm"
           >
             <div className="w-full transition-opacity space-x-1 flex items-center">
               <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" width="16" height="16">

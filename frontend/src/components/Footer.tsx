@@ -10,45 +10,45 @@ const Footer = () => {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             {/* Customer Care */}
             <div>
-              <h4 className="text-lg font-light text-black mb-6">Customer Care</h4>
+              <h4 className="text-lg font-semibold text-black mb-6">Customer Care</h4>
               <ul className="space-y-3">
-                <li><Link to="/contact" className="text-sm text-gray-600 hover:text-black transition-colors">Contact Us</Link></li>
-                <li><Link to="/size-guide" className="text-sm text-gray-600 hover:text-black transition-colors">Size Guide</Link></li>
-                <li><Link to="/shipping" className="text-sm text-gray-600 hover:text-black transition-colors">Shipping & Returns</Link></li>
-                <li><Link to="/care" className="text-sm text-gray-600 hover:text-black transition-colors">Care Instructions</Link></li>
-                <li><Link to="/faq" className="text-sm text-gray-600 hover:text-black transition-colors">FAQ</Link></li>
+                <li><Link to="/contact" className="text-sm text-black hover:text-gray-600 transition-colors">Contact Us</Link></li>
+                <li><Link to="/size-guide" className="text-sm text-black hover:text-gray-600 transition-colors">Size Guide</Link></li>
+                <li><Link to="/shipping" className="text-sm text-black hover:text-gray-600 transition-colors">Shipping & Returns</Link></li>
+                <li><Link to="/care" className="text-sm text-black hover:text-gray-600 transition-colors">Care Instructions</Link></li>
+                <li><Link to="/faq" className="text-sm text-black hover:text-gray-600 transition-colors">FAQ</Link></li>
               </ul>
             </div>
             
             {/* About */}
             <div>
-              <h4 className="text-lg font-light text-black mb-6">About</h4>
+              <h4 className="text-lg font-semibold text-black mb-6">About</h4>
               <ul className="space-y-3">
-                <li><Link to="/about" className="text-sm text-gray-600 hover:text-black transition-colors">Our Story</Link></li>
-                <li><Link to="/craftsmanship" className="text-sm text-gray-600 hover:text-black transition-colors">Craftsmanship</Link></li>
-                <li><Link to="/sustainability" className="text-sm text-gray-600 hover:text-black transition-colors">Sustainability</Link></li>
-                <li><Link to="/careers" className="text-sm text-gray-600 hover:text-black transition-colors">Careers</Link></li>
+                <li><Link to="/about" className="text-sm text-black hover:text-gray-600 transition-colors">Our Story</Link></li>
+                <li><Link to="/craftsmanship" className="text-sm text-black hover:text-gray-600 transition-colors">Craftsmanship</Link></li>
+                <li><Link to="/sustainability" className="text-sm text-black hover:text-gray-600 transition-colors">Sustainability</Link></li>
+                <li><Link to="/careers" className="text-sm text-black hover:text-gray-600 transition-colors">Careers</Link></li>
               </ul>
             </div>
             
             {/* Legal */}
             <div>
-              <h4 className="text-lg font-light text-black mb-6">Legal</h4>
+              <h4 className="text-lg font-semibold text-black mb-6">Legal</h4>
               <ul className="space-y-3">
-                <li><Link to="/privacy" className="text-sm text-gray-600 hover:text-black transition-colors">Privacy Policy</Link></li>
-                <li><Link to="/terms" className="text-sm text-gray-600 hover:text-black transition-colors">Terms & Conditions</Link></li>
-                <li><Link to="/cookies" className="text-sm text-gray-600 hover:text-black transition-colors">Cookie Policy</Link></li>
+                <li><Link to="/privacy" className="text-sm text-black hover:text-gray-600 transition-colors">Privacy Policy</Link></li>
+                <li><Link to="/terms" className="text-sm text-black hover:text-gray-600 transition-colors">Terms & Conditions</Link></li>
+                <li><Link to="/cookies" className="text-sm text-black hover:text-gray-600 transition-colors">Cookie Policy</Link></li>
               </ul>
             </div>
             
             {/* Connect */}
             <div>
-              <h4 className="text-lg font-light text-black mb-6">Connect</h4>
+              <h4 className="text-lg font-semibold text-black mb-6">Connect</h4>
               <ul className="space-y-3">
-                <li><a href="#" className="text-sm text-gray-600 hover:text-black transition-colors">Instagram</a></li>
-                <li><a href="#" className="text-sm text-gray-600 hover:text-black transition-colors">Facebook</a></li>
-                <li><a href="#" className="text-sm text-gray-600 hover:text-black transition-colors">Twitter</a></li>
-                <li><a href="#" className="text-sm text-gray-600 hover:text-black transition-colors">Pinterest</a></li>
+                <li><a href="#" className="text-sm text-black hover:text-gray-600 transition-colors">Instagram</a></li>
+                <li><a href="#" className="text-sm text-black hover:text-gray-600 transition-colors">Facebook</a></li>
+                <li><a href="#" className="text-sm text-black hover:text-gray-600 transition-colors">Twitter</a></li>
+                <li><a href="#" className="text-sm text-black hover:text-gray-600 transition-colors">Pinterest</a></li>
               </ul>
             </div>
           </div>
@@ -67,12 +67,12 @@ const Footer = () => {
             {/* Logo */}
             <div className="text-center">
               <Link to="/" className="text-2xl font-light tracking-widest text-black hover:text-gray-600 transition-colors">
-                STRATHBERRY
+              HEGĒTT
               </Link>
             </div>
             
             {/* Copyright */}
-            <div className="text-sm text-gray-500">
+            <div className="text-sm text-black">
               © 2024 HEGĒTT. All rights reserved.
             </div>
           </div>

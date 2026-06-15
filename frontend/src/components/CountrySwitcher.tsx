@@ -9,10 +9,20 @@ interface Country {
   flag: string
 }
 
+const FlagIcon = ({ code, className = '' }: { code: string; className?: string }) => {
+  const flagUrls: { [key: string]: string } = {
+    'gb': 'https://www.datocms-assets.com/17511/1624285088-united-kingdom-flag.svg',
+    'us': 'https://www.datocms-assets.com/17511/1624523694-united-states-flag.svg',
+    'in': 'https://nelkinda.com/blog/svg-flag-of-india/img/India.svg'
+  }
+  
+  return <img src={flagUrls[code]} alt={`${code} flag`} className={className} />
+}
+
 const countries: Country[] = [
-  { code: 'UK', name: 'United Kingdom', currency: 'GBP', symbol: '£', flag: '🇬🇧' },
-  { code: 'US', name: 'United States', currency: 'USD', symbol: '$', flag: '🇺🇸' },
-  { code: 'IN', name: 'India', currency: 'INR', symbol: '₹', flag: '🇮🇳' }
+  { code: 'UK', name: 'United Kingdom', currency: 'GBP', symbol: '£', flag: 'gb' },
+  { code: 'US', name: 'United States', currency: 'USD', symbol: '$', flag: 'us' },
+  { code: 'IN', name: 'India', currency: 'INR', symbol: '₹', flag: 'in' }
 ]
 
 const CurrencyContext = createContext<{
@@ -51,7 +61,7 @@ export default function CountrySwitcher({ className = '' }: CountrySwitcherProps
           className="flex items-center space-x-1 text-sm font-light text-black hover:text-gray-600 transition-colors tracking-wide"
         >
           <span>Ship to:</span>
-          <span className="text-lg">{selectedCountry.flag}</span>
+          <FlagIcon code={selectedCountry.flag} className="inline-block w-5 h-5" />
           <span className="uppercase">{selectedCountry.code}</span>
         </button>
       </div>

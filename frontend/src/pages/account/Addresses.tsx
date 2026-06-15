@@ -21,7 +21,7 @@ export default function AccountAddresses() {
     <div className="min-h-screen bg-white">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="mb-8">
-          <Link to="/account" className="text-xs font-light text-black hover:text-gray-600 uppercase tracking-wide">
+          <Link to="/account" className="text-sm font-light text-black hover:text-gray-600 uppercase tracking-wide">
             ← Back to Account
           </Link>
         </div>
@@ -38,7 +38,7 @@ export default function AccountAddresses() {
         <div className="flex justify-end mb-8">
           <button 
             onClick={() => setShowAddForm(true)}
-            className="bg-black text-white px-6 py-3 text-xs font-light uppercase tracking-wide hover:bg-gray-800 transition-colors"
+            className="bg-black text-white px-6 py-3 text-sm font-light uppercase tracking-wide hover:bg-gray-800 transition-colors"
           >
             Add New Address
           </button>
@@ -52,7 +52,7 @@ export default function AccountAddresses() {
                   {address.type} Address
                 </h3>
                 {address.isDefault && (
-                  <span className="bg-black text-white px-2 py-1 text-xs font-light uppercase tracking-wide">
+                  <span className="bg-black text-white px-2 py-1 text-sm font-light uppercase tracking-wide">
                     Default
                   </span>
                 )}
@@ -66,10 +66,10 @@ export default function AccountAddresses() {
               </div>
 
               <div className="flex space-x-4">
-                <button className="border border-black text-black px-4 py-2 text-xs font-light uppercase tracking-wide hover:bg-black hover:text-white transition-colors">
+                <button className="border border-black text-black px-4 py-2 text-sm font-light uppercase tracking-wide hover:bg-black hover:text-white transition-colors">
                   Edit
                 </button>
-                <button className="text-red-600 hover:text-red-800 px-4 py-2 text-xs font-light uppercase tracking-wide">
+                <button className="text-red-600 hover:text-red-800 px-4 py-2 text-sm font-light uppercase tracking-wide">
                   Delete
                 </button>
               </div>
@@ -99,13 +99,13 @@ export default function AccountAddresses() {
                   <option>India</option>
                 </select>
                 <div className="flex space-x-4 pt-4">
-                  <button type="submit" className="bg-black text-white px-6 py-2 text-xs font-light uppercase tracking-wide hover:bg-gray-800 transition-colors">
+                  <button type="submit" className="bg-black text-white px-6 py-2 text-sm font-light uppercase tracking-wide hover:bg-gray-800 transition-colors">
                     Save Address
                   </button>
                   <button 
                     type="button"
                     onClick={() => setShowAddForm(false)}
-                    className="border border-gray-300 text-black px-6 py-2 text-xs font-light uppercase tracking-wide hover:bg-gray-50 transition-colors"
+                    className="border border-gray-300 text-black px-6 py-2 text-sm font-light uppercase tracking-wide hover:bg-gray-50 transition-colors"
                   >
                     Cancel
                   </button>

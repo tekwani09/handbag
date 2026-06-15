@@ -28,6 +28,7 @@ export default function ProductDetail() {
       id: productToAdd.id,
       name: productToAdd.name,
       image: productToAdd.images?.[0] || productImages[0],
+      color: productToAdd.color || undefined,
       product: productToAdd
     })
     toggleCart()
@@ -39,7 +40,8 @@ export default function ProductDetail() {
       id: productToWishlist.id,
       name: productToWishlist.name,
       price: getProductPrice(productToWishlist, selectedCountry.currency),
-      image: productImages[0]
+      image: productImages[0],
+      color: productToWishlist.color || undefined
     })
   }
 
@@ -52,10 +54,17 @@ export default function ProductDetail() {
     try {
       const response = await fetch(`${API_BASE_URL}/products/${id}`)
       const data = await response.json()
-      setProduct(data.product)
-      if (data.product.parentProduct) {
-        setProduct(data.product.parentProduct)
-        setSelectedColor(data.product)
+      const fetched = data.product
+
+      if (fetched.parentProduct) {
+        // We landed on a variant — use the parent as the base product
+        // and mark this variant as the selected colour
+        setProduct(fetched.parentProduct)
+        setSelectedColor(fetched)
+      } else {
+        // We landed on a parent product — select it as the active colour
+        setProduct(fetched)
+        setSelectedColor(fetched)
       }
     } catch (error) {
       console.error('Failed to fetch product')
@@ -77,8 +86,14 @@ export default function ProductDetail() {
   }
 
   const displayProduct = selectedColor || product
-  const productImages = displayProduct.images || ['https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800']
-  const allVariants = product.colorVariants || []
+  const productImages = displayProduct?.images || ['https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800']
+
+  // Build the full colour list: parent first, then all its children
+  // The parent product itself is a colour option — include it alongside its colorVariants
+  const allColours: any[] = [
+    product,                           // parent (always first)
+    ...(product.colorVariants || [])   // children
+  ]
 
   return (
     <main className="min-h-screen">
@@ -89,10 +104,10 @@ export default function ProductDetail() {
             {/* Breadcrumb */}
             <nav className="opacity-75 mb-8 hidden lg:block">
               <ul className="text-sm">
-                <li className="inline-block text-xs uppercase tracking-wide mr-2 after:content-['/'] after:pl-2">
+                <li className="inline-block text-sm uppercase tracking-wide mr-2 after:content-['/'] after:pl-2">
                   <Link to="/" className="hover:underline">Home</Link>
                 </li>
-                <li className="inline-block text-xs uppercase tracking-wide">
+                <li className="inline-block text-sm uppercase tracking-wide">
                   <Link to="/products" className="hover:underline">Products</Link>
                 </li>
               </ul>
@@ -125,11 +140,11 @@ export default function ProductDetail() {
             {/* Price */}
             <div className="mb-8">
               <div className="flex items-center space-x-4">
-                <span className="text-2xl font-light">
+                <span className="text-sm font-light">
                   {formatPrice(getProductPrice(displayProduct, selectedCountry.currency), selectedCountry.currency)}
                 </span>
                 {displayProduct.comparePrice && (
-                  <span className="text-xl text-gray-500 line-through">
+                  <span className="text-xs text-gray-500 line-through">
                     {formatPrice(displayProduct.comparePrice, selectedCountry.currency)}
                   </span>
                 )}
@@ -137,31 +152,49 @@ export default function ProductDetail() {
             </div>
 
             {/* Color Swatches */}
-            {allVariants.length > 0 && (
+            {allColours.length > 1 && (
               <div className="mb-8">
-                <div className="flex items-center gap-2 mb-3">
-                  <div className="text-sm opacity-75">{displayProduct.color}</div>
+                {/* Label row */}
+                <div className="flex items-center justify-between gap-4 mb-3">
+                  <div className="flex items-center gap-2">
+                    <div className="text-sm opacity-75">{displayProduct.color}</div>
+                    <div className="text-sm text-black/50 flex-none">({allColours.length} Colour{allColours.length !== 1 ? 's' : ''})</div>
+                  </div>
                 </div>
-                <div className="flex gap-2">
-                  {/* Current product color first */}
-                  {displayProduct.colorHex && (
-                    <div
-                      className="w-10 h-10 rounded-full border-2 border-black"
-                      style={{ backgroundColor: displayProduct.colorHex }}
-                      title={displayProduct.color}
-                    />
-                  )}
-                  {/* Other color variants */}
-                  {allVariants.filter((v: any) => v.id !== displayProduct.id).map((variant: any) => (
-                    <Link
-                      key={variant.id}
-                      to={`/products/${variant.id}`}
-                      title={variant.color}
-                      className="block w-10 h-10 rounded-full border-2 border-gray-300 hover:border-black transition-colors"
-                      style={{ backgroundColor: variant.colorHex }}
-                    >
-                    </Link>
-                  ))}
+
+                {/* Swatch strip */}
+                <div className="relative flex overflow-hidden rounded bg-white p-1 -mx-1">
+                  <div className="flex overflow-x-auto scrollbar-hide gap-1">
+                    {allColours.map((variant: any) => {
+                      const isActive = variant.id === displayProduct.id
+                      return (
+                        <Link
+                          key={variant.id}
+                          to={`/products/${variant.id}`}
+                          title={variant.color}
+                          aria-label={variant.color}
+                          className={`relative flex-none rounded p-1 transition-colors ${
+                            isActive ? 'bg-black/10' : 'hover:bg-black/5'
+                          }`}
+                        >
+                          <div className="rounded w-[75px] h-[94px] md:w-[88px] md:h-[110px] lg:w-8 lg:h-10 xl:w-10 xl:h-[50px] overflow-hidden">
+                            {variant.images?.[0] ? (
+                              <img
+                                src={variant.images[0]}
+                                alt={variant.color}
+                                className="w-full h-full object-cover"
+                              />
+                            ) : (
+                              <div
+                                className="w-full h-full"
+                                style={{ backgroundColor: variant.colorHex || '#ccc' }}
+                              />
+                            )}
+                          </div>
+                        </Link>
+                      )
+                    })}
+                  </div>
                 </div>
               </div>
             )}
@@ -175,7 +208,7 @@ export default function ProductDetail() {
             <div className="mb-8">
               <button 
                 onClick={handleAddToCart}
-                className="w-full bg-black text-white py-4 px-6 text-sm uppercase tracking-wide hover:bg-gray-800 transition-colors"
+                className="w-full bg-black text-white py-4 px-6 text-sm uppercase tracking-wide border border-black hover:bg-white hover:text-black transition-colors"
               >
                 Add to Bag
               </button>
@@ -238,7 +271,7 @@ export default function ProductDetail() {
               ))
             ) : (
               <div className="col-span-2 aspect-square bg-gray-100 flex items-center justify-center">
-                <span className="text-gray-400 text-lg font-light">{displayProduct.name.toUpperCase()}</span>
+                <span className="text-gray-400 text-lg font-light">{displayProduct.name}</span>
               </div>
             )}
           </div>
@@ -323,7 +356,7 @@ export default function ProductDetail() {
         <div className="block lg:flex lg:w-[35%] flex-none">
           <div className="flex flex-col xl:pb-8 md:pb-6 xl:px-10 lg:px-8 md:px-6 px-4 pt-4 xl:pt-6 pb-10">
             <div className="mb-8 xl:mb-10">
-              <h2 className="xl:text-5xl text-4xl font-light mb-8 xl:mb-10">What Fits?</h2>
+              <h2 className="xl:text-4.5xl text-4xl font-light mb-8 xl:mb-10">What Fits?</h2>
               <div className="text-sm mt-10 mb-6 w-[90%] md:w-2/3 lg:w-[90%]">
                 <p>Large enough to carry your laptop, keys, wallet and more – the {product.name} is perfect for your 9-to-5.</p>
               </div>
@@ -486,8 +519,8 @@ export default function ProductDetail() {
                           src={productImages[0]} 
                           alt="Front view with dimensions"
                         />
-                        <div className="absolute z-10 text-center text-xs uppercase" style={{width: '100%', left: '0px', bottom: '2%'}}>39cm (15.4")</div>
-                        <div className="absolute z-10 text-center text-xs uppercase" style={{width: '100%', top: '39%', left: '47%', transform: 'rotate(270deg) translateX(-25%)'}}>37cm (14.6")</div>
+                        <div className="absolute z-10 text-center text-sm uppercase" style={{width: '100%', left: '0px', bottom: '2%'}}>39cm (15.4")</div>
+                        <div className="absolute z-10 text-center text-sm uppercase" style={{width: '100%', top: '39%', left: '47%', transform: 'rotate(270deg) translateX(-25%)'}}>37cm (14.6")</div>
                       </div>
                     </li>
                     <li className="relative overflow-hidden flex">
@@ -497,7 +530,7 @@ export default function ProductDetail() {
                           src={productImages[1] || productImages[0]} 
                           alt="Depth view with dimensions"
                         />
-                        <div className="absolute z-10 text-center text-xs uppercase" style={{width: '100%', bottom: '2%'}}>14cm (5.5")</div>
+                        <div className="absolute z-10 text-center text-sm uppercase" style={{width: '100%', bottom: '2%'}}>14cm (5.5")</div>
                       </div>
                     </li>
                   </ul>

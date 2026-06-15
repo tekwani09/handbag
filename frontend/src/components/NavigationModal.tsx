@@ -47,11 +47,14 @@ export default function NavigationModal({ isOpen, onClose, section }: Navigation
         return {
           columns: [
             {
-              title: 'Our selection',
+              title: 'Collections',
               items: [
                 { name: 'ALL PRODUCTS', href: '/products' },
-                { name: 'FEATURED', href: '/products?filter=featured' },
-                { name: 'NEW ARRIVALS', href: '/products?filter=new' }
+                { name: 'MOSAIC COLLECTION', href: '/collections/mosaic-collection' },
+                { name: 'NEW ARRIVALS', href: '/collections/new-arrivals' },
+                { name: 'BESTSELLERS', href: '/collections/bestsellers' },
+                { name: 'NEW SILHOUETTES', href: '/collections/new-silhouettes' },
+                { name: 'THE TRAVEL COLLECTION', href: '/collections/travel-bags' },
               ]
             }
           ]
@@ -100,7 +103,7 @@ export default function NavigationModal({ isOpen, onClose, section }: Navigation
 
   return (
     <div 
-      className="absolute top-[111px] left-0 right-0 z-50"
+      className="absolute top-[120px] left-0 right-0 z-50"
       onMouseEnter={() => {}}
       onMouseLeave={onClose}
     >
@@ -108,7 +111,7 @@ export default function NavigationModal({ isOpen, onClose, section }: Navigation
           <div className="max-w-7xl mx-auto">
             <div className="flex">
               {navigationData.columns.map((column, columnIndex) => (
-                <div key={columnIndex} className={`${section === 'collections' || section === 'new' ? 'flex-1' : 'flex-1'} py-6 px-4 border-r border-gray-100 last:border-r-0 ml-16 pr-2`}>
+                <div key={columnIndex} className={`${section === 'collections' || section === 'new' ? 'flex-1' : 'flex-1'} py-6 px-4 last:border-r-0 ml-16 pr-2 pb-12`}>
                   <Link 
                     to={`/${section}`}
                     onClick={onClose}
@@ -289,7 +292,7 @@ export default function NavigationModal({ isOpen, onClose, section }: Navigation
               
               {/* New Images */}
               {section === 'new' && (
-                <div className="flex-1 py-6 px-2">
+                <div className="flex-1 py-6 px-2 pb-12">
                   <Link
                     to="/collections/new-arrivals"
                     onClick={onClose}
@@ -299,7 +302,7 @@ export default function NavigationModal({ isOpen, onClose, section }: Navigation
                       <img
                         src="https://d1d1r0t5t0enyr.cloudfront.net/products/8fb96f3e-ade6-4347-8b0f-3e8184d95922.avif"
                         alt="New Arrivals"
-                        className="w-full h-48 object-cover transition-transform group-hover:scale-105"
+                        className="w-full h-full object-cover transition-transform group-hover:scale-105"
                       />
                     </div>
                   </Link>
@@ -308,7 +311,7 @@ export default function NavigationModal({ isOpen, onClose, section }: Navigation
               
               {/* Second New Image */}
               {section === 'new' && (
-                <div className="flex-1 py-6 px-2">
+                <div className="flex-1 py-6 px-2 pb-12">
                   <Link
                     to="/collections/new-silhouettes"
                     onClick={onClose}
@@ -318,7 +321,7 @@ export default function NavigationModal({ isOpen, onClose, section }: Navigation
                       <img
                         src="https://d1d1r0t5t0enyr.cloudfront.net/products/8fb96f3e-ade6-4347-8b0f-3e8184d95922.avif"
                         alt="New Silhouettes"
-                        className="w-full h-48 object-cover transition-transform group-hover:scale-105"
+                        className="w-full h-full object-cover transition-transform group-hover:scale-105"
                       />
                     </div>
                   </Link>
@@ -327,7 +330,7 @@ export default function NavigationModal({ isOpen, onClose, section }: Navigation
               
               {/* Collections Images */}
               {section === 'collections' && (
-                <div className="flex-1 py-6 px-2">
+                <div className="flex-1 py-6 px-2 pb-12">
                   <Link
                     to="/products?filter=featured"
                     onClick={onClose}
@@ -337,7 +340,7 @@ export default function NavigationModal({ isOpen, onClose, section }: Navigation
                       <img
                         src="https://d1d1r0t5t0enyr.cloudfront.net/products/8fb96f3e-ade6-4347-8b0f-3e8184d95922.avif"
                         alt="Featured Collection"
-                        className="w-full h-48 object-cover transition-transform group-hover:scale-105"
+                        className="w-full h-full object-cover transition-transform group-hover:scale-105"
                       />
                     </div>
                   </Link>
@@ -346,7 +349,7 @@ export default function NavigationModal({ isOpen, onClose, section }: Navigation
               
               {/* Second Collections Image */}
               {section === 'collections' && (
-                <div className="flex-1 py-6 px-2">
+                <div className="flex-1 py-6 px-2 pb-12">
                   <Link
                     to="/products?filter=new"
                     onClick={onClose}
@@ -356,7 +359,7 @@ export default function NavigationModal({ isOpen, onClose, section }: Navigation
                       <img
                         src="https://d1d1r0t5t0enyr.cloudfront.net/products/8fb96f3e-ade6-4347-8b0f-3e8184d95922.avif"
                         alt="New Arrivals"
-                        className="w-full h-48 object-cover transition-transform group-hover:scale-105"
+                        className="w-full h-full object-cover transition-transform group-hover:scale-105"
                       />
                     </div>
                   </Link>

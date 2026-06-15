@@ -44,7 +44,7 @@ export default function Login() {
           <div>
             <div className="gap-4 hidden lg:flex sticky top-0">
               <div className="flex items-center group -ml-2">
-                <a className="py-3 px-1.5 xl:px-2 text-xs whitespace-nowrap flex-none transition-opacity group-hover:opacity-70 hover:!opacity-100" href="/change-locale">
+                <a className="py-3 px-1.5 xl:px-2 text-sm whitespace-nowrap flex-none transition-opacity group-hover:opacity-70 hover:!opacity-100" href="/change-locale">
                   Ship to: 
                   <img src="https://www.datocms-assets.com/17511/1624524968-india-flag.svg" alt="India flag" className="inline-block object-contain h-3 aspect-[3/2] mx-0.5 -translate-y-0.5" height="12" />
                   <span className="uppercase">IN</span>
@@ -73,7 +73,7 @@ export default function Login() {
             <h2 className="text-lg block lg:hidden">{isLogin ? 'Sign in' : 'Create an account'}</h2>
           </div>
           <div></div>
-          <button className="relative hover:opacity-70 cursor-pointer transition-all inline-block uppercase text-left text-xs z-20 p-2 -m-2">
+          <button className="relative hover:opacity-70 cursor-pointer transition-all inline-block uppercase text-left text-sm z-20 p-2 -m-2">
             <svg viewBox="0 0 16 16" fill="none" width="16" height="16">
               <path d="M2 2L13.9987 13.9987" stroke="currentColor" strokeLinecap="round" />
               <path d="M14 2L2.00128 13.9987" stroke="currentColor" strokeLinecap="round" />
@@ -89,9 +89,9 @@ export default function Login() {
             <form className="flex-1 flex flex-col gap-0 w-full lg:mt-0 md:mt-6 mt-4">
               <div className="xl:space-y-8 lg:space-y-6 space-y-8">
                 {!isLogin && (
-                  <div className="flex w-full xs:space-x-6 xs:space-y-0 space-y-8 flex-col xs:flex-row">
+                  <div className="flex w-full sm:space-x-6 sm:space-y-0 space-y-8 flex-col sm:flex-row">
                     <div className="group relative flex-1">
-                      <label className="opacity-70 uppercase text-xs transition-all absolute top-0 left-0 transform flex items-center h-full max-h-10 pointer-events-none origin-left group-[.active-input]:opacity-70 group-[.active-input]:-translate-y-[50%] group-[.active-input]:scale-95">
+                      <label className="opacity-70 uppercase text-sm transition-all absolute top-0 left-0 transform flex items-center h-full max-h-10 pointer-events-none origin-left group-[.active-input]:opacity-70 group-[.active-input]:-translate-y-[50%] group-[.active-input]:scale-95">
                         First name<span>*</span>
                       </label>
                       <input 
@@ -105,7 +105,7 @@ export default function Login() {
                       />
                     </div>
                     <div className="group relative flex-1">
-                      <label className="opacity-70 uppercase text-xs transition-all absolute top-0 left-0 transform flex items-center h-full max-h-10 pointer-events-none origin-left group-[.active-input]:opacity-70 group-[.active-input]:-translate-y-[50%] group-[.active-input]:scale-95">
+                      <label className="opacity-70 uppercase text-sm transition-all absolute top-0 left-0 transform flex items-center h-full max-h-10 pointer-events-none origin-left group-[.active-input]:opacity-70 group-[.active-input]:-translate-y-[50%] group-[.active-input]:scale-95">
                         Last name<span>*</span>
                       </label>
                       <input 
@@ -121,9 +121,9 @@ export default function Login() {
                   </div>
                 )}
                 
-                <div className={isLogin ? "space-y-8" : "flex w-full xs:space-x-6 xs:space-y-0 space-y-8 flex-col xs:flex-row"}>
+                <div className={isLogin ? "space-y-8" : "flex w-full sm:space-x-6 sm:space-y-0 space-y-8 flex-col sm:flex-row"}>
                   <div className="group relative flex-1">
-                    <label className="opacity-70 uppercase text-xs transition-all absolute top-0 left-0 transform flex items-center h-full max-h-10 pointer-events-none origin-left group-[.active-input]:opacity-70 group-[.active-input]:-translate-y-[50%] group-[.active-input]:scale-95">
+                    <label className="opacity-70 uppercase text-sm transition-all absolute top-0 left-0 transform flex items-center h-full max-h-10 pointer-events-none origin-left group-[.active-input]:opacity-70 group-[.active-input]:-translate-y-[50%] group-[.active-input]:scale-95">
                       Email<span>*</span>
                     </label>
                     <input 
@@ -137,7 +137,7 @@ export default function Login() {
                     />
                   </div>
                   <div className="group relative flex-1">
-                    <label className="opacity-70 uppercase text-xs transition-all absolute top-0 left-0 transform flex items-center h-full max-h-10 pointer-events-none origin-left group-[.active-input]:opacity-70 group-[.active-input]:-translate-y-[50%] group-[.active-input]:scale-95">
+                    <label className="opacity-70 uppercase text-sm transition-all absolute top-0 left-0 transform flex items-center h-full max-h-10 pointer-events-none origin-left group-[.active-input]:opacity-70 group-[.active-input]:-translate-y-[50%] group-[.active-input]:scale-95">
                       Password<span>*</span>
                     </label>
                     <input 
@@ -168,7 +168,7 @@ export default function Login() {
 
                 {isLogin && (
                   <button type="button" className="relative text-sm cursor-pointer transition-all mt-4">
-                    <div className="underline text-xs">Forgot your password?</div>
+                    <div className="underline text-sm">Forgot your password?</div>
                   </button>
                 )}
               </div>

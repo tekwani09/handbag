@@ -88,10 +88,10 @@ export default function ProductDetail() {
             {/* Breadcrumb */}
             <nav className="opacity-75 mb-8 hidden lg:block">
               <ul className="text-sm">
-                <li className="inline-block text-xs uppercase tracking-wide mr-2 after:content-['/'] after:pl-2">
+                <li className="inline-block text-sm uppercase tracking-wide mr-2 after:content-['/'] after:pl-2">
                   <Link to="/" className="hover:underline">Home</Link>
                 </li>
-                <li className="inline-block text-xs uppercase tracking-wide">
+                <li className="inline-block text-sm uppercase tracking-wide">
                   <span>{product.name}</span>
                 </li>
               </ul>
@@ -278,10 +278,10 @@ export default function ProductDetail() {
 
             {/* Bottom Links */}
             <div className="flex gap-8">
-              <button className="text-xs uppercase tracking-wide underline hover:no-underline">
+              <button className="text-sm uppercase tracking-wide underline hover:no-underline">
                 In-store availability
               </button>
-              <a href="#" className="text-xs uppercase tracking-wide underline hover:no-underline">
+              <a href="#" className="text-sm uppercase tracking-wide underline hover:no-underline">
                 Book an appointment
               </a>
             </div>
@@ -341,7 +341,7 @@ export default function ProductDetail() {
                       })
                       toggleCart()
                     }}
-                    className="text-xs uppercase tracking-wide underline hover:no-underline"
+                    className="text-sm uppercase tracking-wide underline hover:no-underline"
                   >
                     add to bag
                   </button>
@@ -387,8 +387,8 @@ export default function ProductDetail() {
                           src={productImages[0]} 
                           alt="Front view with dimensions"
                         />
-                        <div className="absolute z-10 text-center text-xs uppercase" style={{width: '100%', left: '0px', bottom: '2%'}}>39cm (15.4")</div>
-                        <div className="absolute z-10 text-center text-xs uppercase" style={{width: '100%', top: '39%', left: '47%', transform: 'rotate(270deg) translateX(-25%)'}}>37cm (14.6")</div>
+                        <div className="absolute z-10 text-center text-sm uppercase" style={{width: '100%', left: '0px', bottom: '2%'}}>39cm (15.4")</div>
+                        <div className="absolute z-10 text-center text-sm uppercase" style={{width: '100%', top: '39%', left: '47%', transform: 'rotate(270deg) translateX(-25%)'}}>37cm (14.6")</div>
                       </div>
                     </li>
                     <li className="relative overflow-hidden flex">
@@ -398,7 +398,7 @@ export default function ProductDetail() {
                           src={productImages[1] || productImages[0]} 
                           alt="Depth view with dimensions"
                         />
-                        <div className="absolute z-10 text-center text-xs uppercase" style={{width: '100%', bottom: '2%'}}>14cm (5.5")</div>
+                        <div className="absolute z-10 text-center text-sm uppercase" style={{width: '100%', bottom: '2%'}}>14cm (5.5")</div>
                       </div>
                     </li>
                   </ul>

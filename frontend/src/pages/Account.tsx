@@ -61,7 +61,7 @@ export default function Account() {
             </p>
             <Link 
               to="/account/details"
-              className="inline-block border border-black text-black px-6 py-3 text-xs font-light uppercase tracking-widest hover:bg-black hover:text-white transition-colors"
+              className="inline-block border border-black text-black px-6 py-3 text-sm font-light uppercase tracking-widest hover:bg-black hover:text-white transition-colors"
             >
               Manage
             </Link>
@@ -82,7 +82,7 @@ export default function Account() {
             </p>
             <Link 
               to="/account/orders"
-              className="inline-block border border-black text-black px-6 py-3 text-xs font-light uppercase tracking-widest hover:bg-black hover:text-white transition-colors"
+              className="inline-block border border-black text-black px-6 py-3 text-sm font-light uppercase tracking-widest hover:bg-black hover:text-white transition-colors"
             >
               View Orders
             </Link>
@@ -104,7 +104,7 @@ export default function Account() {
             </p>
             <Link 
               to="/account/addresses"
-              className="inline-block border border-black text-black px-6 py-3 text-xs font-light uppercase tracking-widest hover:bg-black hover:text-white transition-colors"
+              className="inline-block border border-black text-black px-6 py-3 text-sm font-light uppercase tracking-widest hover:bg-black hover:text-white transition-colors"
             >
               Manage
             </Link>
@@ -125,7 +125,7 @@ export default function Account() {
             </p>
             <Link 
               to="/account/wishlist"
-              className="inline-block border border-black text-black px-6 py-3 text-xs font-light uppercase tracking-widest hover:bg-black hover:text-white transition-colors"
+              className="inline-block border border-black text-black px-6 py-3 text-sm font-light uppercase tracking-widest hover:bg-black hover:text-white transition-colors"
             >
               View Wishlist
             </Link>
@@ -146,7 +146,7 @@ export default function Account() {
             </p>
             <Link 
               to="/account/payment"
-              className="inline-block border border-black text-black px-6 py-3 text-xs font-light uppercase tracking-widest hover:bg-black hover:text-white transition-colors"
+              className="inline-block border border-black text-black px-6 py-3 text-sm font-light uppercase tracking-widest hover:bg-black hover:text-white transition-colors"
             >
               Manage
             </Link>
@@ -167,7 +167,7 @@ export default function Account() {
             </p>
             <button 
               onClick={logout}
-              className="inline-block border border-black text-black px-6 py-3 text-xs font-light uppercase tracking-widest hover:bg-black hover:text-white transition-colors"
+              className="inline-block border border-black text-black px-6 py-3 text-sm font-light uppercase tracking-widest hover:bg-black hover:text-white transition-colors"
             >
               Sign Out
             </button>

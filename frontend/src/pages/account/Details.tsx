@@ -59,7 +59,7 @@ export default function AccountDetails() {
     <div className="min-h-screen bg-white">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="mb-8">
-          <Link to="/account" className="text-xs font-light text-black hover:text-gray-600 uppercase tracking-wide">
+          <Link to="/account" className="text-sm font-light text-black hover:text-gray-600 uppercase tracking-wide">
             ← Back to Account
           </Link>
         </div>
@@ -115,7 +115,7 @@ export default function AccountDetails() {
               disabled
               className="w-full px-4 py-3 border border-gray-300 text-sm font-light bg-gray-50 cursor-not-allowed"
             />
-            <p className="text-xs text-gray-500 mt-1">Email cannot be changed</p>
+            <p className="text-sm text-gray-500 mt-1">Email cannot be changed</p>
           </div>
 
           <div>

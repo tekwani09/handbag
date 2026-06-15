@@ -7,6 +7,7 @@ interface CartItem {
   name: string
   image: string
   quantity: number
+  color?: string
   product: any
 }
 

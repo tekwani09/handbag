@@ -24,7 +24,7 @@ export default function Wishlist() {
       <div className="max-w-7xl mx-auto px-4 py-16">
         <div className="mb-12">
           <h1 className="text-4xl font-light mb-4">Wishlist</h1>
-          <p className="text-sm text-gray-600">{items.length} item{items.length !== 1 ? 's' : ''}</p>
+          {items.length > 0 && <p className="text-sm text-gray-600">{items.length} item{items.length !== 1 ? 's' : ''}</p>}
         </div>
 
         {items.length === 0 ? (
@@ -65,7 +65,7 @@ export default function Wishlist() {
                   <p className="text-sm">{formatPrice(item.price, selectedCountry.currency)}</p>
                   <button 
                     onClick={() => handleAddToBag(item)}
-                    className="text-xs uppercase tracking-wide underline hover:no-underline"
+                    className="text-sm uppercase tracking-wide underline hover:no-underline"
                   >
                     Add to Bag
                   </button>

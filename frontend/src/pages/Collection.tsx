@@ -6,6 +6,51 @@ import { API_BASE_URL } from '../config/api'
 import { useCartStore } from '../store/cartStore'
 import { useWishlistStore } from '../store/wishlistStore'
 
+// Virtual collections that don't exist as DB categories
+const VIRTUAL_COLLECTIONS: Record<string, {
+  name: string
+  description: string
+  image: string
+  filter: (product: any) => boolean
+}> = {
+  'new-arrivals': {
+    name: 'New Arrivals',
+    description: 'The latest additions to our collection.',
+    image: 'https://dato-cdn.strathberry.com/1766484148-desktop-portrait-not-top-main-newseason.jpg?w=1600&fm=webp&auto=compress%2Cenhance',
+    filter: (product) => {
+      const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
+      return new Date(product.createdAt) > thirtyDaysAgo
+    }
+  },
+  'bestsellers': {
+    name: 'Bestsellers',
+    description: 'The coveted styles on everybody\'s wishlist.',
+    image: 'https://dato-cdn.strathberry.com/1766485478-desktop-portrait-not-top-main-bestsellers-update.jpg?w=1600&fm=webp&auto=compress%2Cenhance',
+    filter: (product) => product.featured === true
+  },
+  'new-silhouettes': {
+    name: 'New Silhouettes',
+    description: 'Discover our latest bag shapes and silhouettes.',
+    image: 'https://dato-cdn.strathberry.com/1760949947-family_stylist.jpg',
+    filter: (product) => {
+      const sixtyDaysAgo = new Date(Date.now() - 60 * 24 * 60 * 60 * 1000)
+      return new Date(product.createdAt) > sixtyDaysAgo
+    }
+  },
+  'mosaic-collection': {
+    name: 'Mosaic Collection',
+    description: 'Explore the iconic Mosaic family.',
+    image: 'https://dato-cdn.strathberry.com/1760628871-family_mosaic.jpg',
+    filter: (product) => product.family === 'MOSAIC'
+  },
+  'travel-bags': {
+    name: 'The Travel Collection',
+    description: 'Bags built for the journey ahead.',
+    image: 'https://dato-cdn.strathberry.com/1760628871-family_mosaic.jpg',
+    filter: (product) => (product.category || '').toUpperCase() === 'TRAVEL_BAGS'
+  },
+}
+
 export default function Collection() {
   const { slug } = useParams()
   const { selectedCountry } = useCurrency()
@@ -23,6 +68,18 @@ export default function Collection() {
 
   const fetchCollection = async () => {
     try {
+      // Check if this is a virtual collection first
+      const virtual = VIRTUAL_COLLECTIONS[slug!]
+      if (virtual) {
+        const productsResponse = await fetch(`${API_BASE_URL}/products`)
+        const productsData = await productsResponse.json()
+        const allProducts = productsData.products || []
+        setCategory({ name: virtual.name, description: virtual.description, image: virtual.image })
+        setProducts(allProducts.filter(virtual.filter))
+        return
+      }
+
+      // Otherwise treat as a DB category slug
       const [categoryResponse, productsResponse] = await Promise.all([
         fetch(`${API_BASE_URL}/categories/${slug}`),
         fetch(`${API_BASE_URL}/products?category=${slug}`)
@@ -149,7 +206,7 @@ export default function Collection() {
                       <div className="flex items-center justify-between">
                         <button 
                           onClick={() => handleAddToCart(product)}
-                          className="text-xs uppercase tracking-wide underline hover:no-underline transition-all"
+                          className="text-sm uppercase tracking-wide underline hover:no-underline transition-all"
                         >
                           Add to Bag
                         </button>

@@ -20,5 +20,7 @@ export const getProductPrice = (product: any, currency: string) => {
 
 export const formatPrice = (price: number, currency: string) => {
   const symbol = getCurrencySymbol(currency)
-  return `${symbol}${price.toLocaleString()}`
+  const numPrice = Number(price)
+  const locale = currency === 'INR' ? 'en-IN' : currency === 'USD' ? 'en-US' : 'en-GB'
+  return `${symbol}${numPrice.toLocaleString(locale, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`
 }

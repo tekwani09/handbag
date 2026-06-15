@@ -97,7 +97,7 @@ const DummyPayment = ({ amount, currency, orderId, onSuccess, onError }: DummyPa
         {isProcessing ? 'Processing Payment...' : `Pay ${currency.toUpperCase()} ${amount.toFixed(2)}`}
       </button>
 
-      <div className="text-xs text-gray-500 text-center">
+      <div className="text-sm text-gray-500 text-center">
         <p>🔒 This is a demo payment system</p>
         <p>No actual payment will be charged</p>
       </div>

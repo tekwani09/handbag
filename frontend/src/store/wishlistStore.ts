@@ -7,12 +7,14 @@ interface WishlistItem {
   name: string
   price: number
   image: string
+  color?: string
 }
 
 interface WishlistStore {
   items: WishlistItem[]
   addItem: (item: WishlistItem) => void
   removeItem: (id: string) => void
+  clearWishlist: () => void
   isWishlisted: (id: string) => boolean
   toggleItem: (item: WishlistItem) => void
   syncWithServer: (token: string) => Promise<void>
@@ -30,6 +32,9 @@ export const useWishlistStore = create<WishlistStore>()(persist(
     },
     removeItem: (id) => {
       set({ items: get().items.filter(item => item.id !== id) })
+    },
+    clearWishlist: () => {
+      set({ items: [] })
     },
     isWishlisted: (id) => {
       return get().items.some(item => item.id === id)

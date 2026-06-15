@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuthStore } from '../store/authStore'
 import BaseModal from './BaseModal'
@@ -7,11 +7,20 @@ import { bgClasses } from '../styles/colors'
 interface LoginModalProps {
   isOpen: boolean
   onClose: () => void
+  initialMode?: 'login' | 'register'
 }
 
-export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
-  const [isLogin, setIsLogin] = useState(true)
+export default function LoginModal({ isOpen, onClose, initialMode = 'login' }: LoginModalProps) {
+  const [isLogin, setIsLogin] = useState(initialMode === 'login')
   const [showWelcome, setShowWelcome] = useState(false)
+
+  // Sync mode whenever the modal opens or initialMode changes
+  useEffect(() => {
+    if (isOpen) {
+      setIsLogin(initialMode === 'login')
+      setShowWelcome(false)
+    }
+  }, [isOpen, initialMode])
   const [focusedField, setFocusedField] = useState<string | null>(null)
   const [formData, setFormData] = useState({
     firstName: '',
@@ -53,7 +62,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
       <section className={`min-h-[calc(100vh-4rem)] flex flex-col w-full ${bgClasses.modal} transition-opacity sticky lg:static top-16 z-[1] xl:px-8 md:px-6 px-4`}>
             {showWelcome ? (
               <div className="flex flex-col min-h-[calc(100vh-4rem)] w-full">
-                <h2 className="text-lg hidden lg:block xl:my-8 md:my-6 my-4">Account</h2>
+                <h2 className="text-lg font-body hidden lg:block pt-6 pb-4">Account</h2>
                 <div className="flex flex-1 flex-col gap-0 mt-4 w-full md:mt-6 lg:mt-0">
                   <div className="text-sm mb-6">Your account is now logged in.</div>
                   <div className="flex-1"></div>
@@ -103,7 +112,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
               </div>
             ) : (
               <>
-                <h2 className="text-lg xl:my-8 md:my-6 my-4">{isLogin ? 'Sign in' : 'Create an account'}</h2>
+                <h2 className="text-lg font-body pt-6 pb-4">{isLogin ? 'Sign in' : 'Create an account'}</h2>
             
             <div className="flex-1 contents">
               <form onSubmit={handleSubmit} className="flex-1 flex flex-col gap-0 w-full lg:mt-0 md:mt-6 mt-4">
@@ -111,7 +120,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                   {!isLogin && (
                     <div className="flex w-full sm:space-x-6 sm:space-y-0 space-y-8 flex-col sm:flex-row">
                       <div className="group relative flex-1">
-                        <label className={`opacity-70 uppercase text-xs transition-all absolute left-0 pointer-events-none origin-left ${formData.firstName || focusedField === 'firstName' ? '-top-2 scale-95' : 'top-2'}`}>
+                        <label className={`opacity-70 uppercase text-sm transition-all absolute left-0 pointer-events-none origin-left ${formData.firstName || focusedField === 'firstName' ? '-top-2 scale-95' : 'top-2'}`}>
                           First name<span>*</span>
                         </label>
                         <div className="flex w-full flex-col">
@@ -122,12 +131,12 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                             onFocus={() => setFocusedField('firstName')}
                             onBlur={() => setFocusedField(null)}
                             required
-                            className="peer w-full bg-transparent border-solid border-t-0 border-x-0 border-b border-black text-black outline-none focus:ring-0 focus:ring-transparent focus:border-black focus:shadow-none px-0 py-2 text-xs" 
+                            className="peer w-full bg-transparent border-solid border-t-0 border-x-0 border-b border-black text-black outline-none focus:ring-0 focus:ring-transparent focus:border-black focus:shadow-none px-0 py-2 text-sm" 
                           />
                         </div>
                       </div>
                       <div className="group relative flex-1">
-                        <label className={`opacity-70 uppercase text-xs transition-all absolute left-0 pointer-events-none origin-left ${formData.lastName || focusedField === 'lastName' ? '-top-2 scale-95' : 'top-2'}`}>
+                        <label className={`opacity-70 uppercase text-sm transition-all absolute left-0 pointer-events-none origin-left ${formData.lastName || focusedField === 'lastName' ? '-top-2 scale-95' : 'top-2'}`}>
                           Last name<span>*</span>
                         </label>
                         <div className="flex w-full flex-col">
@@ -138,7 +147,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                             onFocus={() => setFocusedField('lastName')}
                             onBlur={() => setFocusedField(null)}
                             required
-                            className="peer w-full bg-transparent border-solid border-t-0 border-x-0 border-b border-black text-black outline-none focus:ring-0 focus:ring-transparent focus:border-black focus:shadow-none px-0 py-2 text-xs" 
+                            className="peer w-full bg-transparent border-solid border-t-0 border-x-0 border-b border-black text-black outline-none focus:ring-0 focus:ring-transparent focus:border-black focus:shadow-none px-0 py-2 text-sm" 
                           />
                         </div>
                       </div>
@@ -148,7 +157,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                   {!isLogin ? (
                     <div className="flex w-full sm:space-x-6 sm:space-y-0 space-y-8 flex-col sm:flex-row">
                       <div className="group relative flex-1">
-                        <label className={`opacity-70 uppercase text-xs transition-all absolute left-0 pointer-events-none origin-left ${formData.email || focusedField === 'email' ? '-top-2 scale-95' : 'top-2'}`}>
+                        <label className={`opacity-70 uppercase text-sm transition-all absolute left-0 pointer-events-none origin-left ${formData.email || focusedField === 'email' ? '-top-2 scale-95' : 'top-2'}`}>
                           Email<span>*</span>
                         </label>
                         <div className="flex w-full flex-col">
@@ -159,12 +168,12 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                             onFocus={() => setFocusedField('email')}
                             onBlur={() => setFocusedField(null)}
                             required
-                            className="peer w-full bg-transparent border-solid border-t-0 border-x-0 border-b border-black text-black outline-none focus:ring-0 focus:ring-transparent focus:border-black focus:shadow-none px-0 py-2 text-xs" 
+                            className="peer w-full bg-transparent border-solid border-t-0 border-x-0 border-b border-black text-black outline-none focus:ring-0 focus:ring-transparent focus:border-black focus:shadow-none px-0 py-2 text-sm" 
                           />
                         </div>
                       </div>
                       <div className="group relative flex-1">
-                        <label className={`opacity-70 uppercase text-xs transition-all absolute left-0 pointer-events-none origin-left ${formData.password || focusedField === 'password' ? '-top-2 scale-95' : 'top-2'}`}>
+                        <label className={`opacity-70 uppercase text-sm transition-all absolute left-0 pointer-events-none origin-left ${formData.password || focusedField === 'password' ? '-top-2 scale-95' : 'top-2'}`}>
                           Password<span>*</span>
                         </label>
                         <div className="flex w-full flex-col">
@@ -175,7 +184,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                             onFocus={() => setFocusedField('password')}
                             onBlur={() => setFocusedField(null)}
                             required
-                            className="peer w-full bg-transparent border-solid border-t-0 border-x-0 border-b border-black text-black outline-none focus:ring-0 focus:ring-transparent focus:border-black focus:shadow-none px-0 py-2 text-xs" 
+                            className="peer w-full bg-transparent border-solid border-t-0 border-x-0 border-b border-black text-black outline-none focus:ring-0 focus:ring-transparent focus:border-black focus:shadow-none px-0 py-2 text-sm" 
                           />
                         </div>
                       </div>
@@ -183,7 +192,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                   ) : (
                     <div className="space-y-8">
                       <div className="group relative">
-                        <label className={`opacity-70 uppercase text-xs transition-all absolute left-0 pointer-events-none origin-left ${formData.email || focusedField === 'email' ? '-top-2 scale-95' : 'top-2'}`}>
+                        <label className={`opacity-70 uppercase text-sm transition-all absolute left-0 pointer-events-none origin-left ${formData.email || focusedField === 'email' ? '-top-2 scale-95' : 'top-2'}`}>
                           Email<span>*</span>
                         </label>
                         <div className="flex w-full flex-col">
@@ -194,12 +203,12 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                             onFocus={() => setFocusedField('email')}
                             onBlur={() => setFocusedField(null)}
                             required
-                            className="peer w-full bg-transparent border-solid border-t-0 border-x-0 border-b border-black text-black outline-none focus:ring-0 focus:ring-transparent focus:border-black focus:shadow-none px-0 py-2 text-xs" 
+                            className="peer w-full bg-transparent border-solid border-t-0 border-x-0 border-b border-black text-black outline-none focus:ring-0 focus:ring-transparent focus:border-black focus:shadow-none px-0 py-2 text-sm" 
                           />
                         </div>
                       </div>
                       <div className="group relative">
-                        <label className={`opacity-70 uppercase text-xs transition-all absolute left-0 pointer-events-none origin-left ${formData.password || focusedField === 'password' ? '-top-2 scale-95' : 'top-2'}`}>
+                        <label className={`opacity-70 uppercase text-sm transition-all absolute left-0 pointer-events-none origin-left ${formData.password || focusedField === 'password' ? '-top-2 scale-95' : 'top-2'}`}>
                           Password<span>*</span>
                         </label>
                         <div className="flex w-full flex-col">
@@ -210,7 +219,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                             onFocus={() => setFocusedField('password')}
                             onBlur={() => setFocusedField(null)}
                             required
-                            className="peer w-full bg-transparent border-solid border-t-0 border-x-0 border-b border-black text-black outline-none focus:ring-0 focus:ring-transparent focus:border-black focus:shadow-none px-0 py-2 text-xs" 
+                            className="peer w-full bg-transparent border-solid border-t-0 border-x-0 border-b border-black text-black outline-none focus:ring-0 focus:ring-transparent focus:border-black focus:shadow-none px-0 py-2 text-sm" 
                           />
                         </div>
                       </div>
@@ -233,7 +242,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
 
                   {isLogin && (
                     <button type="button" className="relative text-sm cursor-pointer transition-all mt-4">
-                      <div className="underline text-xs">Forgot your password?</div>
+                      <div className="underline text-sm">Forgot your password?</div>
                     </button>
                   )}
                 </div>

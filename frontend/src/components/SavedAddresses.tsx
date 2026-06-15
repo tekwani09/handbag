@@ -123,7 +123,7 @@ export default function SavedAddresses({ onSelectAddress, selectedAddressId }: S
                     {address.firstName} {address.lastName}
                   </span>
                   {address.isDefault && (
-                    <span className="px-2 py-0.5 text-xs bg-black text-white rounded">
+                    <span className="px-2 py-0.5 text-sm bg-black text-white rounded">
                       Default
                     </span>
                   )}

@@ -1,14 +1,17 @@
 import { useState, useEffect } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams, useNavigate } from 'react-router-dom'
 import { useCurrency } from '../components/CountrySwitcher'
 import { getProductPrice, formatPrice } from '../utils/currency'
+import Footer from '../components/Footer'
 
 export default function Products() {
   const { selectedCountry } = useCurrency()
+  const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
   const [products, setProducts] = useState([])
   const [filteredProducts, setFilteredProducts] = useState([])
   const [loading, setLoading] = useState(true)
+  const [hoveredVariants, setHoveredVariants] = useState<{[key: number]: any}>({})
   const [activeFilter, setActiveFilter] = useState(() => {
     const filterParam = searchParams.get('filter')
     const categoryParam = searchParams.get('category')
@@ -123,34 +126,50 @@ export default function Products() {
       filtered = filtered.sort((a: any, b: any) => parseFloat(b.priceGBP) - parseFloat(a.priceGBP))
     } else {
       const lowerFilter = activeFilter.toLowerCase()
-      const category = (product: any) => product.category?.toLowerCase() || ''
-      const productName = (product: any) => product.name?.toLowerCase() || ''
-      
-      // Handle category mapping
-      const categoryMappings = {
-        'totes': 'TOTES_TOP_HANDLE_BAGS',
-        'crossbody': 'CROSSBODY_BAGS',
-        'shoulder': 'SHOULDER_BAGS',
-        'mini': 'SMALL_MINI_BAGS',
-        'evening': 'EVENING_BAGS',
-        'travel': 'TRAVEL_BAGS',
-        'raffia': 'RAFFIA_BAGS',
-        'embossed': 'EMBOSSED_BAGS',
-        'suede': 'SUEDE_BAGS'
+
+      // Family mapping: slug → enum value
+      const familyMappings: Record<string, string> = {
+        'kite':     'KITE',
+        'mosaic':   'MOSAIC',
+        'tote':     'TOTE',
+        'osette':   'OSETTE',
+        'east-west':'EAST_WEST',
+        'east_west':'EAST_WEST',
+        'multrees': 'MULTREES',
+        'lana':     'LANA',
+        'crescent': 'CRESCENT',
       }
-      
-      const mappedCategory = categoryMappings[lowerFilter as keyof typeof categoryMappings]
-      
+
+      // Category mapping: slug → enum value
+      const categoryMappings: Record<string, string> = {
+        'totes':     'TOTES_TOP_HANDLE_BAGS',
+        'crossbody': 'CROSSBODY_BAGS',
+        'shoulder':  'SHOULDER_BAGS',
+        'mini':      'SMALL_MINI_BAGS',
+        'evening':   'EVENING_BAGS',
+        'travel':    'TRAVEL_BAGS',
+        'raffia':    'RAFFIA_BAGS',
+        'embossed':  'EMBOSSED_BAGS',
+        'suede':     'SUEDE_BAGS',
+      }
+
+      const mappedFamily   = familyMappings[lowerFilter]
+      const mappedCategory = categoryMappings[lowerFilter]
+
       filtered = filtered.filter((product: any) => {
-        if (mappedCategory && category(product) === mappedCategory.toLowerCase()) {
-          return true
-        }
-        
+        const productFamily   = (product.family   || '').toUpperCase()
+        const productCategory = (product.category || '').toUpperCase()
+
+        if (mappedFamily && productFamily === mappedFamily) return true
+        if (mappedCategory && productCategory === mappedCategory) return true
+
+        // Fallback: loose text match
         return (
-          category(product).includes(lowerFilter) ||
-          productName(product).includes(lowerFilter) ||
-          (lowerFilter === 'handbags' && category(product).includes('bag')) ||
-          (lowerFilter === 'accessories' && category(product).includes('accessory'))
+          productCategory.toLowerCase().includes(lowerFilter) ||
+          productFamily.toLowerCase().includes(lowerFilter) ||
+          product.name?.toLowerCase().includes(lowerFilter) ||
+          (lowerFilter === 'handbags' && productCategory.includes('BAG')) ||
+          (lowerFilter === 'accessories' && productCategory.includes('ACCESSORY'))
         )
       })
     }
@@ -172,10 +191,10 @@ export default function Products() {
       
       {/* Hero Section */}
       <section className="relative block bg-gray-50 xl:pt-8 md:pt-6 pt-4 min-h-none xl:min-h-none pb-4 xl:pb-8">
-        <div className="lg:flex lg:flex-row space-y-4 xs:space-y-4 lg:gap-6 lg:space-y-0 xl:px-8 md:px-6 px-4">
+        <div className="lg:flex lg:flex-row space-y-4 sm:space-y-4 lg:gap-6 lg:space-y-0 xl:px-8 md:px-6 px-4">
           <div className="max-w-responsive-col-3-with-g lg:w-1/3 w-full flex-none">
             <div className="max-w-responsive-col-2-with-g mb-0 h-full lg:mb-0 lg:flex lg:flex-col">
-              <div className="whitespace-pre-wrap font-light tracking-normal normal-case xl:text-5xl text-4xl">
+              <div className="whitespace-pre-wrap font-light tracking-normal normal-case xl:text-4.5xl text-4xl">
                 {getPageTitle()}
               </div>
             </div>
@@ -189,12 +208,12 @@ export default function Products() {
       <div className="sticky top-14 z-40 bg-gray-50 transition-all duration-300">
         <div className="flex items-center justify-between bg-gray-50 py-4 xl:px-8 md:px-6 px-4">
           <div className="flex items-center">
-            <span className="text-sm md:text-xs">{filteredProducts.length} products</span>
+            <span className="text-sm md:text-sm">{filteredProducts.length} products</span>
           </div>
           <div className="flex justify-end">
             <button 
               onClick={() => setShowFilters(!showFilters)}
-              className="relative transition-all group flex uppercase cursor-pointer text-sm md:text-xs"
+              className="relative transition-all group flex uppercase cursor-pointer text-sm md:text-sm"
             >
               <div className="button-content w-full transition-opacity flex items-center space-x-2">
                 <div className="relative"><span>Filter & Sort</span></div>
@@ -224,7 +243,7 @@ export default function Products() {
               </div>
               <button 
                 onClick={() => setShowFilters(false)}
-                className="relative hover:opacity-70 cursor-pointer transition-all inline-block uppercase text-left tracking-wide disabled:opacity-70 z-20 -m-2 p-2 text-xs"
+                className="relative hover:opacity-70 cursor-pointer transition-all inline-block uppercase text-left tracking-wide disabled:opacity-70 z-20 -m-2 p-2 text-sm"
               >
                 <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
                   <path d="M2 2L13.9987 13.9987" stroke="currentColor" strokeLinecap="round"></path>
@@ -260,24 +279,66 @@ export default function Products() {
                   
                   {/* Category Filters */}
                   <div className="border-b border-gray-200 px-4 py-3 md:px-6 xl:px-8">
-                    <div className="text-base mb-4">Category:</div>
+                    <div className="text-base mb-4">Collection:</div>
                     <div className="flex flex-col gap-3">
                       <div className="text-sm">
-                        <input className="cursor-pointer h-4 mr-2" type="radio" name="category" id="all" value="all" checked={activeFilter === 'All'} onChange={(e) => setActiveFilter('All')} />
+                        <input className="cursor-pointer h-4 mr-2" type="radio" name="category" id="all" value="all" checked={activeFilter === 'All'} onChange={() => setActiveFilter('All')} />
                         <label htmlFor="all" className="cursor-pointer uppercase tracking-wide text-sm">All</label>
                       </div>
                       <div className="text-sm">
-                        <input className="cursor-pointer h-4 mr-2" type="radio" name="category" id="crossbody" value="crossbody" checked={activeFilter === 'crossbody'} onChange={(e) => setActiveFilter('crossbody')} />
+                        <input className="cursor-pointer h-4 mr-2" type="radio" name="category" id="crossbody" value="crossbody" checked={activeFilter === 'crossbody'} onChange={() => setActiveFilter('crossbody')} />
                         <label htmlFor="crossbody" className="cursor-pointer uppercase tracking-wide text-sm">Crossbody Bags</label>
                       </div>
                       <div className="text-sm">
-                        <input className="cursor-pointer h-4 mr-2" type="radio" name="category" id="totes" value="totes" checked={activeFilter === 'totes'} onChange={(e) => setActiveFilter('totes')} />
+                        <input className="cursor-pointer h-4 mr-2" type="radio" name="category" id="totes" value="totes" checked={activeFilter === 'totes'} onChange={() => setActiveFilter('totes')} />
                         <label htmlFor="totes" className="cursor-pointer uppercase tracking-wide text-sm">Totes & Top-Handle</label>
                       </div>
                       <div className="text-sm">
-                        <input className="cursor-pointer h-4 mr-2" type="radio" name="category" id="mini" value="mini" checked={activeFilter === 'mini'} onChange={(e) => setActiveFilter('mini')} />
+                        <input className="cursor-pointer h-4 mr-2" type="radio" name="category" id="shoulder" value="shoulder" checked={activeFilter === 'shoulder'} onChange={() => setActiveFilter('shoulder')} />
+                        <label htmlFor="shoulder" className="cursor-pointer uppercase tracking-wide text-sm">Shoulder Bags</label>
+                      </div>
+                      <div className="text-sm">
+                        <input className="cursor-pointer h-4 mr-2" type="radio" name="category" id="mini" value="mini" checked={activeFilter === 'mini'} onChange={() => setActiveFilter('mini')} />
                         <label htmlFor="mini" className="cursor-pointer uppercase tracking-wide text-sm">Small & Mini Bags</label>
                       </div>
+                      <div className="text-sm">
+                        <input className="cursor-pointer h-4 mr-2" type="radio" name="category" id="evening" value="evening" checked={activeFilter === 'evening'} onChange={() => setActiveFilter('evening')} />
+                        <label htmlFor="evening" className="cursor-pointer uppercase tracking-wide text-sm">Evening Bags</label>
+                      </div>
+                      <div className="text-sm">
+                        <input className="cursor-pointer h-4 mr-2" type="radio" name="category" id="travel" value="travel" checked={activeFilter === 'travel'} onChange={() => setActiveFilter('travel')} />
+                        <label htmlFor="travel" className="cursor-pointer uppercase tracking-wide text-sm">Travel Bags</label>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Family Filters */}
+                  <div className="border-b border-gray-200 px-4 py-3 md:px-6 xl:px-8">
+                    <div className="text-base mb-4">Family:</div>
+                    <div className="flex flex-col gap-3">
+                      {[
+                        { value: 'kite',      label: 'Kite' },
+                        { value: 'mosaic',    label: 'Mosaic' },
+                        { value: 'tote',      label: 'Tote' },
+                        { value: 'osette',    label: 'Osette' },
+                        { value: 'east-west', label: 'East/West' },
+                        { value: 'multrees',  label: 'Multrees' },
+                        { value: 'lana',      label: 'Lana' },
+                        { value: 'crescent',  label: 'Crescent' },
+                      ].map(({ value, label }) => (
+                        <div key={value} className="text-sm">
+                          <input
+                            className="cursor-pointer h-4 mr-2"
+                            type="radio"
+                            name="family"
+                            id={`family-${value}`}
+                            value={value}
+                            checked={activeFilter === value}
+                            onChange={() => setActiveFilter(value)}
+                          />
+                          <label htmlFor={`family-${value}`} className="cursor-pointer uppercase tracking-wide text-sm">{label}</label>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>
@@ -329,7 +390,7 @@ export default function Products() {
                             ) : (
                               <div className="h-full flex items-center justify-center bg-gray-100">
                                 <span className="text-gray-400 text-sm font-light">
-                                  {product.name.toUpperCase()}
+                                  {product.name}
                                 </span>
                               </div>
                             )}
@@ -351,26 +412,51 @@ export default function Products() {
                         {/* Product Info */}
                         <div className="mt-2 lg:mt-4">
                           <div className="mx-2 lg:mx-2">
-                            <div className="flex flex-col flex-wrap items-baseline justify-between gap-x-3 gap-y-0.5 lg:gap-y-2">
-                              <div className="flex flex-col">
-                                <span className="whitespace-pre-wrap inherit tracking-normal normal-case inherit text-sm lg:text-base">
-                                  {product.name}
-                                </span>
-                                <span className="whitespace-pre-wrap inherit tracking-normal normal-case inherit text-black/75 text-xs lg:text-sm">
-                                  {product.color}
-                                </span>
+                            <h3 className="text-lg font-light mb-1 tracking-wide">{product.name}</h3>
+                            <div className="flex items-center justify-between mb-1">
+                              <span className="text-base font-light text-gray-700">{product.color}</span>
+                              <div className="flex gap-1 pr-3">
+                              {products.filter((p: any) => 
+                                (p.name === product.name && p.id !== product.id) ||
+                                (p.parentProductId === product.id) ||
+                                (product.parentProductId && p.parentProductId === product.parentProductId && p.id !== product.id) ||
+                                (product.parentProductId === p.id)
+                              ).slice(0, 3).map((variant: any) => (
+                                <Link
+                                  key={variant.id}
+                                  to={`/products/${variant.id}`}
+                                  title={variant.color}
+                                  className="size-3.5 overflow-hidden rounded-full shadow cursor-pointer hover:scale-110 transition-transform"
+                                  style={{ backgroundColor: variant.colorHex }}
+                                >
+                                </Link>
+                              ))}
+                              {products.filter((p: any) => 
+                                (p.name === product.name && p.id !== product.id) ||
+                                (p.parentProductId === product.id) ||
+                                (product.parentProductId && p.parentProductId === product.parentProductId && p.id !== product.id) ||
+                                (product.parentProductId === p.id)
+                              ).length > 3 && (
+                                <span className="text-sm text-black/60">+{products.filter((p: any) => 
+                                  (p.name === product.name && p.id !== product.id) ||
+                                  (p.parentProductId === product.id) ||
+                                  (product.parentProductId && p.parentProductId === product.parentProductId && p.id !== product.id) ||
+                                  (product.parentProductId === p.id)
+                                ).length - 3}</span>
+                              )}
                               </div>
                             </div>
+                            <p className="text-sm font-semibold text-black">{formatPrice(getProductPrice(product, selectedCountry.currency), selectedCountry.currency)}</p>
                           </div>
                         </div>
                       </Link>
                       
                       {/* Price and Color Swatch */}
-                      <div className="mx-2 lg:mx-2">
+                      <div className="mx-2 lg:mx-2 mt-1" style={{display: 'none'}}>
                         <div className="items-center justify-between flex w-full flex-wrap gap-x-2">
                           <div className="weglot-ignore flex justify-center gap-4 align-baseline max-w-max min-w-fit">
                             <span className="whitespace-pre-wrap inherit tracking-normal normal-case text-fine subpixel-antialiased inherit flex flex-wrap-reverse gap-x-2.5 gap-y-0.5 justify-start">
-                              <div className="text-black">
+                              <div className="text-black text-sm font-semibold">
                                 {formatPrice(getProductPrice(product, selectedCountry.currency), selectedCountry.currency)}
                               </div>
                             </span>
@@ -382,7 +468,7 @@ export default function Products() {
                                 (p.parentProductId === product.id) ||
                                 (product.parentProductId && p.parentProductId === product.parentProductId && p.id !== product.id) ||
                                 (product.parentProductId === p.id)
-                              ).map((variant: any) => (
+                              ).slice(0, 3).map((variant: any) => (
                                 <Link
                                   key={variant.id}
                                   to={`/products/${variant.id}`}
@@ -392,6 +478,19 @@ export default function Products() {
                                 >
                                 </Link>
                               ))}
+                              {products.filter((p: any) => 
+                                (p.name === product.name && p.id !== product.id) ||
+                                (p.parentProductId === product.id) ||
+                                (product.parentProductId && p.parentProductId === product.parentProductId && p.id !== product.id) ||
+                                (product.parentProductId === p.id)
+                              ).length > 3 && (
+                                <span className="text-sm text-black/60">+{products.filter((p: any) => 
+                                  (p.name === product.name && p.id !== product.id) ||
+                                  (p.parentProductId === product.id) ||
+                                  (product.parentProductId && p.parentProductId === product.parentProductId && p.id !== product.id) ||
+                                  (product.parentProductId === p.id)
+                                ).length - 3}</span>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -408,6 +507,7 @@ export default function Products() {
           </div>
         </div>
       </section>
+      <Footer />
     </main>
   )
 }

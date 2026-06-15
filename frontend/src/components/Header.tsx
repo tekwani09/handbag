@@ -39,7 +39,7 @@ const Header = () => {
             <div className="flex items-center space-x-4">
               <CountrySwitcher className="hidden lg:block" />
               <button
-                className="lg:hidden text-black text-xs font-light uppercase tracking-wide"
+                className="lg:hidden text-black text-sm font-light uppercase tracking-wide"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
               >
                 Menu
@@ -48,8 +48,8 @@ const Header = () => {
 
             {/* Center - Logo */}
             <div className="absolute left-1/2 transform -translate-x-1/2">
-              <Link to="/" className="text-xl font-light tracking-widest text-black">
-                HEGĒTT
+              <Link to="/">
+                <img src="/images/brand/Asset 1.svg" alt="HEGĒTT" className="h-7" />
               </Link>
             </div>
 
@@ -58,10 +58,11 @@ const Header = () => {
               <div className="hidden lg:flex items-center">
                 <button 
                   onClick={() => openModal('search')}
-                  className="text-black transition-colors group"
+                  className="text-black transition-colors group relative"
                 >
-                  <svg className="w-5 h-5 group-hover:fill-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <circle cx="11" cy="11" r="6" strokeWidth={1.5} className="group-hover:stroke-[2]" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-4.35-4.35" className="group-hover:stroke-[2]" />
                   </svg>
                 </button>
               </div>
@@ -73,7 +74,7 @@ const Header = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                 </svg>
                 {wishlistItems.length > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-black text-white text-xs rounded-full h-4 w-4 flex items-center justify-center font-light">
+                  <span className="absolute -top-1 -right-1 bg-black text-white text-[9px] rounded-full h-3 w-3 flex items-center justify-center font-light">
                     {wishlistItems.length}
                   </span>
                 )}
@@ -92,11 +93,12 @@ const Header = () => {
                 </button>
               )}
               <button onClick={() => openModal('cart')} className="text-black transition-colors relative group">
-                <svg className="w-5 h-5 group-hover:fill-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l-1 12H6L5 9z" />
+                <svg className="w-6 h-6" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                  <path className="transition-all duration-200 group-hover:fill-black" d="M10 26 L54 26 L46 53 Q44.5 55 40 55 L24 55 Q19.5 55 18 53 Z" fill="none" stroke="currentColor" strokeWidth="3" strokeLinejoin="round"/>
+                  <path d="M22 28 C22 14, 27 8, 32 8 C37 8, 42 14, 42 28" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
                 </svg>
                 {getTotalItems() > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-black text-white text-xs rounded-full h-4 w-4 flex items-center justify-center font-light">
+                  <span className="absolute -top-0.5 -right-1 bg-black text-white text-[9px] rounded-full h-3 w-3 flex items-center justify-center font-light">
                     {getTotalItems()}
                   </span>
                 )}
@@ -115,8 +117,8 @@ const Header = () => {
               className="relative"
               onMouseEnter={() => setActiveNavModal('handbags')}
             >
-              <button className={`text-xs font-light text-black transition-colors uppercase tracking-wide ${
-                activeNavModal === 'handbags' ? 'border-b border-black' : 'hover:text-gray-600'
+              <button className={`text-sm font-light text-black transition-colors uppercase tracking-wide pb-1 ${
+                activeNavModal === 'handbags' ? 'border-b-2 border-black' : 'hover:text-gray-600'
               }`}>
                 Handbags
               </button>
@@ -125,8 +127,8 @@ const Header = () => {
               className="relative"
               onMouseEnter={() => setActiveNavModal('collections')}
             >
-              <button className={`text-xs font-light text-black transition-colors uppercase tracking-wide ${
-                activeNavModal === 'collections' ? 'border-b border-black' : 'hover:text-gray-600'
+              <button className={`text-sm font-light text-black transition-colors uppercase tracking-wide pb-1 ${
+                activeNavModal === 'collections' ? 'border-b-2 border-black' : 'hover:text-gray-600'
               }`}>
                 Collections
               </button>
@@ -135,8 +137,8 @@ const Header = () => {
               className="relative"
               onMouseEnter={() => setActiveNavModal('new')}
             >
-              <button className={`text-xs font-light text-black transition-colors uppercase tracking-wide ${
-                activeNavModal === 'new' ? 'border-b border-black' : 'hover:text-gray-600'
+              <button className={`text-sm font-light text-black transition-colors uppercase tracking-wide pb-1 ${
+                activeNavModal === 'new' ? 'border-b-2 border-black' : 'hover:text-gray-600'
               }`}>
                 New
               </button>
@@ -145,8 +147,8 @@ const Header = () => {
               className="relative"
               onMouseEnter={() => setActiveNavModal('gifts')}
             >
-              <button className={`text-xs font-light text-black transition-colors uppercase tracking-wide ${
-                activeNavModal === 'gifts' ? 'border-b border-black' : 'hover:text-gray-600'
+              <button className={`text-sm font-light text-black transition-colors uppercase tracking-wide pb-1 ${
+                activeNavModal === 'gifts' ? 'border-b-2 border-black' : 'hover:text-gray-600'
               }`}>
                 Gifts
               </button>
@@ -181,7 +183,7 @@ const Header = () => {
       )}
       
       {/* Login Modal */}
-      <LoginModal isOpen={activeModal === 'account'} onClose={closeModal} />
+      <LoginModal isOpen={activeModal === 'account' || activeModal === 'register'} onClose={closeModal} initialMode={activeModal === 'register' ? 'register' : 'login'} />
       
       {/* Navigation Modal */}
       <NavigationModal 

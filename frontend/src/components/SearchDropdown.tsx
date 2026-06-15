@@ -116,7 +116,7 @@ export default function SearchDropdown() {
                           />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center">
-                            <span className="text-xs text-gray-400">No image</span>
+                            <span className="text-sm text-gray-400">No image</span>
                           </div>
                         )}
                       </div>

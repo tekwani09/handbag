@@ -220,14 +220,14 @@ export default function AdminProducts() {
           <table className="w-full">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-light text-gray-500 uppercase tracking-wider">Product</th>
-                <th className="px-6 py-3 text-left text-xs font-light text-gray-500 uppercase tracking-wider">Category</th>
-                <th className="px-6 py-3 text-left text-xs font-light text-gray-500 uppercase tracking-wider">Family</th>
-                <th className="px-6 py-3 text-left text-xs font-light text-gray-500 uppercase tracking-wider">Color</th>
-                <th className="px-6 py-3 text-left text-xs font-light text-gray-500 uppercase tracking-wider">Price</th>
-                <th className="px-6 py-3 text-left text-xs font-light text-gray-500 uppercase tracking-wider">Stock</th>
-                <th className="px-6 py-3 text-left text-xs font-light text-gray-500 uppercase tracking-wider">Status</th>
-                <th className="px-6 py-3 text-left text-xs font-light text-gray-500 uppercase tracking-wider">Actions</th>
+                <th className="px-6 py-3 text-left text-sm font-light text-gray-500 uppercase tracking-wider">Product</th>
+                <th className="px-6 py-3 text-left text-sm font-light text-gray-500 uppercase tracking-wider">Category</th>
+                <th className="px-6 py-3 text-left text-sm font-light text-gray-500 uppercase tracking-wider">Family</th>
+                <th className="px-6 py-3 text-left text-sm font-light text-gray-500 uppercase tracking-wider">Color</th>
+                <th className="px-6 py-3 text-left text-sm font-light text-gray-500 uppercase tracking-wider">Price</th>
+                <th className="px-6 py-3 text-left text-sm font-light text-gray-500 uppercase tracking-wider">Stock</th>
+                <th className="px-6 py-3 text-left text-sm font-light text-gray-500 uppercase tracking-wider">Status</th>
+                <th className="px-6 py-3 text-left text-sm font-light text-gray-500 uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
@@ -239,14 +239,14 @@ export default function AdminProducts() {
                         {product.images?.[0] ? (
                           <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover" />
                         ) : (
-                          <span className="text-xs text-gray-400">IMG</span>
+                          <span className="text-sm text-gray-400">IMG</span>
                         )}
                       </div>
                       <div>
                         <div className="text-sm font-light text-black">{product.name}</div>
-                        <div className="text-xs text-gray-500">{product.sku}</div>
+                        <div className="text-sm text-gray-500">{product.sku}</div>
                         {product.parentProductId && (
-                          <div className="text-xs text-blue-600">Variant</div>
+                          <div className="text-sm text-blue-600">Variant</div>
                         )}
                       </div>
                     </div>
@@ -267,13 +267,13 @@ export default function AdminProducts() {
                   <td className="px-6 py-4 text-sm font-light text-black">£{product.priceGBP}</td>
                   <td className="px-6 py-4 text-sm font-light text-black">{product.inventory}</td>
                   <td className="px-6 py-4">
-                    <span className={`px-2 py-1 text-xs font-light rounded ${
+                    <span className={`px-2 py-1 text-sm font-light rounded ${
                       product.active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
                     }`}>
                       {product.active ? 'Active' : 'Inactive'}
                     </span>
                     {product.featured && (
-                      <span className="ml-2 px-2 py-1 text-xs font-light rounded bg-blue-100 text-blue-800">
+                      <span className="ml-2 px-2 py-1 text-sm font-light rounded bg-blue-100 text-blue-800">
                         Featured
                       </span>
                     )}

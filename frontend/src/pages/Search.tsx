@@ -49,10 +49,10 @@ export default function Search() {
       
       {/* Hero Section */}
       <section className="relative block bg-gray-50 xl:pt-8 md:pt-6 pt-4 min-h-none xl:min-h-none pb-4 xl:pb-8">
-        <div className="lg:flex lg:flex-row space-y-4 xs:space-y-4 lg:gap-6 lg:space-y-0 xl:px-8 md:px-6 px-4">
+        <div className="lg:flex lg:flex-row space-y-4 sm:space-y-4 lg:gap-6 lg:space-y-0 xl:px-8 md:px-6 px-4">
           <div className="max-w-responsive-col-3-with-g lg:w-1/3 w-full flex-none">
             <div className="max-w-responsive-col-2-with-g mb-0 h-full lg:mb-0 lg:flex lg:flex-col">
-              <div className="whitespace-pre-wrap font-light tracking-normal normal-case xl:text-5xl text-4xl">
+              <div className="whitespace-pre-wrap font-light tracking-normal normal-case xl:text-4.5xl text-4xl">
                 Search Results
               </div>
               {query && (
@@ -71,7 +71,7 @@ export default function Search() {
       <div className="sticky top-14 z-40 bg-gray-50 transition-all duration-300">
         <div className="flex items-center justify-between bg-gray-50 py-4 xl:px-8 md:px-6 px-4">
           <div className="flex items-center">
-            <span className="text-sm md:text-xs">{products.length} products</span>
+            <span className="text-sm md:text-sm">{products.length} products</span>
           </div>
         </div>
       </div>
@@ -110,7 +110,7 @@ export default function Search() {
                             ) : (
                               <div className="h-full flex items-center justify-center bg-gray-100">
                                 <span className="text-gray-400 text-sm font-light">
-                                  {product.name.toUpperCase()}
+                                  {product.name}
                                 </span>
                               </div>
                             )}
@@ -150,7 +150,7 @@ export default function Search() {
                                 <span className="whitespace-pre-wrap inherit tracking-normal normal-case inherit text-sm lg:text-base">
                                   {product.name}
                                 </span>
-                                <span className="whitespace-pre-wrap inherit tracking-normal normal-case inherit text-black/75 text-xs lg:text-sm">
+                                <span className="whitespace-pre-wrap inherit tracking-normal normal-case inherit text-black/75 text-sm lg:text-sm">
                                   {product.color}
                                 </span>
                               </div>

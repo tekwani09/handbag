@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-type ModalType = 'search' | 'account' | 'wishlist' | 'cart' | 'country' | null
+type ModalType = 'search' | 'account' | 'register' | 'wishlist' | 'cart' | 'country' | null
 
 interface ModalStore {
   activeModal: ModalType
