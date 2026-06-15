@@ -1,10 +1,12 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useCartStore } from '../store/cartStore'
 import { useModalStore } from '../store/modalStore'
+import { useWishlistStore } from '../store/wishlistStore'
 import { formatPrice, getProductPrice } from '../utils/currency'
 import { useCurrency } from './CountrySwitcher'
 import BaseModal from './BaseModal'
+import { API_BASE_URL } from '../config/api'
 
 interface CartModalProps {
   isOpen: boolean
@@ -18,10 +20,39 @@ const FLAG_URLS: Record<string, string> = {
 }
 
 export default function CartModal({ isOpen, onClose }: CartModalProps) {
-  const { items, removeItem, updateQuantity, getTotalPrice } = useCartStore()
+  const { items, removeItem, updateQuantity, getTotalPrice, addItem } = useCartStore()
   const { selectedCountry } = useCurrency()
   const { openModal } = useModalStore()
+  const { toggleItem, isWishlisted } = useWishlistStore()
   const [giftNote, setGiftNote] = useState(false)
+  const [pairsWithProducts, setPairsWithProducts] = useState<any[]>([])
+
+  // Derive the category of the first cart item
+  const firstItemCategory = items[0]?.product?.category ?? null
+
+  useEffect(() => {
+    if (!isOpen || !firstItemCategory) {
+      setPairsWithProducts([])
+      return
+    }
+
+    const fetchPairsWithProducts = async () => {
+      try {
+        const response = await fetch(
+          `${API_BASE_URL}/products?category=${encodeURIComponent(firstItemCategory)}`
+        )
+        const data = await response.json()
+        // Exclude items already in cart
+        const cartIds = new Set(items.map((i) => i.id))
+        const filtered = (data.products || []).filter((p: any) => !cartIds.has(p.id))
+        setPairsWithProducts(filtered.slice(0, 8))
+      } catch {
+        setPairsWithProducts([])
+      }
+    }
+
+    fetchPairsWithProducts()
+  }, [isOpen, firstItemCategory])
 
   const total = getTotalPrice(
     selectedCountry.currency,
@@ -32,6 +63,116 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
 
   return (
     <BaseModal isOpen={isOpen} onClose={onClose}>
+      {/* ── Pairs With panel (left of cart, desktop only) ── */}
+      {pairsWithProducts.length > 0 && items.length > 0 && (
+        <div
+          className="hidden lg:flex flex-col bg-[#f5f3f0] border-r border-black/10"
+          style={{
+            position: 'absolute',
+            top: 0,
+            right: '100%',
+            width: '220px',
+            height: '100%',
+            zIndex: 10,
+          }}
+        >
+          <div className="px-5 pt-6 pb-3 flex-none border-b border-black/10">
+            <p className="text-[10px] uppercase tracking-[0.15em] text-black/50 font-medium">
+              Pairs with...
+            </p>
+          </div>
+          <div className="flex-1 overflow-y-auto py-4 px-4 space-y-6">
+            {pairsWithProducts.map((product) => {
+              const price = getProductPrice(product, selectedCountry.currency)
+              const inCart = items.some((i) => i.id === product.id)
+              return (
+                <div key={product.id} className="group">
+                  {/* Image */}
+                  <div className="relative bg-[#ede9e3] overflow-hidden mb-2">
+                    <Link to={`/products/${product.id}`} onClick={onClose}>
+                      <img
+                        src={
+                          product.images?.[0] ||
+                          'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400'
+                        }
+                        alt={product.name}
+                        className="w-full object-cover aspect-[3/4] group-hover:scale-105 transition-transform duration-500"
+                      />
+                    </Link>
+                    {/* Wishlist button */}
+                    <button
+                      type="button"
+                      aria-label="Add to wishlist"
+                      onClick={() =>
+                        toggleItem({
+                          id: product.id,
+                          name: product.name,
+                          price,
+                          image:
+                            product.images?.[0] ||
+                            'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400',
+                        })
+                      }
+                      className="absolute top-2 right-2 p-1 transition-colors"
+                    >
+                      <svg
+                        className={`w-4 h-4 transition-colors ${
+                          isWishlisted(product.id)
+                            ? 'fill-black stroke-black'
+                            : 'fill-none stroke-black/60 hover:stroke-black'
+                        }`}
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={1.5}
+                          d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                  {/* Name + price */}
+                  <Link to={`/products/${product.id}`} onClick={onClose}>
+                    <p className="text-[11px] font-light leading-snug mb-0.5 hover:underline line-clamp-2">
+                      {product.name}
+                    </p>
+                  </Link>
+                  <p className="text-[11px] text-black/60 mb-2">
+                    {formatPrice(price, selectedCountry.currency)}
+                  </p>
+                  {/* Add to bag */}
+                  <button
+                    type="button"
+                    disabled={inCart}
+                    onClick={() => {
+                      if (!inCart) {
+                        addItem({
+                          id: product.id,
+                          name: product.name,
+                          image:
+                            product.images?.[0] ||
+                            'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400',
+                          color: product.color || undefined,
+                          product,
+                        })
+                      }
+                    }}
+                    className={`w-full border text-[10px] uppercase tracking-widest py-2 transition-colors ${
+                      inCart
+                        ? 'border-black/30 text-black/30 cursor-default'
+                        : 'border-black text-black hover:bg-black hover:text-white cursor-pointer'
+                    }`}
+                  >
+                    {inCart ? 'In bag' : 'Add to bag'}
+                  </button>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      )}
+
       <div className="flex flex-col bg-gray-50" style={{ height: '100vh' }}>
 
         {/* ── Sticky header ── */}
