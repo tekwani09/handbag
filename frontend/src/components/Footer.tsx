@@ -13,7 +13,6 @@ const Footer = () => {
               <h4 className="text-lg font-semibold text-black mb-6">Customer Care</h4>
               <ul className="space-y-3">
                 <li><Link to="/contact" className="text-sm text-black hover:text-gray-600 transition-colors">Contact Us</Link></li>
-                <li><Link to="/size-guide" className="text-sm text-black hover:text-gray-600 transition-colors">Size Guide</Link></li>
                 <li><Link to="/shipping" className="text-sm text-black hover:text-gray-600 transition-colors">Shipping & Returns</Link></li>
                 <li><Link to="/care" className="text-sm text-black hover:text-gray-600 transition-colors">Care Instructions</Link></li>
                 <li><Link to="/faq" className="text-sm text-black hover:text-gray-600 transition-colors">FAQ</Link></li>
@@ -25,8 +24,6 @@ const Footer = () => {
               <h4 className="text-lg font-semibold text-black mb-6">About</h4>
               <ul className="space-y-3">
                 <li><Link to="/about" className="text-sm text-black hover:text-gray-600 transition-colors">Our Story</Link></li>
-                <li><Link to="/craftsmanship" className="text-sm text-black hover:text-gray-600 transition-colors">Craftsmanship</Link></li>
-                <li><Link to="/sustainability" className="text-sm text-black hover:text-gray-600 transition-colors">Sustainability</Link></li>
                 <li><Link to="/careers" className="text-sm text-black hover:text-gray-600 transition-colors">Careers</Link></li>
               </ul>
             </div>
@@ -47,7 +44,7 @@ const Footer = () => {
               <ul className="space-y-3">
                 <li><a href="#" className="text-sm text-black hover:text-gray-600 transition-colors">Instagram</a></li>
                 <li><a href="#" className="text-sm text-black hover:text-gray-600 transition-colors">Facebook</a></li>
-                <li><a href="#" className="text-sm text-black hover:text-gray-600 transition-colors">Twitter</a></li>
+                <li><a href="#" className="text-sm text-black hover:text-gray-600 transition-colors">X</a></li>
                 <li><a href="#" className="text-sm text-black hover:text-gray-600 transition-colors">Pinterest</a></li>
               </ul>
             </div>

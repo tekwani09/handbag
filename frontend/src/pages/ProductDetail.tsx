@@ -132,9 +132,6 @@ export default function ProductDetail() {
                   </svg>
                 </button>
               </div>
-              {displayProduct.color && (
-                <div className="text-sm opacity-75 mt-2">{displayProduct.color}</div>
-              )}
             </div>
 
             {/* Price */}
@@ -152,52 +149,60 @@ export default function ProductDetail() {
             </div>
 
             {/* Color Swatches */}
-            {allColours.length > 1 && (
-              <div className="mb-8">
-                {/* Label row */}
-                <div className="flex items-center justify-between gap-4 mb-3">
-                  <div className="flex items-center gap-2">
-                    <div className="text-sm opacity-75">{displayProduct.color}</div>
-                    <div className="text-sm text-black/50 flex-none">({allColours.length} Colour{allColours.length !== 1 ? 's' : ''})</div>
+            {allColours.length > 1 && (() => {
+              const VISIBLE = 4
+              const overflow = allColours.length - VISIBLE
+              const visibleColours = allColours.slice(0, VISIBLE)
+              return (
+                <div className="flex flex-col gap-3 lg:flex-row lg:gap-6 justify-between lg:items-center mb-8">
+                  {/* Label */}
+                  <div className="flex flex-col gap-1 lg:justify-center">
+                    <div className="flex items-center gap-2">
+                      <div className="text-sm opacity-75">{displayProduct.color}</div>
+                    </div>
                   </div>
-                </div>
 
-                {/* Swatch strip */}
-                <div className="relative flex overflow-hidden rounded bg-white p-1 -mx-1">
-                  <div className="flex overflow-x-auto scrollbar-hide gap-1">
-                    {allColours.map((variant: any) => {
-                      const isActive = variant.id === displayProduct.id
-                      return (
-                        <Link
-                          key={variant.id}
-                          to={`/products/${variant.id}`}
-                          title={variant.color}
-                          aria-label={variant.color}
-                          className={`relative flex-none rounded p-1 transition-colors ${
-                            isActive ? 'bg-black/10' : 'hover:bg-black/5'
-                          }`}
-                        >
-                          <div className="rounded w-[75px] h-[94px] md:w-[88px] md:h-[110px] lg:w-8 lg:h-10 xl:w-10 xl:h-[50px] overflow-hidden">
-                            {variant.images?.[0] ? (
-                              <img
-                                src={variant.images[0]}
-                                alt={variant.color}
-                                className="w-full h-full object-cover"
-                              />
-                            ) : (
-                              <div
-                                className="w-full h-full"
-                                style={{ backgroundColor: variant.colorHex || '#ccc' }}
-                              />
-                            )}
-                          </div>
-                        </Link>
-                      )
-                    })}
+                  {/* Swatch strip */}
+                  <div className="flex-none">
+                    <div className="relative flex items-center rounded bg-white p-1 gap-1.5 pr-10">
+                      {visibleColours.map((variant: any) => {
+                        const isActive = variant.id === displayProduct.id
+                        return (
+                          <Link
+                            key={variant.id}
+                            to={`/products/${variant.id}`}
+                            aria-label={variant.color}
+                            title={variant.color}
+                            className={`flex-none rounded overflow-hidden transition-colors ring-1 ${
+                              isActive ? 'ring-black' : 'ring-transparent hover:ring-black/30'
+                            }`}
+                          >
+                            <div className="w-[75px] h-[94px] md:w-[88px] md:h-[110px] lg:w-8 lg:h-10 xl:w-10 xl:h-[50px]">
+                              {variant.images?.[0] ? (
+                                <img
+                                  src={variant.images[0]}
+                                  alt={variant.color}
+                                  loading="lazy"
+                                  className="w-full h-full object-cover"
+                                />
+                              ) : (
+                                <div
+                                  className="w-full h-full"
+                                  style={{ backgroundColor: variant.colorHex || '#ccc' }}
+                                />
+                              )}
+                            </div>
+                          </Link>
+                        )
+                      })}
+                      {overflow > 0 && (
+                        <span className="text-sm text-black/60 pl-1">+{overflow}</span>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
+              )
+            })()}
 
            
 

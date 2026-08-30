@@ -30,6 +30,7 @@ import PaymentSuccess from './pages/PaymentSuccess'
 import PaymentFailed from './pages/PaymentFailed'
 import Gifts from './pages/Gifts'
 import OrderDetail from './pages/OrderDetail'
+import About from './pages/About'
 
 function App() {
   const { checkAuth } = useAuthStore()
@@ -56,6 +57,7 @@ function App() {
           <Route path="/products" element={<Products />} />
           <Route path="/products/:id" element={<ProductDetail />} />
           <Route path="/gifts" element={<Gifts />} />
+          <Route path="/about" element={<About />} />
           <Route path="/collections/:slug" element={<Collection />} />
           <Route path="/search" element={<Search />} />
           <Route path="/wishlist" element={<Wishlist />} />

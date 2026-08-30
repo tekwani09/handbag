@@ -192,14 +192,56 @@ export default function Collection() {
                       </div>
                     </Link>
                     
-                    <div className="space-y-3">
+                    <div className="space-y-1">
                       <Link to={`/products/${product.id}`}>
                         <h3 className="font-light text-sm hover:underline">
                           {product.name}
                         </h3>
                       </Link>
-                      
-                      <p className="text-sm text-gray-600">
+
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-light text-gray-700">{product.color}</span>
+                        <div className="flex gap-1 pr-1">
+                          {product.colorHex && (
+                            <div
+                              title={product.color}
+                              className="size-3.5 overflow-hidden rounded-full shadow"
+                              style={{ backgroundColor: product.colorHex }}
+                            />
+                          )}
+                          {products.filter((p: any) =>
+                            (p.name === product.name && p.id !== product.id) ||
+                            (p.parentProductId === product.id) ||
+                            (product.parentProductId && p.parentProductId === product.parentProductId && p.id !== product.id) ||
+                            (product.parentProductId === p.id)
+                          ).slice(0, 2).map((variant: any) => (
+                            <Link
+                              key={variant.id}
+                              to={`/products/${variant.id}`}
+                              title={variant.color}
+                              className="size-3.5 overflow-hidden rounded-full shadow cursor-pointer hover:scale-110 transition-transform"
+                              style={{ backgroundColor: variant.colorHex }}
+                            />
+                          ))}
+                          {products.filter((p: any) =>
+                            (p.name === product.name && p.id !== product.id) ||
+                            (p.parentProductId === product.id) ||
+                            (product.parentProductId && p.parentProductId === product.parentProductId && p.id !== product.id) ||
+                            (product.parentProductId === p.id)
+                          ).length > 2 && (
+                            <span className="text-xs text-black/50">
+                              +{products.filter((p: any) =>
+                                (p.name === product.name && p.id !== product.id) ||
+                                (p.parentProductId === product.id) ||
+                                (product.parentProductId && p.parentProductId === product.parentProductId && p.id !== product.id) ||
+                                (product.parentProductId === p.id)
+                              ).length - 2}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      <p className="text-sm font-normal text-black">
                         {formatPrice(getProductPrice(product, selectedCountry.currency), selectedCountry.currency)}
                       </p>
                       

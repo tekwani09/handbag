@@ -31,7 +31,7 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
   const firstItemCategory = items[0]?.product?.category ?? null
 
   useEffect(() => {
-    if (!isOpen || !firstItemCategory) {
+    if (!firstItemCategory) {
       setPairsWithProducts([])
       return
     }
@@ -52,7 +52,7 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
     }
 
     fetchPairsWithProducts()
-  }, [isOpen, firstItemCategory])
+  }, [firstItemCategory])
 
   const total = getTotalPrice(
     selectedCountry.currency,

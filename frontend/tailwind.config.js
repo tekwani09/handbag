@@ -22,7 +22,9 @@ export default {
         'surface-secondary': '#e5e5e5',
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ['Jost', 'system-ui', 'sans-serif'],
+        serif: ['Cormorant Garamond', 'Georgia', 'serif'],
+        body: ['Jost', 'system-ui', 'sans-serif'],
       },
       aspectRatio: {
         'image': '4 / 5',
