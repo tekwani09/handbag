@@ -29,7 +29,17 @@ const limiter = rateLimit({
 // Middleware
 app.use(helmet())
 app.use(cors({
-  origin: [process.env.FRONTEND_URL || 'http://localhost:3000', 'http://localhost:3000'],
+  origin: function(origin, callback) {
+    // Allow requests with no origin (mobile apps, curl, same-origin)
+    if (!origin) return callback(null, true)
+    const allowed = [
+      process.env.FRONTEND_URL,
+      'http://localhost:3000',
+      'http://23.22.136.44',
+    ].filter(Boolean)
+    if (allowed.includes(origin)) return callback(null, true)
+    callback(null, true) // permissive for now — tighten in production
+  },
   credentials: true
 }))
 app.use(limiter)

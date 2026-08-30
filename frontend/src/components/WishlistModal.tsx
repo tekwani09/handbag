@@ -70,7 +70,7 @@ export default function WishlistModal({ isOpen, onClose }: WishlistModalProps) {
         </div>
 
         {/* ── Scrollable body ── */}
-        <div className="flex-1 overflow-y-auto flex flex-col">
+        <div className="flex-1 overflow-y-auto scrollbar-hide flex flex-col">
 
           {items.length === 0 ? (
             /* ── Empty state ── */
@@ -80,12 +80,39 @@ export default function WishlistModal({ isOpen, onClose }: WishlistModalProps) {
                 <h2 className="text-lg font-body pt-6 pb-4 hidden lg:block">
                   Wishlist
                 </h2>
-                <p className="text-sm mb-6 text-black/70">
-                  Your wishlist is empty. Explore our popular categories for inspiration:
-                </p>
+
+                {isGuest ? (
+                  /* Not signed in — prompt to sign in */
+                  <div className="flex flex-col items-center justify-center text-center py-12 gap-4">
+                    <svg className="w-10 h-10 text-black/20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
+                    <p className="text-sm text-black/70 max-w-[240px]">
+                      Sign in to save your wishlist and access it across all your devices.
+                    </p>
+                    <button
+                      onClick={() => openModal('account')}
+                      className="relative cursor-pointer transition-all inline-block py-3 px-8 bg-black text-white uppercase text-center tracking-widest text-xs hover:bg-transparent hover:text-black border border-black"
+                    >
+                      Sign In
+                    </button>
+                    <button
+                      onClick={() => openModal('register')}
+                      className="text-xs underline hover:no-underline text-black/60 cursor-pointer"
+                    >
+                      Create an account
+                    </button>
+                  </div>
+                ) : (
+                  /* Signed in but empty */
+                  <p className="text-sm mb-6 text-black/70">
+                    Your wishlist is empty. Explore our popular categories for inspiration:
+                  </p>
+                )}
               </div>
 
-              {/* Inspiration grid */}
+              {/* Inspiration grid — only when signed in */}
+              {!isGuest && (
               <div className="flex w-full flex-wrap justify-between gap-x-[2px] gap-y-6 px-0">
                 {INSPIRATION_CATEGORIES.map((cat) => (
                   <Link
@@ -116,6 +143,7 @@ export default function WishlistModal({ isOpen, onClose }: WishlistModalProps) {
                   </Link>
                 ))}
               </div>
+              )}
 
               <div className="flex-1" />
 

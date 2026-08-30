@@ -31,6 +31,8 @@ import PaymentFailed from './pages/PaymentFailed'
 import Gifts from './pages/Gifts'
 import OrderDetail from './pages/OrderDetail'
 import About from './pages/About'
+import BagSingleColor from './pages/BagSingleColor'
+import BagTwoColorways from './pages/BagTwoColorways'
 
 function App() {
   const { checkAuth } = useAuthStore()
@@ -58,6 +60,8 @@ function App() {
           <Route path="/products/:id" element={<ProductDetail />} />
           <Route path="/gifts" element={<Gifts />} />
           <Route path="/about" element={<About />} />
+          <Route path="/bag/single" element={<BagSingleColor />} />
+          <Route path="/bag/two-colorways" element={<BagTwoColorways />} />
           <Route path="/collections/:slug" element={<Collection />} />
           <Route path="/search" element={<Search />} />
           <Route path="/wishlist" element={<Wishlist />} />

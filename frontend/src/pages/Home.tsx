@@ -531,7 +531,7 @@ export default function Home() {
                   <h3 className="text-lg font-light mb-1 tracking-wide">{product.name}</h3>
                   <div className="flex items-end justify-between mb-1">
                     <span className="text-base font-light text-gray-700">{displayProduct.color || 'Color'}</span>
-                    <div className="flex gap-1 pr-3">
+                    <div className="flex items-center gap-1 pr-3 mt-1">
                       {/* Current product colour dot — always show */}
                       <div
                         title={product.color}

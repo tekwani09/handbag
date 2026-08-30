@@ -1,14 +1,65 @@
 import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 import { useCartStore } from '../store/cartStore'
 import { useWishlistStore } from '../store/wishlistStore'
 import { useModalStore } from '../store/modalStore'
 import { formatPrice, getProductPrice } from '../utils/currency'
 import { useCurrency } from './CountrySwitcher'
+import { API_BASE_URL } from '../config/api'
 
 export default function CartSidebar() {
   const { items, isOpen, toggleCart, removeItem, updateQuantity, getTotalPrice } = useCartStore()
   const { selectedCountry } = useCurrency()
   const { openModal } = useModalStore()
+  const [pairsWithProducts, setPairsWithProducts] = useState<any[]>([])
+  const [loadingPairs, setLoadingPairs] = useState(false)
+
+  // Fetch products from same categories as items in cart
+  useEffect(() => {
+    if (!isOpen || items.length === 0) {
+      setPairsWithProducts([])
+      return
+    }
+
+    const fetchPairsWithProducts = async () => {
+      try {
+        setLoadingPairs(true)
+        
+        // Get unique categories from items in cart
+        const categories = [...new Set(
+          items
+            .filter(item => item.product?.category)
+            .map(item => item.product.category)
+        )]
+
+        if (categories.length === 0) {
+          setPairsWithProducts([])
+          return
+        }
+
+        // Fetch all products
+        const response = await fetch(`${API_BASE_URL}/products`)
+        const data = await response.json()
+        const allProducts = data.products || []
+
+        // Filter for products in same categories, excluding items already in cart
+        const cartItemIds = new Set(items.map(item => item.product?.id))
+        const recommendedProducts = allProducts.filter((product: any) => 
+          categories.includes(product.category) && 
+          !cartItemIds.has(product.id)
+        ).slice(0, 4) // Limit to 4 products
+
+        setPairsWithProducts(recommendedProducts)
+      } catch (error) {
+        console.error('Failed to fetch pairs with products:', error)
+        setPairsWithProducts([])
+      } finally {
+        setLoadingPairs(false)
+      }
+    }
+
+    fetchPairsWithProducts()
+  }, [isOpen, items])
 
   if (!isOpen) return null
 
@@ -113,6 +164,50 @@ export default function CartSidebar() {
                     </div>
                   </div>
                 ))}
+
+                {/* Pairs with section */}
+                {pairsWithProducts.length > 0 && (
+                  <div className="mt-8 pt-8 border-t border-gray-200">
+                    <h3 className="text-sm font-light mb-4 uppercase">Pairs with</h3>
+                    <div className="space-y-4">
+                      {pairsWithProducts.map((product: any) => {
+                        const price = getProductPrice(product, selectedCountry.currency)
+                        return (
+                          <div key={product.id} className="flex gap-3 pb-4 border-b border-gray-100 last:border-b-0">
+                            <div className="w-16 h-16 bg-gray-200 flex-shrink-0">
+                              <img 
+                                src={product.images?.[0] || 'https://via.placeholder.com/64'}
+                                alt={product.name}
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                            <div className="flex-1 flex flex-col justify-between">
+                              <div>
+                                <h4 className="text-xs font-light">{product.name}</h4>
+                                <p className="text-xs text-gray-600 mt-1">{formatPrice(price, selectedCountry.currency)}</p>
+                              </div>
+                              <button 
+                                onClick={() => {
+                                  useCartStore.getState().addItem({
+                                    id: `${product.id}-${product.colors?.[0] || 'default'}`,
+                                    name: product.name,
+                                    image: product.images?.[0] || '',
+                                    color: product.colors?.[0],
+                                    product
+                                  })
+                                  // Optional: Show notification
+                                }}
+                                className="text-xs underline hover:no-underline"
+                              >
+                                Add to bag
+                              </button>
+                            </div>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  </div>
+                )}
               </div>
 
               <div className="border-t p-4 xl:p-8 md:p-6 bg-gray-50">

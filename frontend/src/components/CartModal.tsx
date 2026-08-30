@@ -27,7 +27,6 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
   const [giftNote, setGiftNote] = useState(false)
   const [pairsWithProducts, setPairsWithProducts] = useState<any[]>([])
 
-  // Derive the category of the first cart item
   const firstItemCategory = items[0]?.product?.category ?? null
 
   useEffect(() => {
@@ -35,14 +34,10 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
       setPairsWithProducts([])
       return
     }
-
-    const fetchPairsWithProducts = async () => {
+    const fetchPairs = async () => {
       try {
-        const response = await fetch(
-          `${API_BASE_URL}/products?category=${encodeURIComponent(firstItemCategory)}`
-        )
-        const data = await response.json()
-        // Exclude items already in cart
+        const res = await fetch(`${API_BASE_URL}/products?category=${encodeURIComponent(firstItemCategory)}`)
+        const data = await res.json()
         const cartIds = new Set(items.map((i) => i.id))
         const filtered = (data.products || []).filter((p: any) => !cartIds.has(p.id))
         setPairsWithProducts(filtered.slice(0, 8))
@@ -50,119 +45,61 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
         setPairsWithProducts([])
       }
     }
-
-    fetchPairsWithProducts()
+    fetchPairs()
   }, [firstItemCategory])
 
   const total = getTotalPrice(
     selectedCountry.currency,
     (product, currency) => getProductPrice(product || {}, currency)
   )
-
   const flagUrl = FLAG_URLS[selectedCountry.flag] || FLAG_URLS['gb']
 
   return (
     <BaseModal isOpen={isOpen} onClose={onClose}>
-      {/* ── Pairs With panel (left of cart, desktop only) ── */}
+
+      {/* ── Pairs With panel (desktop, left of cart) ── */}
       {pairsWithProducts.length > 0 && items.length > 0 && (
         <div
           className="hidden lg:flex flex-col bg-[#f5f3f0] border-r border-black/10"
-          style={{
-            position: 'absolute',
-            top: 0,
-            right: '100%',
-            width: '220px',
-            height: '100%',
-            zIndex: 10,
-          }}
+          style={{ position: 'absolute', top: 0, right: '100%', width: '220px', height: '100%', zIndex: 10 }}
         >
           <div className="px-5 pt-6 pb-3 flex-none border-b border-black/10">
-            <p className="text-[10px] uppercase tracking-[0.15em] text-black/50 font-medium">
-              Pairs with...
-            </p>
+            <p className="text-[10px] uppercase tracking-[0.15em] text-black/50 font-medium">Pairs with...</p>
           </div>
-          <div className="flex-1 overflow-y-auto py-4 px-4 space-y-6">
+          <div className="flex-1 overflow-y-auto scrollbar-hide py-4 px-4 space-y-6">
             {pairsWithProducts.map((product) => {
               const price = getProductPrice(product, selectedCountry.currency)
               const inCart = items.some((i) => i.id === product.id)
               return (
                 <div key={product.id} className="group">
-                  {/* Image */}
                   <div className="relative bg-[#ede9e3] overflow-hidden mb-2">
                     <Link to={`/products/${product.id}`} onClick={onClose}>
                       <img
-                        src={
-                          product.images?.[0] ||
-                          'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400'
-                        }
+                        src={product.images?.[0] || 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400'}
                         alt={product.name}
                         className="w-full object-cover aspect-[3/4] group-hover:scale-105 transition-transform duration-500"
                       />
                     </Link>
-                    {/* Wishlist button */}
                     <button
                       type="button"
                       aria-label="Add to wishlist"
-                      onClick={() =>
-                        toggleItem({
-                          id: product.id,
-                          name: product.name,
-                          price,
-                          image:
-                            product.images?.[0] ||
-                            'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400',
-                        })
-                      }
-                      className="absolute top-2 right-2 p-1 transition-colors"
+                      onClick={() => toggleItem({ id: product.id, name: product.name, price, image: product.images?.[0] || '' })}
+                      className="absolute top-2 right-2 p-1"
                     >
-                      <svg
-                        className={`w-4 h-4 transition-colors ${
-                          isWishlisted(product.id)
-                            ? 'fill-black stroke-black'
-                            : 'fill-none stroke-black/60 hover:stroke-black'
-                        }`}
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={1.5}
-                          d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                        />
+                      <svg className={`w-4 h-4 ${isWishlisted(product.id) ? 'fill-black stroke-black' : 'fill-none stroke-black/60 hover:stroke-black'}`} viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                       </svg>
                     </button>
                   </div>
-                  {/* Name + price */}
                   <Link to={`/products/${product.id}`} onClick={onClose}>
-                    <p className="text-[11px] font-light leading-snug mb-0.5 hover:underline line-clamp-2">
-                      {product.name}
-                    </p>
+                    <p className="text-[11px] font-light leading-snug mb-0.5 hover:underline line-clamp-2">{product.name}</p>
                   </Link>
-                  <p className="text-[11px] text-black/60 mb-2">
-                    {formatPrice(price, selectedCountry.currency)}
-                  </p>
-                  {/* Add to bag */}
+                  <p className="text-[11px] text-black/60 mb-2">{formatPrice(price, selectedCountry.currency)}</p>
                   <button
                     type="button"
                     disabled={inCart}
-                    onClick={() => {
-                      if (!inCart) {
-                        addItem({
-                          id: product.id,
-                          name: product.name,
-                          image:
-                            product.images?.[0] ||
-                            'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400',
-                          color: product.color || undefined,
-                          product,
-                        })
-                      }
-                    }}
-                    className={`w-full border text-[10px] uppercase tracking-widest py-2 transition-colors ${
-                      inCart
-                        ? 'border-black/30 text-black/30 cursor-default'
-                        : 'border-black text-black hover:bg-black hover:text-white cursor-pointer'
-                    }`}
+                    onClick={() => { if (!inCart) addItem({ id: product.id, name: product.name, image: product.images?.[0] || '', color: product.color || undefined, product }) }}
+                    className={`w-full border text-[10px] uppercase tracking-widest py-2 transition-colors ${inCart ? 'border-black/30 text-black/30 cursor-default' : 'border-black text-black hover:bg-black hover:text-white cursor-pointer'}`}
                   >
                     {inCart ? 'In bag' : 'Add to bag'}
                   </button>
@@ -175,47 +112,50 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
 
       <div className="flex flex-col bg-gray-50" style={{ height: '100vh' }}>
 
-        {/* ── Sticky header ── */}
+        {/* Header */}
         <header className="xl:px-8 md:px-6 px-4 bg-gray-50 flex-none">
-          <div className="pt-6 pb-4 flex justify-between items-center">
-            <h2 className="text-lg font-body">
+          <div className="pt-2 pb-3">
+            <h2 className="text-lg text-left" style={{ fontFamily: 'inherit', textAlign: 'left' }}>
               Shopping bag{items.length > 0 && ` (${items.reduce((s, i) => s + i.quantity, 0)} item${items.reduce((s, i) => s + i.quantity, 0) !== 1 ? 's' : ''})`}
             </h2>
           </div>
         </header>
 
-        {/* ── Items / empty state ── */}
-        <div className="flex flex-col flex-1 min-h-0 overflow-y-auto">
+        {/* Items / empty state */}
+        <div className="flex flex-col flex-1 min-h-0 overflow-y-auto scrollbar-hide">
           {items.length === 0 ? (
+            /* ── Empty state ── */
             <div className="flex flex-col h-full">
-              <div className="flex-1 flex items-center justify-center px-4">
-                <p className="text-sm">Your bag is empty</p>
+              <div className="flex-1 flex flex-col items-center justify-center px-4 gap-3 text-center">
+                <svg className="w-10 h-10 text-black/20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 11H4L5 9z" />
+                </svg>
+                <p className="text-sm text-black/60">Your bag is empty</p>
               </div>
-              <div className="flex-none px-4 py-4">
+              <div className="flex-none px-4 py-6">
                 <button
                   type="button"
                   onClick={onClose}
-                  className="relative hover:bg-black hover:text-white cursor-pointer transition-all inline-block py-4 px-6 bg-transparent uppercase text-center border border-black tracking-widest w-full text-sm"
+                  className="relative cursor-pointer transition-all inline-block py-4 px-6 bg-black text-white uppercase text-center tracking-widest w-full text-sm hover:bg-transparent hover:text-black border border-black"
                 >
                   Continue Shopping
                 </button>
               </div>
             </div>
           ) : (
-            <ul className="space-y-5 py-6 lg:space-y-6">
+            <ul className="space-y-5 py-6 pb-48 lg:space-y-6">
               {items.map((item) => {
                 const itemPrice = getProductPrice(item.product || item, selectedCountry.currency)
                 return (
                   <li key={item.id} className="px-4">
                     <div className="flex gap-5">
-                      {/* Product image */}
+
+                      {/* Image */}
                       <div className="flex w-[100px] flex-none flex-col justify-start">
                         <Link to={`/products/${item.id}`} onClick={onClose}>
                           <img
                             alt={item.name}
                             loading="lazy"
-                            width={160}
-                            height={200}
                             src={item.image || 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400'}
                             className="rounded object-cover object-center w-full"
                             style={{ aspectRatio: '160 / 200' }}
@@ -225,19 +165,26 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
 
                       {/* Details */}
                       <div className="flex w-full flex-col gap-2">
-                        {/* Name + color + remove */}
+
+                        {/* Row 1: name + colour (left) | wishlist + delete (right) */}
                         <div className="flex w-full justify-between">
-                          <Link
-                            to={`/products/${item.id}`}
-                            onClick={onClose}
-                            className="block space-y-1"
-                          >
+                          <Link to={`/products/${item.id}`} onClick={onClose} className="block space-y-1">
                             <div className="text-sm font-body">{item.name}</div>
                             {item.color && (
                               <p className="text-sm font-body text-black/70">{item.color}</p>
                             )}
                           </Link>
-                          <div className="flex min-w-8 items-start justify-end">
+                          <div className="flex min-w-8 items-start justify-end gap-1">
+                            <button
+                              type="button"
+                              aria-label="Add to wishlist"
+                              onClick={() => toggleItem({ id: item.id, name: item.name, price: itemPrice, image: item.image, color: item.color })}
+                              className="relative cursor-pointer -m-1 flex items-center justify-center p-1 px-1 py-2"
+                            >
+                              <svg className={`w-4 h-4 transition-all ${isWishlisted(item.id) ? 'fill-black' : 'fill-none stroke-black hover:fill-black'}`} viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                              </svg>
+                            </button>
                             <button
                               type="button"
                               title="Remove from Cart"
@@ -253,18 +200,15 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
                           </div>
                         </div>
 
-                        {/* Quantity + price */}
+                        {/* Row 2: quantity (left) | price (right) */}
                         <div className="flex flex-wrap items-baseline justify-between gap-4 mt-auto">
-                          {/* Quantity stepper */}
                           <div className="flex items-center gap-1.5">
                             <button
                               aria-label="Decrease quantity"
                               onClick={() => updateQuantity(item.id, item.quantity - 1)}
                               className="relative cursor-pointer -m-1 p-1 w-6 h-6 grid items-center justify-center"
                             >
-                              <span className="flex items-center justify-center rounded-[4px] bg-black/8 w-4 h-4 text-[9px]">
-                                <span>−</span>
-                              </span>
+                              <span className="flex items-center justify-center rounded-[4px] bg-black/8 w-4 h-4 text-[9px]"><span>−</span></span>
                             </button>
                             <div className="text-center text-[12px] tabular-nums w-4">{item.quantity}</div>
                             <button
@@ -272,19 +216,14 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
                               onClick={() => updateQuantity(item.id, item.quantity + 1)}
                               className="relative cursor-pointer -m-1 p-1 w-6 h-6 grid items-center justify-center"
                             >
-                              <span className="flex items-center justify-center rounded-[4px] bg-black/8 w-4 h-4 text-[9px]">
-                                <span>+</span>
-                              </span>
+                              <span className="flex items-center justify-center rounded-[4px] bg-black/8 w-4 h-4 text-[9px]"><span>+</span></span>
                             </button>
                           </div>
-
-                          {/* Price */}
                           <div className="flex flex-row items-baseline gap-1 text-sm">
-                            <div className="text-black">
-                              {formatPrice(itemPrice * item.quantity, selectedCountry.currency)}
-                            </div>
+                            <div className="text-black">{formatPrice(itemPrice * item.quantity, selectedCountry.currency)}</div>
                           </div>
                         </div>
+
                       </div>
                     </div>
                   </li>
@@ -294,57 +233,40 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
           )}
         </div>
 
-        {/* ── Sticky footer ── */}
+        {/* Sticky footer */}
         {items.length > 0 && (
-          <footer className="sticky bottom-0 z-10 bg-gray-50 px-4">
-            <div className="space-y-4 border-t border-black/10 pb-4">
+          <footer className="sticky bottom-0 z-10 bg-gray-50 px-4 pt-3">
+            <div className="space-y-2 border-t border-black/10 pb-3">
 
-              {/* Gift note toggle */}
-              <div className="flex items-end space-x-2 border-b border-black/10 py-4">
-                <div className="flex items-center text-sm">
-                  <input
-                    className="cursor-pointer h-4 mr-2 accent-black"
-                    id="gift-note"
-                    type="checkbox"
-                    checked={giftNote}
-                    onChange={(e) => setGiftNote(e.target.checked)}
-                  />
-                  <label htmlFor="gift-note" className="cursor-pointer font-normal text-sm">
-                    Add complimentary gift note + ribbon
-                  </label>
+              {/* Gift note */}
+              <div className="flex items-center space-x-2 py-2 border-b border-black/10">
+                <input className="cursor-pointer h-4 accent-black flex-none" id="gift-note" type="checkbox" checked={giftNote} onChange={(e) => setGiftNote(e.target.checked)} />
+                <label htmlFor="gift-note" className="cursor-pointer font-normal text-xs">Add complimentary gift note + ribbon</label>
+              </div>
+
+              {/* Delivery + Total */}
+              <div>
+                <div className="flex items-center justify-between my-1.5">
+                  <span className="text-xs font-normal">Estimated delivery</span>
+                  <span className="text-xs font-normal uppercase">Free</span>
+                </div>
+                <div className="flex items-center justify-between my-1.5 border-t border-black/60 pt-2">
+                  <span className="text-xs font-medium capitalize">Total</span>
+                  <div className="text-xs font-medium">{formatPrice(total, selectedCountry.currency)}</div>
                 </div>
               </div>
 
-              {/* Estimated delivery + total */}
-              <div className="my-3">
-                <div className="flex items-center justify-between space-x-2 my-3">
-                  <span className="text-sm font-normal">Estimated delivery</span>
-                  <span className="text-sm font-normal uppercase">Free</span>
-                </div>
-                <div className="flex items-center justify-between space-x-2 my-3 border-t border-black/60 pt-3">
-                  <span className="text-sm font-medium capitalize">Total</span>
-                  <div className="text-sm font-medium">
-                    {formatPrice(total, selectedCountry.currency)}
-                  </div>
-                </div>
-              </div>
-
-              {/* Checkout CTA */}
-              <div className="flex flex-col">
-                <Link
-                  to="/checkout"
-                  onClick={onClose}
-                  className="relative cursor-pointer text-sm transition-all inline-block py-4 px-6 text-white uppercase text-center bg-black border border-black tracking-widest w-full hover:bg-transparent hover:text-black"
-                >
-                  <div className="w-full transition-opacity flex justify-center">
-                    Continue to checkout
-                  </div>
-                </Link>
-              </div>
+              {/* Checkout */}
+              <Link
+                to="/checkout"
+                onClick={onClose}
+                className="relative cursor-pointer text-sm transition-all inline-block py-4 px-6 text-white uppercase text-center bg-black border border-black tracking-widest w-full hover:bg-transparent hover:text-black"
+              >
+                Continue to checkout
+              </Link>
 
               {/* Trust signals */}
               <div className="flex flex-col gap-2 pb-2">
-                {/* Free shipping */}
                 <div className="flex items-center space-x-2">
                   <div className="inline-flex size-4 flex-none items-center justify-center">
                     <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -355,8 +277,6 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
                   </div>
                   <span className="text-sm font-normal">Free standard shipping on all orders</span>
                 </div>
-
-                {/* Free returns */}
                 <div className="flex items-center space-x-2">
                   <div className="inline-flex size-4 flex-none items-center justify-center">
                     <svg className="h-4 w-4" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -368,8 +288,6 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
                   </div>
                   <span className="text-sm font-normal">Free returns*</span>
                 </div>
-
-                {/* Shipping to country */}
                 <div className="flex items-center space-x-2">
                   <div className="inline-flex size-4 flex-none items-center justify-center">
                     <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -379,19 +297,9 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
                   </div>
                   <span className="text-sm font-normal flex items-center gap-1">
                     Shipping to{' '}
-                    <img
-                      alt=""
-                      className="inline-block shadow mx-1"
-                      width={18}
-                      src={flagUrl}
-                    />
+                    <img alt="" className="inline-block shadow mx-1" width={18} src={flagUrl} />
                     {selectedCountry.name}{' '}
-                    <button
-                      className="underline outline-none hover:no-underline"
-                      onClick={() => openModal('country')}
-                    >
-                      Change
-                    </button>
+                    <button className="underline outline-none hover:no-underline" onClick={() => openModal('country')}>Change</button>
                   </span>
                 </div>
               </div>
