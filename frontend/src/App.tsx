@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
 import Header from './components/Header'
+import Footer from './components/Footer'
 import ErrorBoundary from './components/ErrorBoundary'
 import { useAuthStore } from './store/authStore'
 
@@ -94,6 +95,7 @@ function App() {
           } />
         </Routes>
       </main>
+      <Footer />
         </div>
       </CurrencyProvider>
     </ErrorBoundary>
