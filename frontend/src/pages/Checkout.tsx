@@ -42,12 +42,6 @@ export default function Checkout() {
       const token = localStorage.getItem('token')
       console.log('Frontend - Token exists:', !!token)
       
-      if (!token) {
-        alert('Please login first to place an order')
-        navigate('/login')
-        return
-      }
-      
       console.log('Frontend - API URL:', `${API_BASE_URL}/orders`)
       
       const orderData = {
@@ -74,12 +68,18 @@ export default function Checkout() {
       
       console.log('Frontend - Order data:', orderData)
       
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json'
+      }
+      
+      // Add authorization header if token exists
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`
+      }
+      
       const response = await fetch(`${API_BASE_URL}/orders`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
+        headers,
         body: JSON.stringify(orderData)
       })
       
@@ -265,11 +265,11 @@ export default function Checkout() {
                       onSuccess={() => {
                         console.log('Payment successful - clearing cart')
                         clearCart()
-                        navigate(`/payment-success?orderId=${orderId}`)
+                        window.location.href = `/payment-success?orderId=${orderId}`
                       }}
                       onError={(error) => {
                         console.error('Payment error:', error)
-                        navigate('/payment-failed')
+                        window.location.href = '/payment-failed'
                       }}
                     />
                   )}
