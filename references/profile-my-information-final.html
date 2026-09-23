@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Hegētt — My Information</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;1,400;1,500&family=Work+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{ --paper:#F5F2EC; --sidebar:#EDE8DF; --ink:#211D19; --umber:#7A4B32; --moss:#3B3F33; --line: rgba(33,29,25,0.22); }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{background:#fff; color:var(--ink); font-family:'Work Sans',sans-serif; -webkit-font-smoothing:antialiased;}
+  .serif{font-family:'Newsreader',serif;}
+  a{color:inherit; text-decoration:none;}
+
+  .promo{background:var(--paper); text-align:center; padding:12px 24px; font-size:13px; position:relative;}
+  .promo .close{position:absolute; right:24px; top:50%; transform:translateY(-50%); opacity:0.5; font-size:16px;}
+
+  header{display:flex; align-items:center; justify-content:space-between; padding:22px 3vw; border-bottom:1px solid rgba(33,29,25,0.12);}
+  header nav.left{display:flex; gap:26px; font-size:12px; letter-spacing:0.06em; text-transform:uppercase;}
+  .logo{font-family:'Newsreader',serif; font-size:22px; letter-spacing:0.18em;}
+  header .right{display:flex; gap:22px; font-size:12px; letter-spacing:0.06em; text-transform:uppercase;}
+  header .right span{opacity:0.7;}
+
+  .layout{display:flex; min-height:80vh; align-items:flex-start;}
+  .sidebar{width:420px; flex-shrink:0; background:var(--sidebar); padding:70px 5vw; align-self:stretch; position:relative;}
+  .sidebar .greeting{font-family:'Newsreader',serif; font-size:38px; font-weight:400;}
+  .sidebar .inner{position:sticky; top:calc(100vh - 400px); margin-top:255px;}
+  .acct-nav{margin-top:0;}
+  .acct-nav a{display:block; font-size:13px; letter-spacing:0.07em; text-transform:uppercase; color:rgba(33,29,25,0.6); padding:14px 0;}
+  .acct-nav a.active{color:var(--ink); font-weight:500;}
+  .logout{display:flex; align-items:center; gap:9px; font-size:13px; letter-spacing:0.07em; text-transform:uppercase; color:rgba(33,29,25,0.55); margin-top:48px;}
+
+  .main{flex:1; padding:60px 6vw 100px; max-width:1000px;}
+  .main h1{font-family:'Newsreader',serif; font-weight:400; font-size:36px; margin-bottom:48px;}
+
+  /* Underlined form fields, Strathberry style */
+  .form-grid{display:grid; grid-template-columns:1fr 1fr; gap:26px 40px; margin-bottom:56px;}
+  .field label{display:block; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:rgba(33,29,25,0.75); margin-bottom:10px;}
+  .field input, .field select{width:100%; border:none; border-bottom:1px solid var(--line); background:transparent; padding:8px 0 12px; font-family:'Work Sans',sans-serif; font-size:15px; color:var(--ink); border-radius:0; -webkit-appearance:none; appearance:none;}
+  .field select{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8'><path d='M1 1l5 5 5-5' stroke='%23211D19' stroke-width='1' fill='none'/></svg>"); background-repeat:no-repeat; background-position:right 2px center;}
+  .field input:focus, .field select:focus{outline:none; border-bottom-color:var(--ink);}
+  .field.full{grid-column:1 / -1;}
+
+  /* Buttons */
+  .btn-row{display:grid; grid-template-columns:1fr; max-width:360px; margin-bottom:90px;}
+  .btn{padding:18px; text-align:center; font-size:12px; letter-spacing:0.1em; text-transform:uppercase; cursor:pointer; border:1px solid var(--ink);}
+  .btn.primary{background:var(--ink); color:#fff;}
+  .btn.ghost{background:transparent; color:var(--ink); border-color:var(--ink);}
+
+  /* Section divider + heading */
+  .section{border-top:1px solid rgba(33,29,25,0.14); padding-top:52px; margin-bottom:80px;}
+  .section h2{font-family:'Newsreader',serif; font-weight:400; font-size:24px; margin-bottom:8px;}
+  .section .note{font-size:13.5px; line-height:1.8; color:rgba(33,29,25,0.65); max-width:620px; margin-bottom:34px;}
+
+  .cred-row{display:grid; grid-template-columns:1fr auto; gap:32px; align-items:end; margin-bottom:30px; max-width:760px;}
+  .cred-row .link-btn{font-size:11px; letter-spacing:0.1em; text-transform:uppercase; border-bottom:1px solid var(--ink); padding-bottom:3px; white-space:nowrap; margin-bottom:12px;}
+  .field .input-wrap{position:relative; display:flex; align-items:center;}
+  .field .input-wrap input{padding-right:34px;}
+  .field .edit-icon{position:absolute; right:2px; bottom:12px; color:rgba(33,29,25,0.7); display:flex;}
+  .field .edit-icon:hover{color:var(--ink);}
+
+  /* Deactivate */
+  /* Change password modal */
+  .overlay{position:fixed; inset:0; background:rgba(20,17,14,0.45); display:none; align-items:center; justify-content:center; z-index:50; padding:24px;}
+  .overlay.is-open{display:flex;}
+  .modal{background:#fff; width:100%; max-width:480px; padding:76px 56px 68px; position:relative;}
+  .modal .close-x{position:absolute; top:18px; right:24px; font-size:20px; opacity:0.45; cursor:pointer; line-height:1;}
+  .modal h2{font-family:'Newsreader',serif; font-weight:400; font-size:26px; margin-bottom:52px;}
+  .modal .modal-note{font-size:13.5px; line-height:1.75; color:rgba(33,29,25,0.65); margin-bottom:34px;}
+  .modal .field{margin-bottom:44px;}
+  .modal .field .input-wrap input{padding-right:56px;}
+  .modal .show-toggle{position:absolute; right:0; bottom:12px; font-size:10.5px; letter-spacing:0.08em; text-transform:uppercase; color:rgba(33,29,25,0.55); cursor:pointer;}
+  .modal .forgot{display:block; font-size:11.5px; color:rgba(33,29,25,0.6); border-bottom:1px solid rgba(33,29,25,0.3); width:fit-content; margin:-14px 0 30px; padding-bottom:2px;}
+  .modal .rules{font-size:12px; line-height:1.9; color:rgba(33,29,25,0.55); margin:-12px 0 32px; padding-left:16px;}
+  .modal .rules li{list-style:none; position:relative;}
+  .modal .rules li::before{content:'—'; position:absolute; left:-16px; opacity:0.5;}
+  .modal .btn{width:100%; margin-top:16px; margin-bottom:22px;}
+  .modal .cancel-link{display:block; text-align:center; font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:rgba(33,29,25,0.55);}
+
+  .deactivate{margin-top:70px;}
+  .deactivate .warning{font-size:13.5px; line-height:1.85; color:rgba(33,29,25,0.7); max-width:680px; margin-bottom:28px;}
+  .deactivate .warning a{border-bottom:1px solid rgba(33,29,25,0.4);}
+  .deactivate .btn.danger{display:inline-block; border-color:rgba(33,29,25,0.35); color:rgba(33,29,25,0.75); padding:16px 42px; background:transparent;}
+
+  @media (max-width:900px){
+    .layout{flex-direction:column;}
+    .sidebar{width:100%; padding:44px 24px;}
+    .sidebar .greeting{margin-bottom:34px; font-size:30px;}
+    .acct-nav{margin-top:0;}
+    .main{padding:44px 24px 80px;}
+    .form-grid, .btn-row, .cred-row{grid-template-columns:1fr;}
+    header nav.left{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<div class="promo">
+  Hegētt launches August 2026 — join the list
+  <span class="close">×</span>
+</div>
+
+<header>
+  <nav class="left">
+    <a href="#">Collection</a>
+    <a href="#">Our Story</a>
+    <a href="#">Craft</a>
+  </nav>
+  <div class="logo">HEGĒTT</div>
+  <div class="right">
+    <span>Account</span>
+    <span>Wishlist</span>
+    <span>Cart</span>
+  </div>
+</header>
+
+<div class="layout">
+
+  <aside class="sidebar">
+    <div class="greeting serif">Hello, [Customer Name]</div>
+    <div class="inner">
+      <div class="acct-nav">
+        <a class="active" href="#">My Information</a>
+        <a href="#">My Orders &amp; Returns</a>
+        <a href="#">Wishlist</a>
+        <a href="#">Address Book</a>
+        <a href="#">Preferences</a>
+      </div>
+      <a class="logout" href="#">← Logout</a>
+    </div>
+  </aside>
+
+  <div class="main">
+    <h1 class="serif">My Information</h1>
+
+    <!-- Personal details -->
+    <div class="form-grid">
+      <div class="field">
+        <label>Title</label>
+        <select>
+          <option>Prefer not to say</option>
+          <option>Ms</option>
+          <option>Mrs</option>
+          <option>Miss</option>
+          <option>Mr</option>
+          <option>Mx</option>
+        </select>
+      </div>
+      <div class="field"></div>
+
+      <div class="field">
+        <label>First name*</label>
+        <input type="text" value="[First Name]">
+      </div>
+      <div class="field">
+        <label>Last name*</label>
+        <input type="text" value="[Last Name]">
+      </div>
+
+      <div class="field">
+        <label>Phone number</label>
+        <input type="tel" value="+1 000 000 0000">
+      </div>
+      <div class="field">
+        <label>Gender</label>
+        <select>
+          <option>Prefer not to answer</option>
+          <option>Female</option>
+          <option>Male</option>
+          <option>Non-binary</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Date of birth</label>
+        <input type="date">
+      </div>
+      <div class="field"></div>
+    </div>
+
+    <div class="btn-row">
+      <div class="btn primary">Save Changes</div>
+    </div>
+
+    <!-- Change of credentials -->
+    <div class="section">
+      <h2 class="serif">Change of access credentials</h2>
+      <p class="note">Your email address is used to sign in and to receive order updates.</p>
+
+      <div class="cred-row">
+        <div class="field with-icon">
+          <label>Email address</label>
+          <div class="input-wrap">
+            <input type="email" value="[email@placeholder.com]" readonly>
+            <a class="edit-icon" href="#" aria-label="Edit email">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+                <path d="M17 3a2.1 2.1 0 013 3L8 18l-4 1 1-4z"/>
+                <path d="M14 6l4 4"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+        <span></span>
+      </div>
+
+      <div class="cred-row">
+        <div class="field">
+          <label>Current password</label>
+          <input type="password" value="••••••••" readonly>
+        </div>
+        <a class="link-btn" href="#">Change password</a>
+      </div>
+    </div>
+
+    <!-- Deactivate account -->
+    <div class="section deactivate">
+      <h2 class="serif">Deactivate account</h2>
+      <p class="warning">If you deactivate your account you will no longer be able to access your personal area or your order history: to view, modify or request the cancellation of your personal details, consult our <a href="#">Privacy Policy</a>.</p>
+      <div class="btn danger">Deactivate my account</div>
+    </div>
+
+  </div>
+
+</div>
+
+<!--
+  Change password modal — hidden by default.
+  To open: add the class "is-open" to the .overlay element below
+  (e.g. when the "Change password" link is tapped).
+  To close: remove that class (× button, Cancel link, or overlay click).
+-->
+<div class="overlay">
+  <div class="modal">
+    <span class="close-x">×</span>
+    <h2 class="serif">Change password</h2>
+
+    <div class="field">
+      <label>Current password</label>
+      <div class="input-wrap">
+        <input type="password" value="••••••••" readonly>
+        <span class="show-toggle">Show</span>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>New password</label>
+      <div class="input-wrap">
+        <input type="password" placeholder="">
+        <span class="show-toggle">Show</span>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Confirm new password</label>
+      <div class="input-wrap">
+        <input type="password" placeholder="">
+        <span class="show-toggle">Show</span>
+      </div>
+    </div>
+
+    <div class="btn primary">Update password</div>
+    <a class="cancel-link" href="#">Cancel</a>
+  </div>
+</div>
+
+</body>
+</html>
