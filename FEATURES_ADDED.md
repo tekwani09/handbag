@@ -334,7 +334,64 @@ This file maintains a record of all new features and enhancements added to the a
 
 ---
 
+### 11. Enhanced Wishlist Page with Sidebar Layout
+**Status**: ✅ Completed
+**Date Added**: September 26, 2026
+**Description**: Redesigned Wishlist page with sidebar navigation matching Account page design
+**Files Modified**:
+- `frontend/src/pages/Wishlist.tsx` (completely redesigned)
+- `frontend/src/App.tsx` (added protected /account/wishlist route)
+
+**Details**:
+- **Sidebar Navigation**:
+  - Consistent sidebar layout matching My Information and Orders pages
+  - "Hello, [Name]" greeting with proper spacing
+  - Navigation menu with active "Wishlist" link indicator
+  - Logout button in sidebar for quick access
+  - Responsive design (sidebar collapses on mobile)
+  
+- **Main Content Area**:
+  - Large serif heading "Wishlist"
+  - Action buttons: "Share Wishlist" and "Clear Wishlist"
+  - Item count display (desktop and mobile)
+  - "Move all items to bag" button for bulk addition
+  
+- **Wishlist Grid**:
+  - Responsive grid layout (1 column on mobile, 2 on tablet, 3 on desktop)
+  - Product cards with:
+    - Product image with hover zoom effect
+    - Product name as link to product detail
+    - Color variant display
+    - Price in selected currency
+    - "Add to bag" link button
+    - Remove button (X icon) in top-right corner
+  
+- **Empty State**:
+  - Serif heading: "Your wishlist is empty"
+  - Descriptive subtitle
+  - "Start Shopping" call-to-action button
+  
+- **Routing**:
+  - Public route: `/wishlist` (unprotected, shows generic wishlist)
+  - Protected route: `/account/wishlist` (requires authentication, shows user's wishlist)
+  - Both routes navigate through sidebar links when authenticated
+  
+- **Functionality**:
+  - Add single items to bag from wishlist
+  - Move all items to bag at once
+  - Remove individual items from wishlist
+  - Clear entire wishlist with confirmation
+  - Share wishlist (placeholder for future implementation)
+  - Currency formatting applied to all prices
+  
+**Testing**: ✅ Build verified successful (CSS: 47.26 kB, JS: 509.10 kB gzipped)
+**Git Commits**: 
+  - ✅ "Feature #13: Enhance Wishlist page with sidebar layout and protected route"
+**Next**: Ready for local testing and user feedback
+
+---
+
 **Last Updated**: September 26, 2026
-**Total Completed**: 10 features
+**Total Completed**: 11 features
 **In Progress**: 0 features
 **Planned**: 5+ features
