@@ -1,8 +1,19 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../store/authStore'
+import { useState } from 'react'
 
 export default function Account() {
   const { user, isAuthenticated, logout } = useAuthStore()
+  const navigate = useNavigate()
+  const [formData, setFormData] = useState({
+    title: 'Prefer not to say',
+    firstName: user?.firstName || '',
+    lastName: user?.lastName || '',
+    phone: '',
+    gender: 'Prefer not to answer',
+    dateOfBirth: '',
+    email: user?.email || ''
+  })
 
   if (!isAuthenticated) {
     return (
@@ -42,164 +53,211 @@ export default function Account() {
     )
   }
 
+  const handleLogout = () => {
+    logout()
+    navigate('/')
+  }
+
   return (
-    <div className="min-h-screen" style={{backgroundColor: '#fcfcfb'}}>
-      <main className="max-w-6xl mx-auto px-4 md:px-6 lg:px-8 py-12 md:py-20">
-        {/* Header Section */}
-        <div className="mb-16">
-          <h1 className="text-4xl md:text-5xl font-light mb-2">MY ACCOUNT</h1>
-          <p className="text-sm text-gray-600">
-            Welcome back, <span className="font-medium">{user?.firstName}</span>
-          </p>
-        </div>
-
-        {/* Account Dashboard Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* Account Details Card */}
-          <Link 
-            to="/account/details"
-            className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow group"
-          >
-            <div className="p-6 md:p-8">
-              <div className="mb-4">
-                <svg className="w-10 h-10 text-black group-hover:opacity-80 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-light mb-2 group-hover:opacity-80 transition-opacity">
-                Account Details
-              </h3>
-              <p className="text-sm text-gray-600 mb-4">
-                Update your personal information and preferences
-              </p>
-              <span className="text-xs uppercase tracking-widest text-gray-700 group-hover:text-black transition-colors">
-                Manage →
-              </span>
-            </div>
-          </Link>
-
-          {/* Order History Card */}
-          <Link 
-            to="/account/orders"
-            className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow group"
-          >
-            <div className="p-6 md:p-8">
-              <div className="mb-4">
-                <svg className="w-10 h-10 text-black group-hover:opacity-80 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-light mb-2 group-hover:opacity-80 transition-opacity">
-                Order History
-              </h3>
-              <p className="text-sm text-gray-600 mb-4">
-                View and track your current and past orders
-              </p>
-              <span className="text-xs uppercase tracking-widest text-gray-700 group-hover:text-black transition-colors">
-                View Orders →
-              </span>
-            </div>
-          </Link>
-
-          {/* Address Book Card */}
-          <Link 
-            to="/account/addresses"
-            className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow group"
-          >
-            <div className="p-6 md:p-8">
-              <div className="mb-4">
-                <svg className="w-10 h-10 text-black group-hover:opacity-80 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-light mb-2 group-hover:opacity-80 transition-opacity">
-                Address Book
-              </h3>
-              <p className="text-sm text-gray-600 mb-4">
-                Manage your shipping and billing addresses
-              </p>
-              <span className="text-xs uppercase tracking-widest text-gray-700 group-hover:text-black transition-colors">
-                Manage →
-              </span>
-            </div>
-          </Link>
-
-          {/* Wishlist Card */}
-          <Link 
-            to="/account/wishlist"
-            className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow group"
-          >
-            <div className="p-6 md:p-8">
-              <div className="mb-4">
-                <svg className="w-10 h-10 text-black group-hover:opacity-80 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-light mb-2 group-hover:opacity-80 transition-opacity">
+    <div className="min-h-screen" style={{backgroundColor: '#ffffff'}}>
+      <div className="flex flex-col lg:flex-row min-h-screen">
+        {/* Sidebar */}
+        <aside className="w-full lg:w-80 lg:flex-shrink-0" style={{backgroundColor: '#f0eee9'}}>
+          <div className="p-8 lg:p-12 sticky top-0">
+            <h2 className="text-3xl md:text-4xl font-light mb-12" style={{fontFamily: 'Cormorant Garamond'}}>
+              Hello, {user?.firstName}
+            </h2>
+            
+            <nav className="space-y-3 mb-12">
+              <Link 
+                to="/account"
+                className="block text-xs uppercase tracking-wider font-medium text-black"
+              >
+                My Information
+              </Link>
+              <Link 
+                to="/account/orders"
+                className="block text-xs uppercase tracking-wider text-gray-600 hover:text-black transition-colors"
+              >
+                My Orders &amp; Returns
+              </Link>
+              <Link 
+                to="/account/wishlist"
+                className="block text-xs uppercase tracking-wider text-gray-600 hover:text-black transition-colors"
+              >
                 Wishlist
-              </h3>
-              <p className="text-sm text-gray-600 mb-4">
-                Save your favorite items for later
-              </p>
-              <span className="text-xs uppercase tracking-widest text-gray-700 group-hover:text-black transition-colors">
-                View Wishlist →
-              </span>
-            </div>
-          </Link>
+              </Link>
+              <Link 
+                to="/account/addresses"
+                className="block text-xs uppercase tracking-wider text-gray-600 hover:text-black transition-colors"
+              >
+                Address Book
+              </Link>
+              <Link 
+                to="/account/payment"
+                className="block text-xs uppercase tracking-wider text-gray-600 hover:text-black transition-colors"
+              >
+                Preferences
+              </Link>
+            </nav>
 
-          {/* Payment Methods Card */}
-          <Link 
-            to="/account/payment"
-            className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow group"
-          >
-            <div className="p-6 md:p-8">
-              <div className="mb-4">
-                <svg className="w-10 h-10 text-black group-hover:opacity-80 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-                </svg>
+            <button 
+              onClick={handleLogout}
+              className="flex items-center gap-2 text-xs uppercase tracking-wider text-gray-600 hover:text-black transition-colors"
+            >
+              <span>←</span> Logout
+            </button>
+          </div>
+        </aside>
+
+        {/* Main Content */}
+        <main className="flex-1 p-8 lg:p-12 max-w-4xl">
+          <h1 className="text-4xl md:text-5xl font-light mb-12" style={{fontFamily: 'Cormorant Garamond'}}>
+            My Information
+          </h1>
+
+          {/* Personal Details Form */}
+          <div className="mb-16">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-8">
+              {/* Title */}
+              <div>
+                <label className="block text-xs uppercase tracking-widest text-gray-700 mb-2">Title</label>
+                <select 
+                  value={formData.title}
+                  onChange={(e) => setFormData({...formData, title: e.target.value})}
+                  className="w-full border-b border-gray-300 bg-transparent py-2 text-sm focus:outline-none focus:border-black"
+                >
+                  <option>Prefer not to say</option>
+                  <option>Ms</option>
+                  <option>Mrs</option>
+                  <option>Miss</option>
+                  <option>Mr</option>
+                  <option>Mx</option>
+                </select>
               </div>
-              <h3 className="text-xl font-light mb-2 group-hover:opacity-80 transition-opacity">
-                Payment Methods
-              </h3>
-              <p className="text-sm text-gray-600 mb-4">
-                Manage your saved payment methods
-              </p>
-              <span className="text-xs uppercase tracking-widest text-gray-700 group-hover:text-black transition-colors">
-                Manage →
-              </span>
-            </div>
-          </Link>
+              <div></div>
 
-          {/* Sign Out Card */}
-          <button 
-            onClick={logout}
-            className="text-left bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow group"
-          >
-            <div className="p-6 md:p-8">
-              <div className="mb-4">
-                <svg className="w-10 h-10 text-black group-hover:opacity-80 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                </svg>
+              {/* First Name */}
+              <div>
+                <label className="block text-xs uppercase tracking-widest text-gray-700 mb-2">First name *</label>
+                <input 
+                  type="text" 
+                  value={formData.firstName}
+                  onChange={(e) => setFormData({...formData, firstName: e.target.value})}
+                  className="w-full border-b border-gray-300 bg-transparent py-2 text-sm focus:outline-none focus:border-black"
+                />
               </div>
-              <h3 className="text-xl font-light mb-2 group-hover:opacity-80 transition-opacity">
-                Sign Out
-              </h3>
-              <p className="text-sm text-gray-600 mb-4">
-                Securely sign out of your account
-              </p>
-              <span className="text-xs uppercase tracking-widest text-gray-700 group-hover:text-black transition-colors">
-                Sign Out →
-              </span>
-            </div>
-          </button>
-        </div>
 
-        {/* Footer Info */}
-        <div className="mt-16 text-center text-sm text-gray-600 max-w-md mx-auto">
-          <p>Need help? <a href="#" className="underline hover:no-underline">Contact our customer care team</a></p>
-        </div>
-      </main>
+              {/* Last Name */}
+              <div>
+                <label className="block text-xs uppercase tracking-widest text-gray-700 mb-2">Last name *</label>
+                <input 
+                  type="text" 
+                  value={formData.lastName}
+                  onChange={(e) => setFormData({...formData, lastName: e.target.value})}
+                  className="w-full border-b border-gray-300 bg-transparent py-2 text-sm focus:outline-none focus:border-black"
+                />
+              </div>
+
+              {/* Phone */}
+              <div>
+                <label className="block text-xs uppercase tracking-widest text-gray-700 mb-2">Phone number</label>
+                <input 
+                  type="tel" 
+                  value={formData.phone}
+                  onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                  className="w-full border-b border-gray-300 bg-transparent py-2 text-sm focus:outline-none focus:border-black"
+                />
+              </div>
+
+              {/* Gender */}
+              <div>
+                <label className="block text-xs uppercase tracking-widest text-gray-700 mb-2">Gender</label>
+                <select 
+                  value={formData.gender}
+                  onChange={(e) => setFormData({...formData, gender: e.target.value})}
+                  className="w-full border-b border-gray-300 bg-transparent py-2 text-sm focus:outline-none focus:border-black"
+                >
+                  <option>Prefer not to answer</option>
+                  <option>Female</option>
+                  <option>Male</option>
+                  <option>Non-binary</option>
+                </select>
+              </div>
+
+              {/* Date of Birth */}
+              <div>
+                <label className="block text-xs uppercase tracking-widest text-gray-700 mb-2">Date of birth</label>
+                <input 
+                  type="date" 
+                  value={formData.dateOfBirth}
+                  onChange={(e) => setFormData({...formData, dateOfBirth: e.target.value})}
+                  className="w-full border-b border-gray-300 bg-transparent py-2 text-sm focus:outline-none focus:border-black"
+                />
+              </div>
+            </div>
+
+            <button className="px-8 py-3 bg-black text-white text-xs uppercase tracking-widest hover:bg-gray-800 transition-colors">
+              Save Changes
+            </button>
+          </div>
+
+          {/* Change Credentials Section */}
+          <div className="border-t border-gray-300 pt-12 mb-16">
+            <h2 className="text-2xl font-light mb-2" style={{fontFamily: 'Cormorant Garamond'}}>
+              Change of access credentials
+            </h2>
+            <p className="text-sm text-gray-600 mb-8 max-w-xl">
+              Your email address is used to sign in and to receive order updates.
+            </p>
+
+            {/* Email */}
+            <div className="mb-8">
+              <label className="block text-xs uppercase tracking-widest text-gray-700 mb-2">Email address</label>
+              <div className="flex items-end gap-4">
+                <input 
+                  type="email" 
+                  value={formData.email}
+                  readOnly
+                  className="flex-1 border-b border-gray-300 bg-transparent py-2 text-sm focus:outline-none"
+                />
+                <button className="text-xs uppercase tracking-widest text-gray-600 hover:text-black transition-colors mb-2">
+                  Edit
+                </button>
+              </div>
+            </div>
+
+            {/* Password */}
+            <div className="mb-8">
+              <label className="block text-xs uppercase tracking-widest text-gray-700 mb-2">Current password</label>
+              <div className="flex items-end gap-4">
+                <input 
+                  type="password" 
+                  value="••••••••"
+                  readOnly
+                  className="flex-1 border-b border-gray-300 bg-transparent py-2 text-sm focus:outline-none"
+                />
+                <button className="text-xs uppercase tracking-widest text-gray-600 hover:text-black transition-colors mb-2">
+                  Change password
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Deactivate Account Section */}
+          <div className="border-t border-gray-300 pt-12">
+            <h2 className="text-2xl font-light mb-4" style={{fontFamily: 'Cormorant Garamond'}}>
+              Deactivate account
+            </h2>
+            <p className="text-sm text-gray-600 mb-6 max-w-xl leading-relaxed">
+              If you deactivate your account you will no longer be able to access your personal area or your order history. To view, modify or request the cancellation of your personal details, consult our Privacy Policy.
+            </p>
+            <button className="px-8 py-3 border border-gray-400 text-gray-700 text-xs uppercase tracking-widest hover:bg-gray-100 transition-colors">
+              Deactivate my account
+            </button>
+          </div>
+        </main>
+      </div>
     </div>
   )
 }
