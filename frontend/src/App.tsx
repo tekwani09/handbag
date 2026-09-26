@@ -31,6 +31,7 @@ import PaymentSuccess from './pages/PaymentSuccess'
 import PaymentFailed from './pages/PaymentFailed'
 import Gifts from './pages/Gifts'
 import OrderDetail from './pages/OrderDetail'
+import NeedHelp from './pages/NeedHelp'
 import About from './pages/About'
 import BagSingleColor from './pages/BagSingleColor'
 import BagTwoColorways from './pages/BagTwoColorways'
@@ -74,6 +75,7 @@ function App() {
           <Route path="/payment-failed" element={<PaymentFailed />} />
           <Route path="/order/:id" element={<ProtectedRoute><OrderDetail /></ProtectedRoute>} />
           <Route path="/orders/:id" element={<ProtectedRoute><OrderDetail /></ProtectedRoute>} />
+          <Route path="/order/:orderId/help" element={<ProtectedRoute><NeedHelp /></ProtectedRoute>} />
           <Route path="/account" element={<Account />} />
           <Route path="/account/details" element={<ProtectedRoute><AccountDetails /></ProtectedRoute>} />
           <Route path="/account/orders" element={<ProtectedRoute><AccountOrders /></ProtectedRoute>} />

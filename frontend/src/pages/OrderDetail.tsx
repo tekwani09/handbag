@@ -278,11 +278,17 @@ export default function OrderDetail() {
           >
             View All Orders
           </Link>
+          <Link 
+            to={`/order/${id}/help`} 
+            className="flex-1 md:flex-none border-2 border-gray-400 text-gray-700 py-4 px-8 text-sm uppercase tracking-wide hover:border-black hover:text-black transition-colors text-center rounded"
+          >
+            Need Help?
+          </Link>
         </div>
 
         {/* Support Info */}
         <div className="text-center text-sm text-gray-600 max-w-md mx-auto mt-8">
-          <p>Questions about your order? <a href="#" className="underline hover:no-underline">Contact our customer care team</a></p>
+          <p>Questions about your order? <Link to={`/order/${id}/help`} className="underline hover:no-underline">Get help with this order</Link></p>
         </div>
       </main>
     </div>
