@@ -2,11 +2,194 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Base Font Setup */
 body {
   font-family: 'Jost', system-ui, sans-serif;
   font-weight: 300;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================
+   Typography System - Dual Font Implementation
+   Cormorant Garamond: Headings & Display
+   Jost: Body & Navigation
+   ============================================ */
+
+/* Heading Hierarchy - Using Cormorant Garamond (Serif) */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+h1 {
+  @apply text-4xl md:text-5xl font-light tracking-tight;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 400;
+}
+
+h2 {
+  @apply text-3xl md:text-4xl font-light;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+h3 {
+  @apply text-2xl md:text-3xl font-light;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 400;
+}
+
+h4 {
+  @apply text-xl md:text-2xl font-light;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 400;
+}
+
+h5 {
+  @apply text-lg font-light;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 400;
+}
+
+h6 {
+  @apply text-base font-light;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 400;
+}
+
+/* Typography Components */
+.font-serif-display {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 400;
+}
+
+.font-serif-medium {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 500;
+}
+
+.font-serif-light {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 300;
+}
+
+.font-sans-body {
+  font-family: 'Jost', system-ui, sans-serif;
+  font-weight: 300;
+}
+
+.font-sans-medium {
+  font-family: 'Jost', system-ui, sans-serif;
+  font-weight: 500;
+}
+
+.font-sans-semibold {
+  font-family: 'Jost', system-ui, sans-serif;
+  font-weight: 600;
+}
+
+/* Text Styles */
+p {
+  font-family: 'Jost', system-ui, sans-serif;
+  font-weight: 300;
+  line-height: 1.6;
+}
+
+p.font-light {
+  font-weight: 300;
+}
+
+p.font-medium {
+  font-weight: 400;
+}
+
+p.font-semibold {
+  font-weight: 500;
+}
+
+/* Links */
+a {
+  font-family: inherit;
+}
+
+a.serif-link {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+}
+
+a.sans-link {
+  font-family: 'Jost', system-ui, sans-serif;
+}
+
+/* Navigation - Using Jost (Sans) */
+nav, .nav {
+  font-family: 'Jost', system-ui, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+nav a, .nav a {
+  font-family: 'Jost', system-ui, sans-serif;
+  font-weight: 400;
+}
+
+/* Labels & Captions - Using Jost */
+label, caption, small, .text-xs, .text-sm {
+  font-family: 'Jost', system-ui, sans-serif;
+  font-weight: 300;
+}
+
+label {
+  font-weight: 400;
+}
+
+/* Buttons - Using Jost */
+button, .btn {
+  font-family: 'Jost', system-ui, sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* Special Typography for Luxury Feel */
+.luxury-heading {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  font-size: clamp(1.5rem, 5vw, 3rem);
+}
+
+.luxury-subheading {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  font-size: clamp(1.2rem, 4vw, 1.875rem);
+}
+
+.product-title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+.product-description {
+  font-family: 'Jost', system-ui, sans-serif;
+  font-weight: 300;
+  line-height: 1.8;
+}
+
+/* Price Display */
+.price {
+  font-family: 'Jost', system-ui, sans-serif;
+  font-weight: 500;
+}
+
+.price-currency {
+  font-family: 'Jost', system-ui, sans-serif;
+  font-size: 0.875em;
 }
 
 /* Hide scrollbars */
