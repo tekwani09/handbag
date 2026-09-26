@@ -43,6 +43,9 @@ export default function AccountOrders() {
   const navigate = useNavigate()
   const [orders, setOrders] = useState<Order[]>([])
   const [loading, setLoading] = useState(true)
+  const [filterOpen, setFilterOpen] = useState(false)
+  const [selectedStatus, setSelectedStatus] = useState<string[]>([])
+  const [selectedYear, setSelectedYear] = useState<string[]>([])
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -80,8 +83,56 @@ export default function AccountOrders() {
     return status === 'PENDING' || status === 'SHIPPED' || status === 'IN_TRANSIT'
   }
 
-  const inProgressOrders = orders.filter(order => isInProgress(order.status))
-  const pastOrders = orders.filter(order => !isInProgress(order.status))
+  // Calculate counts for filters
+  const inProgressCount = orders.filter(order => isInProgress(order.status)).length
+  const deliveredCount = orders.filter(o => o.status === 'DELIVERED').length
+  const returnedCount = orders.filter(o => o.status === 'RETURNED').length
+
+  const statusCounts = {
+    'ALL': orders.length,
+    'IN_PROGRESS': inProgressCount,
+    'DELIVERED': deliveredCount,
+    'RETURNED': returnedCount
+  }
+
+  const yearCounts = orders.reduce((acc: {[key: string]: number}, order) => {
+    const year = new Date(order.createdAt).getFullYear().toString()
+    acc[year] = (acc[year] || 0) + 1
+    return acc
+  }, {})
+
+  // Get filtered orders
+  const filteredOrders = orders.filter(order => {
+    const year = new Date(order.createdAt).getFullYear().toString()
+    
+    // If filters are not set, show all
+    if (selectedStatus.length === 0 && selectedYear.length === 0) {
+      return true
+    }
+    
+    let statusMatch = selectedStatus.length === 0 ? true : false
+    if (selectedStatus.length > 0) {
+      const statusType = isInProgress(order.status) ? 'IN_PROGRESS' : order.status
+      statusMatch = selectedStatus.includes(statusType) || selectedStatus.includes('ALL')
+    }
+    
+    const yearMatch = selectedYear.length === 0 ? true : selectedYear.includes(year) || selectedYear.includes('ALL_YEARS')
+    
+    return statusMatch && yearMatch
+  })
+
+  const filteredInProgress = filteredOrders.filter(order => isInProgress(order.status))
+  const filteredPastOrders = filteredOrders.filter(order => !isInProgress(order.status))
+
+  const handleClearFilters = () => {
+    setSelectedStatus([])
+    setSelectedYear([])
+    setFilterOpen(false)
+  }
+
+  const handleApplyFilters = () => {
+    setFilterOpen(false)
+  }
 
   return (
     <div className="min-h-screen" style={{backgroundColor: '#ffffff'}}>
@@ -149,24 +200,134 @@ export default function AccountOrders() {
               </div>
             </div>
           ) : orders.length === 0 ? (
-            <div className="text-center py-16">
-              <p className="text-gray-600 mb-6">You haven't placed any orders yet.</p>
+            <div className="pt-2" style={{maxWidth: '560px'}}>
+              <p className="text-2xl font-light leading-relaxed mb-3" style={{fontFamily: 'Cormorant Garamond'}}>
+                You haven't placed any orders yet.
+              </p>
+              <p className="text-sm leading-relaxed text-gray-600 mb-12" style={{color: 'rgba(33,29,25,0.65)'}}>
+                When you do, you will find the summary of all of your orders and returns.
+              </p>
               <Link 
                 to="/" 
-                className="inline-block bg-black text-white py-3 px-8 text-sm uppercase tracking-widest hover:bg-gray-800 transition-colors rounded"
+                className="inline-block bg-black text-white py-4 px-12 text-xs uppercase tracking-widest hover:bg-gray-800 transition-colors"
               >
                 Start Shopping
               </Link>
             </div>
           ) : (
             <>
+              {/* Filter Bar and In Progress Label */}
+              <div className="mb-6 flex justify-between items-center relative" style={{maxWidth: '820px'}}>
+                <p className="text-xs uppercase tracking-widest text-gray-600">In progress</p>
+                
+                <button 
+                  onClick={() => setFilterOpen(!filterOpen)}
+                  className="flex items-center gap-2 text-xs uppercase tracking-widest text-gray-600 hover:text-black border-b border-gray-300 hover:border-black pb-1 transition-colors"
+                >
+                  Filters
+                  <svg className="w-2 h-1.5" viewBox="0 0 10 7" fill="none">
+                    <path d="M1 1l4 4 4-4" stroke="currentColor" strokeWidth="1"/>
+                  </svg>
+                </button>
+
+                {/* Filter Panel */}
+                {filterOpen && (
+                  <div className="absolute top-8 right-0 bg-white border border-gray-200 z-20 min-w-56 p-6 shadow-sm">
+                    {/* Status Group */}
+                    <div className="mb-5">
+                      <div className="text-xs uppercase tracking-widest text-gray-600 mb-3">Status</div>
+                      <div className="space-y-2">
+                        {[
+                          {label: 'All', value: 'ALL', count: statusCounts['ALL']},
+                          {label: 'In progress', value: 'IN_PROGRESS', count: statusCounts['IN_PROGRESS']},
+                          {label: 'Delivered', value: 'DELIVERED', count: statusCounts['DELIVERED']},
+                          {label: 'Returned', value: 'RETURNED', count: statusCounts['RETURNED']}
+                        ].map(option => (
+                          <label key={option.value} className="flex items-center gap-2.5 text-sm text-gray-700 cursor-pointer hover:text-black">
+                            <input 
+                              type="checkbox" 
+                              checked={selectedStatus.includes(option.value)}
+                              onChange={(e) => {
+                                if (e.target.checked) {
+                                  setSelectedStatus([...selectedStatus, option.value])
+                                } else {
+                                  setSelectedStatus(selectedStatus.filter(s => s !== option.value))
+                                }
+                              }}
+                              className="w-3 h-3 border border-gray-400 accent-black cursor-pointer"
+                            />
+                            <span className="flex-1">{option.label}</span>
+                            <span className="text-xs text-gray-500">{option.count}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Year Group */}
+                    <div className="mb-4">
+                      <div className="text-xs uppercase tracking-widest text-gray-600 mb-3">Year</div>
+                      <div className="space-y-2">
+                        <label className="flex items-center gap-2.5 text-sm text-gray-700 cursor-pointer hover:text-black">
+                          <input 
+                            type="checkbox" 
+                            checked={selectedYear.includes('ALL_YEARS') || selectedYear.length === 0}
+                            onChange={(e) => {
+                              if (e.target.checked) {
+                                setSelectedYear(['ALL_YEARS'])
+                              } else {
+                                setSelectedYear([])
+                              }
+                            }}
+                            className="w-3 h-3 border border-gray-400 accent-black cursor-pointer"
+                          />
+                          <span>All years</span>
+                        </label>
+                        {Object.entries(yearCounts).sort((a, b) => parseInt(b[0]) - parseInt(a[0])).map(([year, count]) => (
+                          <label key={year} className="flex items-center gap-2.5 text-sm text-gray-700 cursor-pointer hover:text-black">
+                            <input 
+                              type="checkbox" 
+                              checked={selectedYear.includes(year)}
+                              onChange={(e) => {
+                                if (e.target.checked) {
+                                  setSelectedYear([...selectedYear.filter(y => y !== 'ALL_YEARS'), year])
+                                } else {
+                                  setSelectedYear(selectedYear.filter(y => y !== year))
+                                }
+                              }}
+                              className="w-3 h-3 border border-gray-400 accent-black cursor-pointer"
+                            />
+                            <span className="flex-1">{year}</span>
+                            <span className="text-xs text-gray-500">{count}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Footer */}
+                    <div className="flex justify-between items-center border-t border-gray-200 pt-4 mt-4">
+                      <button 
+                        onClick={handleClearFilters}
+                        className="text-xs uppercase tracking-widest text-gray-600 hover:text-black transition-colors"
+                      >
+                        Clear
+                      </button>
+                      <button 
+                        onClick={handleApplyFilters}
+                        className="text-xs uppercase tracking-widest border-b border-black pb-0.5 hover:text-gray-600 transition-colors"
+                      >
+                        Apply
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+
               {/* In Progress Orders */}
-              {inProgressOrders.length > 0 && (
+              {filteredInProgress.length > 0 && (
                 <div className="mb-12">
-                  <p className="text-xs uppercase tracking-widest text-gray-600 mb-6">In progress</p>
                   
                   <div className="space-y-6">
-                    {inProgressOrders.map(order => (
+                    {filteredInProgress.map(order => (
                       <OrderCard 
                         key={order.id} 
                         order={order}
@@ -178,14 +339,14 @@ export default function AccountOrders() {
               )}
 
               {/* Past Orders */}
-              {pastOrders.length > 0 && (
+              {filteredPastOrders.length > 0 && (
                 <div>
-                  <p className="text-xs uppercase tracking-widest text-gray-600 mb-6" style={{marginTop: inProgressOrders.length > 0 ? '52px' : '0'}}>
+                  <p className="text-xs uppercase tracking-widest text-gray-600 mb-6" style={{marginTop: '52px'}}>
                     Past orders
                   </p>
                   
                   <div className="space-y-6">
-                    {pastOrders.map(order => (
+                    {filteredPastOrders.map(order => (
                       <OrderCard 
                         key={order.id} 
                         order={order}
@@ -193,6 +354,12 @@ export default function AccountOrders() {
                       />
                     ))}
                   </div>
+                </div>
+              )}
+
+              {filteredOrders.length === 0 && (
+                <div className="text-center py-12">
+                  <p className="text-gray-600">No orders match your filters.</p>
                 </div>
               )}
             </>

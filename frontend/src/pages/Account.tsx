@@ -5,6 +5,15 @@ import { useState } from 'react'
 export default function Account() {
   const { user, isAuthenticated, logout } = useAuthStore()
   const navigate = useNavigate()
+  const [showPasswordModal, setShowPasswordModal] = useState(false)
+  const [passwordForm, setPasswordForm] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: '',
+    showCurrent: false,
+    showNew: false,
+    showConfirm: false
+  })
   const [formData, setFormData] = useState({
     title: 'Prefer not to say',
     firstName: user?.firstName || '',
@@ -237,7 +246,10 @@ export default function Account() {
                   readOnly
                   className="flex-1 border-b border-gray-300 bg-transparent py-2 text-sm focus:outline-none"
                 />
-                <button className="text-xs uppercase tracking-widest text-gray-600 hover:text-black transition-colors mb-2">
+                <button 
+                  onClick={() => setShowPasswordModal(true)}
+                  className="text-xs uppercase tracking-widest text-gray-600 hover:text-black transition-colors mb-2"
+                >
                   Change password
                 </button>
               </div>
@@ -258,6 +270,97 @@ export default function Account() {
           </div>
         </main>
       </div>
+
+      {/* Change Password Modal */}
+      {showPasswordModal && (
+        <div className="fixed inset-0 bg-black/45 flex items-center justify-center z-50 p-6">
+          <div className="bg-white w-full max-w-md p-16 md:p-14 relative">
+            <button 
+              onClick={() => setShowPasswordModal(false)}
+              className="absolute top-4 right-6 text-2xl text-gray-500 hover:text-gray-700 leading-none"
+            >
+              ×
+            </button>
+
+            <h2 className="text-2xl font-light mb-12" style={{fontFamily: 'Cormorant Garamond'}}>
+              Change password
+            </h2>
+
+            {/* Current Password */}
+            <div className="mb-11">
+              <label className="block text-xs uppercase tracking-widest text-gray-700 mb-2">Current password</label>
+              <div className="relative flex items-center">
+                <input 
+                  type={passwordForm.showCurrent ? 'text' : 'password'}
+                  value={passwordForm.currentPassword}
+                  onChange={(e) => setPasswordForm({...passwordForm, currentPassword: e.target.value})}
+                  className="w-full border-b border-gray-300 bg-transparent py-2 text-sm focus:outline-none focus:border-black pr-12"
+                  placeholder=""
+                />
+                <button 
+                  onClick={() => setPasswordForm({...passwordForm, showCurrent: !passwordForm.showCurrent})}
+                  className="absolute right-0 bottom-2 text-xs uppercase tracking-widest text-gray-600 hover:text-black"
+                >
+                  {passwordForm.showCurrent ? 'Hide' : 'Show'}
+                </button>
+              </div>
+            </div>
+
+            {/* New Password */}
+            <div className="mb-11">
+              <label className="block text-xs uppercase tracking-widest text-gray-700 mb-2">New password</label>
+              <div className="relative flex items-center">
+                <input 
+                  type={passwordForm.showNew ? 'text' : 'password'}
+                  value={passwordForm.newPassword}
+                  onChange={(e) => setPasswordForm({...passwordForm, newPassword: e.target.value})}
+                  className="w-full border-b border-gray-300 bg-transparent py-2 text-sm focus:outline-none focus:border-black pr-12"
+                  placeholder=""
+                />
+                <button 
+                  onClick={() => setPasswordForm({...passwordForm, showNew: !passwordForm.showNew})}
+                  className="absolute right-0 bottom-2 text-xs uppercase tracking-widest text-gray-600 hover:text-black"
+                >
+                  {passwordForm.showNew ? 'Hide' : 'Show'}
+                </button>
+              </div>
+            </div>
+
+            {/* Confirm Password */}
+            <div className="mb-11">
+              <label className="block text-xs uppercase tracking-widest text-gray-700 mb-2">Confirm new password</label>
+              <div className="relative flex items-center">
+                <input 
+                  type={passwordForm.showConfirm ? 'text' : 'password'}
+                  value={passwordForm.confirmPassword}
+                  onChange={(e) => setPasswordForm({...passwordForm, confirmPassword: e.target.value})}
+                  className="w-full border-b border-gray-300 bg-transparent py-2 text-sm focus:outline-none focus:border-black pr-12"
+                  placeholder=""
+                />
+                <button 
+                  onClick={() => setPasswordForm({...passwordForm, showConfirm: !passwordForm.showConfirm})}
+                  className="absolute right-0 bottom-2 text-xs uppercase tracking-widest text-gray-600 hover:text-black"
+                >
+                  {passwordForm.showConfirm ? 'Hide' : 'Show'}
+                </button>
+              </div>
+            </div>
+
+            {/* Update Button */}
+            <button className="w-full bg-black text-white py-4 text-xs uppercase tracking-widest hover:bg-gray-800 transition-colors mb-4">
+              Update password
+            </button>
+
+            {/* Cancel Link */}
+            <button 
+              onClick={() => setShowPasswordModal(false)}
+              className="block w-full text-center text-xs uppercase tracking-widest text-gray-600 hover:text-black"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
