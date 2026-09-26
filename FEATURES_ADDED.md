@@ -162,49 +162,55 @@ This file maintains a record of all new features and enhancements added to the a
 
 **Testing**: Build successful, ready for local testing
 
-### 8. Enhanced Account Dashboard Page
+### 9. My Orders & Returns Page with Filters
 **Status**: ✅ Completed
-**Date Added**: August 30, 2026
-**Description**: Redesigned Account/Dashboard page with modern professional design
+**Date Added**: September 26, 2026
+**Description**: Implemented comprehensive My Orders & Returns page with sidebar navigation and order filtering
 **Files Modified**:
-- `frontend/src/pages/Account.tsx`
+- `frontend/src/pages/account/Orders.tsx` (completely redesigned)
+- `frontend/src/pages/Account.tsx` (added change password modal)
+- `frontend/src/App.tsx` (added route support)
 **Details**:
-- **Visual Improvements**:
-  - Beige background (#fcfcfb) consistent with other pages
-  - Card-based layout with borders and shadows
-  - Hover effects on cards with shadow enhancement
-  - Improved icon sizing (10x10) for better visibility
+- **Sidebar Navigation**:
+  - Consistent sidebar layout matching My Information page
+  - "Hello, [Name]" greeting with proper spacing
+  - Navigation menu with active state indicators
+  - Logout button in sidebar
   
-- **Card Enhancements**:
-  - Account Details, Order History, Address Book
-  - Wishlist, Payment Methods, Sign Out
-  - Each card is a clickable link (except Sign Out which is a button)
-  - Arrow indicators (→) for clarity
-  - Hover animations for better UX
+- **Order Display**:
+  - Orders grouped into "In progress" and "Past orders" sections
+  - Order cards show: Order number, placed date, total, status badge
+  - Status colors: Delivered (green), In transit (blue), Pending (yellow), Returned (gray)
+  - Each order displays product items with: Image, Name, Quantity, Price
+  - Card actions: View order details, Need help? link
   
-- **Typography**:
-  - Large serif headings (h1)
-  - Professional card titles
-  - Clear descriptions for each section
-  - Better spacing and hierarchy
+- **Filter System**:
+  - Filter toggle button on same line as "In progress" label
+  - Dropdown filter panel with two groups:
+    - **Status**: All, In progress, Delivered, Returned (with counts)
+    - **Year**: All years, and selectable year options (with counts)
+  - Clear and Apply buttons in filter footer
+  - Applied filters persist until cleared
+  - Shows "No orders match your filters" when no results
   
-- **Login Prompt Improvement**:
-  - Updated unauthenticated state with better styling
-  - Consistent background color
-  - Professional card-based login/register buttons
+- **Empty State**:
+  - Matches reference design styling
+  - Large serif heading: "You haven't placed any orders yet."
+  - Descriptive subtitle text
+  - Call-to-action "Start Shopping" button
   
-- **Responsive Design**:
-  - Grid adapts from 1 column (mobile) → 2 columns (md) → 3 columns (lg)
-  - Proper spacing on all devices
-  - Touch-friendly buttons
+- **Change Password Modal**:
+  - Modal triggered from My Information page
+  - Three password input fields:
+    - Current password
+    - New password
+    - Confirm new password
+  - Show/Hide toggle for each password field
+  - Update Password and Cancel buttons
+  - Modal overlay with proper z-index management
   
-- **UX Enhancements**:
-  - Customer support link at bottom
-  - Better visual hierarchy
-  - Clearer call-to-action buttons
-  - Improved accessibility
-  
-**Testing**: Build successful, ready for local testing
+**Testing**: Ready for local testing
+**Build Status**: ✅ Successful
 
 ---
 
@@ -221,18 +227,22 @@ This file maintains a record of all new features and enhancements added to the a
 
 ## Testing Checklist
 
-- [ ] PaymentSuccess page displays correctly
-- [ ] PaymentFailed page displays correctly
-- [ ] Order summary calculations are accurate
-- [ ] All action buttons navigate correctly
-- [ ] Responsive design works on mobile/tablet/desktop
-- [ ] Fonts display correctly throughout site
-- [ ] OrderDetail page enhanced design
+- [ ] My Orders & Returns page displays correctly with sidebar
+- [ ] Filters work: Status and Year filters apply correctly
+- [ ] Filter counts display accurately
+- [ ] Clear and Apply buttons function properly
+- [ ] Order cards show all information
+- [ ] Product images load correctly
+- [ ] Empty state displays when no orders
+- [ ] Change Password modal opens when clicking "Change password"
+- [ ] Show/Hide toggles work for password fields
+- [ ] Modal closes with Cancel or X button
 - [ ] All pages maintain header and footer
+- [ ] Responsive design works on mobile/tablet/desktop
 
 ---
 
-**Last Updated**: August 30, 2026
-**Total Completed**: 8 features
+**Last Updated**: September 26, 2026
+**Total Completed**: 9 features
 **In Progress**: 0 features
 **Planned**: 5+ features
