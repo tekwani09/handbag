@@ -64,7 +64,7 @@ export default function Account() {
         {/* Sidebar */}
         <aside className="w-full lg:w-80 lg:flex-shrink-0" style={{backgroundColor: '#f0eee9'}}>
           <div className="p-8 lg:p-12 sticky top-0">
-            <h2 className="text-3xl md:text-4xl font-light mb-12" style={{fontFamily: 'Cormorant Garamond'}}>
+            <h2 className="text-3xl md:text-4xl font-light mb-20" style={{fontFamily: 'Cormorant Garamond'}}>
               Hello, {user?.firstName}
             </h2>
             
@@ -112,7 +112,7 @@ export default function Account() {
 
         {/* Main Content */}
         <main className="flex-1 p-8 lg:p-12 max-w-4xl">
-          <h1 className="text-4xl md:text-5xl font-light mb-12" style={{fontFamily: 'Cormorant Garamond'}}>
+          <h1 className="text-4xl md:text-5xl font-light mb-16" style={{fontFamily: 'Cormorant Garamond'}}>
             My Information
           </h1>
 

@@ -8,6 +8,7 @@ const PaymentSuccess = () => {
   const [searchParams] = useSearchParams()
   const [order, setOrder] = useState<any>(null)
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(false)
   const { selectedCountry } = useCurrency()
   const orderId = searchParams.get('orderId')
 
@@ -27,15 +28,25 @@ const PaymentSuccess = () => {
         if (response.ok) {
           const data = await response.json()
           setOrder(data.order)
+        } else {
+          setError(true)
         }
       } catch (error) {
         console.error('Failed to fetch order:', error)
+        setError(true)
       } finally {
         setLoading(false)
       }
     }
 
+    // Set a timeout to stop loading after 5 seconds
+    const timer = setTimeout(() => {
+      setLoading(false)
+    }, 5000)
+
     fetchOrder()
+
+    return () => clearTimeout(timer)
   }, [orderId])
 
   if (loading) {
@@ -71,8 +82,8 @@ const PaymentSuccess = () => {
           )}
         </div>
 
-        {/* Order Summary Card */}
-        {!loading && order && (
+        {/* Order Summary Card - Only show if order data is available */}
+        {order && (
           <div className="bg-white border border-gray-200 rounded-lg overflow-hidden mb-12 shadow-sm">
             {/* Card Header */}
             <div className="border-b border-gray-200 p-6 md:p-8">
