@@ -3,7 +3,6 @@ import { useWishlistStore } from '../store/wishlistStore'
 import { useCartStore } from '../store/cartStore'
 import { formatPrice } from '../utils/currency'
 import { useCurrency } from '../components/CountrySwitcher'
-import Footer from '../components/Footer'
 
 export default function Wishlist() {
   const { items, removeItem } = useWishlistStore()
@@ -75,7 +74,6 @@ export default function Wishlist() {
           </div>
         )}
       </div>
-      <Footer />
     </main>
   )
 }

@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom'
-import Footer from '../components/Footer'
 
 const umber = '#7A4B32'
 const ink = '#211D19'
@@ -100,8 +99,6 @@ export default function BagTwoColorways() {
           </Link>
         </div>
       </section>
-
-      <Footer />
     </div>
   )
 }

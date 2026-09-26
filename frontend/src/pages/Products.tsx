@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import { Link, useSearchParams, useNavigate } from 'react-router-dom'
 import { useCurrency } from '../components/CountrySwitcher'
 import { getProductPrice, formatPrice } from '../utils/currency'
-import Footer from '../components/Footer'
 
 export default function Products() {
   const { selectedCountry } = useCurrency()
@@ -507,7 +506,6 @@ export default function Products() {
           </div>
         </div>
       </section>
-      <Footer />
     </main>
   )
 }

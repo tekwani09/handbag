@@ -1,16 +1,28 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useCartStore } from '../store/cartStore'
 import { useCurrency } from '../components/CountrySwitcher'
 import { formatPrice, getProductPrice } from '../utils/currency'
-import Footer from '../components/Footer'
+import { useAuthStore } from '../store/authStore'
+import { useState } from 'react'
 
 export default function Cart() {
   const { items, removeItem, updateQuantity, getTotalPrice } = useCartStore()
   const { selectedCountry } = useCurrency()
+  const { isAuthenticated } = useAuthStore()
+  const navigate = useNavigate()
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false)
 
   const subtotal = getTotalPrice(selectedCountry.currency, getProductPrice)
   const shipping = subtotal > 200 ? 0 : 15
   const total = subtotal + shipping
+
+  const handleCheckout = () => {
+    if (!isAuthenticated) {
+      setShowLoginPrompt(true)
+    } else {
+      navigate('/checkout')
+    }
+  }
 
   if (items.length === 0) {
     return (
@@ -27,7 +39,6 @@ export default function Cart() {
             </Link>
           </div>
         </div>
-        <Footer />
       </div>
     )
   }
@@ -105,12 +116,12 @@ export default function Cart() {
               </div>
             </div>
 
-            <Link 
-              to="/checkout"
+            <button 
+              onClick={handleCheckout}
               className="block w-full bg-black text-white py-4 px-6 text-sm uppercase tracking-wide hover:bg-gray-800 transition-colors text-center mb-4"
             >
               Checkout
-            </Link>
+            </button>
             
             <Link 
               to="/products"
@@ -127,7 +138,57 @@ export default function Cart() {
           </div>
         </div>
       </div>
-      <Footer />
+
+      {/* Login Prompt Modal */}
+      {showLoginPrompt && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-6">
+          <div className="bg-white w-full max-w-md p-12 rounded-lg relative">
+            <button 
+              onClick={() => setShowLoginPrompt(false)}
+              className="absolute top-4 right-6 text-2xl text-gray-500 hover:text-gray-700 leading-none"
+            >
+              ×
+            </button>
+
+            <h2 className="text-2xl font-light mb-4" style={{fontFamily: 'Cormorant Garamond'}}>
+              Sign in to continue
+            </h2>
+            
+            <p className="text-sm text-gray-600 mb-8 leading-relaxed">
+              You need to be signed in to proceed with checkout. Sign in to your account or create a new one.
+            </p>
+
+            <div className="space-y-4">
+              <button 
+                onClick={() => {
+                  setShowLoginPrompt(false)
+                  navigate('/login')
+                }}
+                className="w-full bg-black text-white py-4 px-6 text-sm uppercase tracking-widest hover:bg-gray-800 transition-colors"
+              >
+                Sign In
+              </button>
+
+              <button 
+                onClick={() => {
+                  setShowLoginPrompt(false)
+                  navigate('/register')
+                }}
+                className="w-full border-2 border-black text-black py-4 px-6 text-sm uppercase tracking-widest hover:bg-black hover:text-white transition-colors"
+              >
+                Create Account
+              </button>
+
+              <button 
+                onClick={() => setShowLoginPrompt(false)}
+                className="w-full text-center text-sm uppercase tracking-widest text-gray-600 hover:text-black py-4 transition-colors"
+              >
+                Continue Shopping
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

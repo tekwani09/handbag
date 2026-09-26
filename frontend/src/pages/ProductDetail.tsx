@@ -3,7 +3,6 @@ import { useParams, Link } from 'react-router-dom'
 import { useCurrency } from '../components/CountrySwitcher'
 import { getProductPrice, formatPrice } from '../utils/currency'
 import { API_BASE_URL } from '../config/api'
-import Footer from '../components/Footer'
 import { useCartStore } from '../store/cartStore'
 import { useWishlistStore } from '../store/wishlistStore'
 
@@ -489,8 +488,6 @@ export default function ProductDetail() {
         </div>
       </section>
       
-      <Footer />
-
       {/* Size & Fit Modal */}
       {showSizeFitModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-end bg-black bg-opacity-50">

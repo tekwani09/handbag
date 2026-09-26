@@ -23,7 +23,7 @@ interface Address {
 export default function Checkout() {
   const { items, getTotalPrice, clearCart } = useCartStore()
   const { selectedCountry } = useCurrency()
-  const { user } = useAuthStore()
+  const { user, isAuthenticated } = useAuthStore()
   const navigate = useNavigate()
   const [orderId, setOrderId] = useState<string | null>(null)
   const [selectedAddress, setSelectedAddress] = useState<Address | null>(null)
@@ -150,6 +150,46 @@ export default function Checkout() {
           <Link to="/products" className="text-sm uppercase tracking-wide underline hover:no-underline">
             Continue Shopping
           </Link>
+        </div>
+      </div>
+    )
+  }
+
+  // Redirect to login if not authenticated
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center" style={{backgroundColor: '#fcfcfb'}}>
+        <div className="bg-white p-12 rounded-lg max-w-md w-full mx-4">
+          <h1 className="text-2xl font-light mb-4" style={{fontFamily: 'Cormorant Garamond'}}>
+            Sign in to checkout
+          </h1>
+          
+          <p className="text-sm text-gray-600 mb-8 leading-relaxed">
+            You need to be signed in to proceed with checkout.
+          </p>
+
+          <div className="space-y-4">
+            <Link 
+              to="/login"
+              className="block w-full bg-black text-white py-4 px-6 text-sm uppercase tracking-widest hover:bg-gray-800 transition-colors text-center"
+            >
+              Sign In
+            </Link>
+
+            <Link 
+              to="/register"
+              className="block w-full border-2 border-black text-black py-4 px-6 text-sm uppercase tracking-widest hover:bg-black hover:text-white transition-colors text-center"
+            >
+              Create Account
+            </Link>
+
+            <Link 
+              to="/cart"
+              className="block w-full text-center text-sm uppercase tracking-widest text-gray-600 hover:text-black py-4 transition-colors"
+            >
+              Back to Cart
+            </Link>
+          </div>
         </div>
       </div>
     )
