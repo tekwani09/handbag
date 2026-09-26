@@ -72,6 +72,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/payment-success" element={<PaymentSuccess />} />
           <Route path="/payment-failed" element={<PaymentFailed />} />
+          <Route path="/order/:id" element={<ProtectedRoute><OrderDetail /></ProtectedRoute>} />
           <Route path="/orders/:id" element={<ProtectedRoute><OrderDetail /></ProtectedRoute>} />
           <Route path="/account" element={<Account />} />
           <Route path="/account/details" element={<ProtectedRoute><AccountDetails /></ProtectedRoute>} />

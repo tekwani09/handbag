@@ -38,7 +38,7 @@ interface Order {
   }
 }
 
-export default function AccountOrders() {
+export default function OrderHistory() {
   const { user, isAuthenticated, logout } = useAuthStore()
   const navigate = useNavigate()
   const [orders, setOrders] = useState<Order[]>([])
@@ -76,12 +76,57 @@ export default function AccountOrders() {
     navigate('/')
   }
 
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'DELIVERED':
+        return 'text-green-600 border-green-600'
+      case 'SHIPPED':
+      case 'IN_TRANSIT':
+        return 'text-blue-600 border-blue-600'
+      case 'RETURNED':
+        return 'text-gray-600 border-gray-400'
+      case 'PENDING':
+        return 'text-yellow-600 border-yellow-600'
+      case 'CANCELLED':
+        return 'text-red-600 border-red-600'
+      default:
+        return 'text-gray-600 border-gray-600'
+    }
+  }
+
+  const getStatusDisplay = (status: string) => {
+    switch (status) {
+      case 'DELIVERED':
+        return 'Delivered'
+      case 'SHIPPED':
+        return 'In transit'
+      case 'IN_TRANSIT':
+        return 'In transit'
+      case 'RETURNED':
+        return 'Returned'
+      case 'PENDING':
+        return 'Pending'
+      case 'CANCELLED':
+        return 'Cancelled'
+      default:
+        return status
+    }
+  }
+
   const isInProgress = (status: string) => {
     return status === 'PENDING' || status === 'SHIPPED' || status === 'IN_TRANSIT'
   }
 
   const inProgressOrders = orders.filter(order => isInProgress(order.status))
   const pastOrders = orders.filter(order => !isInProgress(order.status))
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    })
+  }
 
   return (
     <div className="min-h-screen" style={{backgroundColor: '#ffffff'}}>
