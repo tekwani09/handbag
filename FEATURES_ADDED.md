@@ -267,7 +267,74 @@ This file maintains a record of all new features and enhancements added to the a
 
 ---
 
+### 10. Need Help Workflow & Issue Reporting System
+**Status**: ✅ Completed
+**Date Added**: September 26, 2026
+**Description**: Implemented comprehensive Need Help workflow allowing customers to report order issues
+**Files Created**:
+- `frontend/src/pages/NeedHelp.tsx` (292 lines)
+- `frontend/src/components/IssueReportModal.tsx` (234 lines)
+**Files Modified**:
+- `frontend/src/pages/OrderDetail.tsx` (added Need Help button and link)
+- `frontend/src/App.tsx` (added NeedHelp route)
+- `references/need-help-page-v4.html` (copied reference design)
+- `references/WRONG WITH ORDER.html` (copied reference design)
+
+**Details**:
+- **Need Help Page** (`/order/:orderId/help`):
+  - Sidebar navigation matching account page layout
+  - Order reference information (Order number, date)
+  - 5 help topic categories:
+    - Something is wrong with my bag (damage, faults)
+    - Something is wrong with my order (wrong bag, color, missing items)
+    - Delivery and address (tracking, delivery issues)
+    - Payment, invoice or duties (charges, refunds)
+    - Returns and exchanges (return process)
+  - Each topic opens dedicated issue report modal
+  - Direct contact information (Email & WhatsApp)
+  - Responsive design (mobile/tablet/desktop)
+
+- **Issue Report Modal**:
+  - Dynamic modal triggered by topic selection
+  - Multi-item selection for orders with multiple items
+  - Dropdown menu with context-specific issue options:
+    - 6 options for bag damage
+    - 5 options for order issues
+    - 4 options for delivery
+    - 4 options for payment
+    - 5 options for returns
+  - Description textarea with character guidance
+  - File upload placeholder for issue documentation
+  - Email reply-to field with option to use alternate email
+  - Submit button with validation (requires issue type and description)
+  - Helpful messaging about response time (1-2 business days)
+
+- **OrderDetail Page Integration**:
+  - Added "Need Help?" button in action buttons section
+  - Updated support contact link to point to help page
+  - Button styling matches design system (bordered, muted color)
+
+- **Design & UX**:
+  - Matches existing account page sidebar pattern
+  - Serif headings (Cormorant Garamond)
+  - Clean typography with proper hierarchy
+  - Responsive grid layout for contact information
+  - Smooth transitions and hover states
+  - Modal overlay with proper z-index management
+
+**Testing**: ✅ Build verified successful
+- CSS: 47.23 kB gzipped (0.34 kB increase)
+- JS: 505.55 kB gzipped (12.62 kB increase)
+- 142 modules (2 new modules)
+
+**Routes**:
+- `/order/:orderId/help` - Need Help page (protected route)
+
+**Next**: Ready for local testing - Test all 5 issue categories and modal functionality
+
+---
+
 **Last Updated**: September 26, 2026
-**Total Completed**: 9 features
+**Total Completed**: 10 features
 **In Progress**: 0 features
 **Planned**: 5+ features
