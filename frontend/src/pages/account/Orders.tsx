@@ -217,7 +217,7 @@ export default function AccountOrders() {
           ) : (
             <>
               {/* Filter Bar and In Progress Label */}
-              <div className="mb-6 flex justify-between items-center relative" style={{maxWidth: '820px'}}>
+              <div className="mb-6 flex justify-between items-center relative">
                 <p className="text-xs uppercase tracking-widest text-gray-600">In progress</p>
                 
                 <button 
