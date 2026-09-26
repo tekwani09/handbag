@@ -170,6 +170,7 @@ This file maintains a record of all new features and enhancements added to the a
 - `frontend/src/pages/account/Orders.tsx` (completely redesigned)
 - `frontend/src/pages/Account.tsx` (added change password modal)
 - `frontend/src/App.tsx` (added route support)
+- `frontend/src/pages/Home.tsx` (removed duplicate footer)
 **Details**:
 - **Sidebar Navigation**:
   - Consistent sidebar layout matching My Information page
@@ -185,8 +186,9 @@ This file maintains a record of all new features and enhancements added to the a
   - Card actions: View order details, Need help? link
   
 - **Filter System**:
-  - Filter toggle button on same line as "In progress" label
-  - Dropdown filter panel with two groups:
+  - Filter toggle button on same line as "In progress" label (right-aligned)
+  - Dropdown filter panel positioned to the right edge
+  - Two filter groups:
     - **Status**: All, In progress, Delivered, Returned (with counts)
     - **Year**: All years, and selectable year options (with counts)
   - Clear and Apply buttons in filter footer
@@ -209,8 +211,14 @@ This file maintains a record of all new features and enhancements added to the a
   - Update Password and Cancel buttons
   - Modal overlay with proper z-index management
   
-**Testing**: Ready for local testing
-**Build Status**: ✅ Successful
+- **Footer Fix**:
+  - Removed duplicate inline footer from Home.tsx
+  - Footer component already renders globally on all pages
+  - Verified only one footer appears on all pages
+  
+**Testing**: ✅ Build verified successful (CSS: 46.89 kB, JS: 490.59 kB gzipped)
+**Git Commit**: ✅ "Fix: Remove duplicate footer from Home page and adjust filter positioning"
+**Next**: Ready for local testing before deployment
 
 ---
 
