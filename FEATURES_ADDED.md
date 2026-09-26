@@ -171,6 +171,14 @@ This file maintains a record of all new features and enhancements added to the a
 - `frontend/src/pages/Account.tsx` (added change password modal)
 - `frontend/src/App.tsx` (added route support)
 - `frontend/src/pages/Home.tsx` (removed duplicate footer)
+- `frontend/src/pages/Products.tsx` (removed duplicate footer)
+- `frontend/src/pages/About.tsx` (removed duplicate footer)
+- `frontend/src/pages/BagTwoColorways.tsx` (removed duplicate footer)
+- `frontend/src/pages/ProductDetail.tsx` (removed duplicate footer)
+- `frontend/src/pages/BagSingleColor.tsx` (removed duplicate footer)
+- `frontend/src/pages/Cart.tsx` (removed duplicate footer + added login protection)
+- `frontend/src/pages/Wishlist.tsx` (removed duplicate footer)
+- `frontend/src/pages/CheckoutNew.tsx` (added login protection)
 **Details**:
 - **Sidebar Navigation**:
   - Consistent sidebar layout matching My Information page
@@ -210,14 +218,23 @@ This file maintains a record of all new features and enhancements added to the a
   - Show/Hide toggle for each password field
   - Update Password and Cancel buttons
   - Modal overlay with proper z-index management
+
+- **Global Footer Fix**:
+  - Removed all duplicate inline Footer components from individual pages
+  - Footer now renders only once globally via App.tsx
+  - Verified single footer appears on all pages
   
-- **Footer Fix**:
-  - Removed duplicate inline footer from Home.tsx
-  - Footer component already renders globally on all pages
-  - Verified only one footer appears on all pages
+- **Checkout Login Protection**:
+  - Cart page: Shows elegant login prompt modal when non-authenticated user clicks Checkout
+  - Modal offers three options: Sign In, Create Account, Continue Shopping
+  - Checkout page: Redirects non-authenticated users to Sign In page
+  - Ensures users must be logged in before proceeding with payment
   
-**Testing**: ✅ Build verified successful (CSS: 46.89 kB, JS: 490.59 kB gzipped)
-**Git Commit**: ✅ "Fix: Remove duplicate footer from Home page and adjust filter positioning"
+**Testing**: ✅ Build verified successful (CSS: 46.95 kB, JS: 492.93 kB gzipped)
+**Git Commits**: 
+  - ✅ "Fix: Remove duplicate footer from Home page and adjust filter positioning"
+  - ✅ "Update FEATURES_ADDED.md - Document Feature #9 completion"
+  - ✅ "Fix: Remove duplicate Footer imports and add checkout login protection"
 **Next**: Ready for local testing before deployment
 
 ---
