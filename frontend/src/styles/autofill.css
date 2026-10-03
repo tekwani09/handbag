@@ -1,0 +1,16 @@
+/* Remove all autofill background styling */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: none !important;
+  -webkit-text-fill-color: #000000 !important;
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+/* Delay autofill color change */
+input:-webkit-autofill {
+  -webkit-transition: background-color 5000s ease-in-out 0s;
+  transition: background-color 5000s ease-in-out 0s;
+}

@@ -16,6 +16,7 @@ interface AuthStore {
   isLoading: boolean
   isAuthenticated: boolean
   isAdmin: boolean
+  error: string | null
   login: (email: string, password: string) => Promise<boolean>
   register: (firstName: string, lastName: string, email: string, password: string) => Promise<boolean>
   logout: () => void
@@ -26,6 +27,7 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
   user: null,
   token: localStorage.getItem('token'),
   isLoading: false,
+  error: null,
   get isAuthenticated() {
     return !!get().token
   },
@@ -52,7 +54,7 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       
       if (response.ok) {
         localStorage.setItem('token', data.token)
-        set({ user: data.user, token: data.token, isLoading: false })
+        set({ user: data.user, token: data.token, isLoading: false, error: null })
         return true
       } else {
         set({ isLoading: false })
@@ -65,7 +67,7 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
   },
 
   register: async (firstName: string, lastName: string, email: string, password: string) => {
-    set({ isLoading: true })
+    set({ isLoading: true, error: null })
     try {
       const response = await fetch(`${API_BASE_URL}/auth/register`, {
         method: 'POST',
@@ -77,14 +79,21 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       
       if (response.ok) {
         localStorage.setItem('token', data.token)
-        set({ user: data.user, token: data.token, isLoading: false })
+        set({ user: data.user, token: data.token, isLoading: false, error: null })
         return true
       } else {
-        set({ isLoading: false })
+        // Format error message from backend
+        let errorMessage = 'Registration failed'
+        if (data.details && Array.isArray(data.details)) {
+          errorMessage = data.details.map((d: any) => d.message).join('\n')
+        } else if (data.error) {
+          errorMessage = data.error
+        }
+        set({ isLoading: false, error: errorMessage })
         return false
       }
     } catch (error) {
-      set({ isLoading: false })
+      set({ isLoading: false, error: 'Network error. Please try again.' })
       return false
     }
   },

@@ -22,12 +22,20 @@ const Header = () => {
   
   const { getTotalItems } = useCartStore()
   const { items: wishlistItems } = useWishlistStore()
-  const { user, checkAuth } = useAuthStore()
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
+  const checkAuth = useAuthStore((state) => state.checkAuth)
   const { activeModal, openModal, closeModal } = useModalStore()
   
   useEffect(() => {
     checkAuth()
   }, [])
+
+  // Re-check auth when modal closes (after login/register)
+  useEffect(() => {
+    if (activeModal === null) {
+      checkAuth()
+    }
+  }, [activeModal])
 
   return (
     <header className="sticky top-0 z-50">
@@ -79,14 +87,20 @@ const Header = () => {
                   </span>
                 )}
               </button>
-              {user ? (
+              {isAuthenticated ? (
                 <Link to="/account" className="text-black transition-colors group">
                   <svg className="w-5 h-5 group-hover:fill-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                   </svg>
                 </Link>
               ) : (
-                <button onClick={() => openModal('account')} className="text-black transition-colors group">
+                <button 
+                  onClick={() => {
+                    console.log('User icon clicked - isAuthenticated:', isAuthenticated)
+                    openModal('account')
+                  }} 
+                  className="text-black transition-colors group"
+                >
                   <svg className="w-5 h-5 group-hover:fill-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                   </svg>

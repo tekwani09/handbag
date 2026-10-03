@@ -13,16 +13,29 @@ export const processPayment = async (req: Request, res: Response) => {
 
     if (!userId) {
       console.log('Payment controller - No user ID found in token')
-      return res.status(401).json({ error: 'User not authenticated' })
+      return res.status(401).json({ error: 'User authentication required' })
+    }
+    
+    if (!orderId) {
+      return res.status(400).json({ error: 'Order ID is required' })
     }
     
     console.log('Payment controller - Processing payment for user:', userId)
+
+    // Verify order belongs to user
+    const order = await prisma.order.findFirst({
+      where: { id: orderId, userId }
+    })
+
+    if (!order) {
+      return res.status(404).json({ error: 'Order not found' })
+    }
 
     // Simulate payment processing delay
     await new Promise(resolve => setTimeout(resolve, 2000))
 
     // Update order status to paid
-    await prisma.order.update({
+    const updatedOrder = await prisma.order.update({
       where: { id: orderId },
       data: {
         paymentStatus: 'PAID',
@@ -34,11 +47,17 @@ export const processPayment = async (req: Request, res: Response) => {
     res.json({
       success: true,
       paymentId: `dummy_payment_${Date.now()}`,
-      message: 'Payment processed successfully'
+      message: 'Payment processed successfully',
+      order: updatedOrder
     })
-  } catch (error) {
-    console.error('Payment processing failed:', error)
-    res.status(500).json({ error: 'Payment processing failed' })
+  } catch (error: any) {
+    console.error('Payment processing error:', error)
+    
+    if (error?.code === 'P2025') {
+      return res.status(404).json({ error: 'Order not found' })
+    }
+    
+    res.status(500).json({ error: 'Payment processing failed. Please try again.' })
   }
 }
 

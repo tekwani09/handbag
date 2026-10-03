@@ -1,8 +1,26 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../store/authStore'
 import BaseModal from './BaseModal'
 import { bgClasses } from '../styles/colors'
+
+// Validation helpers
+function isValidEmail(email: string): boolean {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  return emailRegex.test(email)
+}
+
+function validatePasswordStrength(password: string): { isValid: boolean; errors: string[] } {
+  const errors: string[] = []
+  
+  if (!password) return { isValid: false, errors: [] }
+  if (password.length < 8) errors.push('At least 8 characters')
+  if (!/[A-Z]/.test(password)) errors.push('One uppercase letter')
+  if (!/[a-z]/.test(password)) errors.push('One lowercase letter')
+  if (!/\d/.test(password)) errors.push('One number')
+  
+  return { isValid: errors.length === 0, errors }
+}
 
 interface LoginModalProps {
   isOpen: boolean
@@ -13,6 +31,9 @@ interface LoginModalProps {
 export default function LoginModal({ isOpen, onClose, initialMode = 'login' }: LoginModalProps) {
   const [isLogin, setIsLogin] = useState(initialMode === 'login')
   const [showWelcome, setShowWelcome] = useState(false)
+  const navigate = useNavigate()
+  
+  const { login, register, isLoading, user, error: authError, checkAuth, isAuthenticated } = useAuthStore()
 
   // Sync mode whenever the modal opens or initialMode changes
   useEffect(() => {
@@ -21,6 +42,14 @@ export default function LoginModal({ isOpen, onClose, initialMode = 'login' }: L
       setShowWelcome(false)
     }
   }, [isOpen, initialMode])
+
+  // Close modal if user becomes authenticated
+  useEffect(() => {
+    if (isAuthenticated && isOpen) {
+      onClose()
+    }
+  }, [isAuthenticated, isOpen, onClose])
+
   const [focusedField, setFocusedField] = useState<string | null>(null)
   const [formData, setFormData] = useState({
     firstName: '',
@@ -28,9 +57,45 @@ export default function LoginModal({ isOpen, onClose, initialMode = 'login' }: L
     email: '',
     password: ''
   })
+  const [fieldErrors, setFieldErrors] = useState<{ [key: string]: string }>({})
   const [error, setError] = useState('')
-  
-  const { login, register, isLoading, user } = useAuthStore()
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }))
+
+    // Real-time validation
+    const newFieldErrors = { ...fieldErrors }
+    
+    if (name === 'email') {
+      if (!value) {
+        delete newFieldErrors.email
+      } else if (!isValidEmail(value)) {
+        newFieldErrors.email = 'Please enter a valid email address'
+      } else {
+        delete newFieldErrors.email
+      }
+    }
+    
+    if (name === 'password') {
+      if (!value) {
+        delete newFieldErrors.password
+      } else {
+        const { errors } = validatePasswordStrength(value)
+        if (errors.length > 0) {
+          newFieldErrors.password = errors.join(', ')
+        } else {
+          delete newFieldErrors.password
+        }
+      }
+    }
+    
+    setFieldErrors(newFieldErrors)
+  }
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -41,13 +106,22 @@ export default function LoginModal({ isOpen, onClose, initialMode = 'login' }: L
       success = await login(formData.email, formData.password)
     } else {
       success = await register(formData.firstName, formData.lastName, formData.email, formData.password)
+      // After registration, verify the auth state
+      if (success) {
+        await checkAuth()
+      }
     }
     
     if (success) {
       setShowWelcome(true)
       setFormData({ firstName: '', lastName: '', email: '', password: '' })
     } else {
-      setError(isLogin ? 'Invalid email or password' : 'Registration failed')
+      // Use the detailed error from the store
+      if (authError) {
+        setError(authError)
+      } else {
+        setError(isLogin ? 'Invalid email or password' : 'Registration failed')
+      }
     }
   }
 
@@ -94,13 +168,15 @@ export default function LoginModal({ isOpen, onClose, initialMode = 'login' }: L
                     </div>
                   </div>
                   <div className={`sticky bottom-0 ${bgClasses.modal} pt-6 xl:pb-8 md:pb-6 pb-4`}>
-                    <Link 
-                      to="/account"
-                      onClick={handleClose}
+                    <button 
+                      onClick={() => {
+                        handleClose()
+                        navigate('/account')
+                      }}
                       className="relative hover:bg-transparent hover:text-inherit cursor-pointer text-sm transition-all inline-block py-4 px-6 text-white uppercase text-center bg-black border border-black w-full"
                     >
                       <div className="w-full transition-opacity">Go to my account</div>
-                    </Link>
+                    </button>
                     <button 
                       onClick={handleClose}
                       className="relative hover:bg-black hover:text-white cursor-pointer text-sm transition-all inline-block py-4 px-6 bg-transparent uppercase text-center border border-black w-full mt-4"
@@ -115,7 +191,7 @@ export default function LoginModal({ isOpen, onClose, initialMode = 'login' }: L
                 <h2 className="text-lg font-body pt-6 pb-4">{isLogin ? 'Sign in' : 'Create an account'}</h2>
             
             <div className="flex-1 contents">
-              <form onSubmit={handleSubmit} className="flex-1 flex flex-col gap-0 w-full lg:mt-0 md:mt-6 mt-4">
+              <form onSubmit={handleSubmit} className="flex-1 flex flex-col gap-0 w-full lg:mt-0 md:mt-6 mt-4" noValidate>
                 <div className="xl:space-y-8 lg:space-y-6 space-y-8">
                   {!isLogin && (
                     <div className="flex w-full sm:space-x-6 sm:space-y-0 space-y-8 flex-col sm:flex-row">
@@ -130,7 +206,6 @@ export default function LoginModal({ isOpen, onClose, initialMode = 'login' }: L
                             onChange={(e) => setFormData({...formData, firstName: e.target.value})}
                             onFocus={() => setFocusedField('firstName')}
                             onBlur={() => setFocusedField(null)}
-                            required
                             className="peer w-full bg-transparent border-solid border-t-0 border-x-0 border-b border-black text-black outline-none focus:ring-0 focus:ring-transparent focus:border-black focus:shadow-none px-0 py-2 text-sm" 
                           />
                         </div>
@@ -146,7 +221,6 @@ export default function LoginModal({ isOpen, onClose, initialMode = 'login' }: L
                             onChange={(e) => setFormData({...formData, lastName: e.target.value})}
                             onFocus={() => setFocusedField('lastName')}
                             onBlur={() => setFocusedField(null)}
-                            required
                             className="peer w-full bg-transparent border-solid border-t-0 border-x-0 border-b border-black text-black outline-none focus:ring-0 focus:ring-transparent focus:border-black focus:shadow-none px-0 py-2 text-sm" 
                           />
                         </div>
@@ -162,15 +236,18 @@ export default function LoginModal({ isOpen, onClose, initialMode = 'login' }: L
                         </label>
                         <div className="flex w-full flex-col">
                           <input 
-                            type="email" 
+                            type="text" 
+                            name="email"
                             value={formData.email}
-                            onChange={(e) => setFormData({...formData, email: e.target.value})}
+                            onChange={handleChange}
                             onFocus={() => setFocusedField('email')}
                             onBlur={() => setFocusedField(null)}
-                            required
-                            className="peer w-full bg-transparent border-solid border-t-0 border-x-0 border-b border-black text-black outline-none focus:ring-0 focus:ring-transparent focus:border-black focus:shadow-none px-0 py-2 text-sm" 
+                            className={`peer w-full bg-transparent border-solid border-t-0 border-x-0 border-b text-black outline-none focus:ring-0 focus:ring-transparent focus:shadow-none px-0 py-2 text-sm transition-colors ${fieldErrors.email ? 'border-red-500 focus:border-red-500' : 'border-black focus:border-black'}`}
                           />
                         </div>
+                        {fieldErrors.email && (
+                          <p className="text-red-500 text-xs mt-1">{fieldErrors.email}</p>
+                        )}
                       </div>
                       <div className="group relative flex-1">
                         <label className={`opacity-70 uppercase text-sm transition-all absolute left-0 pointer-events-none origin-left ${formData.password || focusedField === 'password' ? '-top-2 scale-95' : 'top-2'}`}>
@@ -179,14 +256,17 @@ export default function LoginModal({ isOpen, onClose, initialMode = 'login' }: L
                         <div className="flex w-full flex-col">
                           <input 
                             type="password" 
+                            name="password"
                             value={formData.password}
-                            onChange={(e) => setFormData({...formData, password: e.target.value})}
+                            onChange={handleChange}
                             onFocus={() => setFocusedField('password')}
                             onBlur={() => setFocusedField(null)}
-                            required
-                            className="peer w-full bg-transparent border-solid border-t-0 border-x-0 border-b border-black text-black outline-none focus:ring-0 focus:ring-transparent focus:border-black focus:shadow-none px-0 py-2 text-sm" 
+                            className={`peer w-full bg-transparent border-solid border-t-0 border-x-0 border-b text-black outline-none focus:ring-0 focus:ring-transparent focus:shadow-none px-0 py-2 text-sm transition-colors ${fieldErrors.password ? 'border-red-500 focus:border-red-500' : 'border-black focus:border-black'}`}
                           />
                         </div>
+                        {fieldErrors.password && (
+                          <p className="text-red-500 text-xs mt-1">{fieldErrors.password}</p>
+                        )}
                       </div>
                     </div>
                   ) : (
@@ -197,15 +277,18 @@ export default function LoginModal({ isOpen, onClose, initialMode = 'login' }: L
                         </label>
                         <div className="flex w-full flex-col">
                           <input 
-                            type="email" 
+                            type="text" 
+                            name="email"
                             value={formData.email}
-                            onChange={(e) => setFormData({...formData, email: e.target.value})}
+                            onChange={handleChange}
                             onFocus={() => setFocusedField('email')}
                             onBlur={() => setFocusedField(null)}
-                            required
-                            className="peer w-full bg-transparent border-solid border-t-0 border-x-0 border-b border-black text-black outline-none focus:ring-0 focus:ring-transparent focus:border-black focus:shadow-none px-0 py-2 text-sm" 
+                            className={`peer w-full bg-transparent border-solid border-t-0 border-x-0 border-b text-black outline-none focus:ring-0 focus:ring-transparent focus:shadow-none px-0 py-2 text-sm transition-colors ${fieldErrors.email ? 'border-red-500 focus:border-red-500' : 'border-black focus:border-black'}`}
                           />
                         </div>
+                        {fieldErrors.email && (
+                          <p className="text-red-500 text-xs mt-1">{fieldErrors.email}</p>
+                        )}
                       </div>
                       <div className="group relative">
                         <label className={`opacity-70 uppercase text-sm transition-all absolute left-0 pointer-events-none origin-left ${formData.password || focusedField === 'password' ? '-top-2 scale-95' : 'top-2'}`}>
@@ -214,14 +297,17 @@ export default function LoginModal({ isOpen, onClose, initialMode = 'login' }: L
                         <div className="flex w-full flex-col">
                           <input 
                             type="password" 
+                            name="password"
                             value={formData.password}
-                            onChange={(e) => setFormData({...formData, password: e.target.value})}
+                            onChange={handleChange}
                             onFocus={() => setFocusedField('password')}
                             onBlur={() => setFocusedField(null)}
-                            required
-                            className="peer w-full bg-transparent border-solid border-t-0 border-x-0 border-b border-black text-black outline-none focus:ring-0 focus:ring-transparent focus:border-black focus:shadow-none px-0 py-2 text-sm" 
+                            className={`peer w-full bg-transparent border-solid border-t-0 border-x-0 border-b text-black outline-none focus:ring-0 focus:ring-transparent focus:shadow-none px-0 py-2 text-sm transition-colors ${fieldErrors.password ? 'border-red-500 focus:border-red-500' : 'border-black focus:border-black'}`}
                           />
                         </div>
+                        {fieldErrors.password && (
+                          <p className="text-red-500 text-xs mt-1">{fieldErrors.password}</p>
+                        )}
                       </div>
                     </div>
                   )}
@@ -250,7 +336,11 @@ export default function LoginModal({ isOpen, onClose, initialMode = 'login' }: L
                 <div className="flex-1"></div>
 
                 {error && (
-                  <div className="text-red-600 text-sm mb-4">{error}</div>
+                  <div className="text-red-600 text-sm mb-4">
+                    {error.split('\n').map((line, idx) => (
+                      <div key={idx}>{line}</div>
+                    ))}
+                  </div>
                 )}
 
                 {/* Trust Signals */}

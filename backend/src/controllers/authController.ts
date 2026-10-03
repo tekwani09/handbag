@@ -13,27 +13,36 @@ export const register = async (req: Request, res: Response) => {
   try {
     const { email, password, firstName, lastName, phone } = req.body
 
-    if (!email || !password || !firstName || !lastName) {
+    console.log('Register - Request received:', { email, firstName, lastName, phone: !!phone })
+
+    // Normalize email to lowercase and trim whitespace
+    const normalizedEmail = email?.toLowerCase().trim()
+
+    if (!normalizedEmail || !password || !firstName || !lastName) {
+      console.log('Register - Missing required fields')
       return res.status(400).json({ error: 'Missing required fields' })
     }
     
-    const existingUser = await prisma.user.findUnique({ where: { email } })
+    const existingUser = await prisma.user.findUnique({ where: { email: normalizedEmail } })
     if (existingUser) {
-      return res.status(400).json({ error: 'User already exists' })
+      console.log('Register - Email already registered:', normalizedEmail)
+      return res.status(400).json({ error: 'This email is already registered' })
     }
 
     const hashedPassword = await bcrypt.hash(password, 12)
     
     const user = await prisma.user.create({
       data: {
-        email,
+        email: normalizedEmail,
         password: hashedPassword,
-        firstName,
-        lastName,
-        phone: phone || null,
+        firstName: firstName.trim(),
+        lastName: lastName.trim(),
+        phone: phone?.trim() || null,
         role: 'CUSTOMER'
       }
     })
+
+    console.log('Register - User created successfully:', user.id)
 
     const token = jwt.sign(
       { userId: user.id, email: user.email, role: user.role },
@@ -52,9 +61,16 @@ export const register = async (req: Request, res: Response) => {
         role: user.role
       }
     })
-  } catch (error) {
+  } catch (error: any) {
     console.error('Registration error:', error)
-    res.status(500).json({ error: 'Registration failed' })
+    
+    // Handle specific Prisma errors
+    if (error?.code === 'P2002') {
+      console.log('Register - Duplicate key error')
+      return res.status(400).json({ error: 'This email is already registered' })
+    }
+    
+    res.status(500).json({ error: 'Registration failed. Please try again.' })
   }
 }
 
@@ -62,18 +78,21 @@ export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body
 
-    if (!email || !password) {
+    // Normalize email to lowercase and trim whitespace
+    const normalizedEmail = email?.toLowerCase().trim()
+
+    if (!normalizedEmail || !password) {
       return res.status(400).json({ error: 'Email and password required' })
     }
     
-    const user = await prisma.user.findUnique({ where: { email } })
+    const user = await prisma.user.findUnique({ where: { email: normalizedEmail } })
     if (!user) {
-      return res.status(401).json({ error: 'Invalid credentials' })
+      return res.status(401).json({ error: 'Invalid email or password' })
     }
 
     const isValidPassword = await bcrypt.compare(password, user.password)
     if (!isValidPassword) {
-      return res.status(401).json({ error: 'Invalid credentials' })
+      return res.status(401).json({ error: 'Invalid email or password' })
     }
 
     const token = jwt.sign(
@@ -93,9 +112,9 @@ export const login = async (req: Request, res: Response) => {
         role: user.role
       }
     })
-  } catch (error) {
+  } catch (error: any) {
     console.error('Login error:', error)
-    res.status(500).json({ error: 'Login failed' })
+    res.status(500).json({ error: 'Login failed. Please try again.' })
   }
 }
 

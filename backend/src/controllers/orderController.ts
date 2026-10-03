@@ -13,7 +13,7 @@ export const createOrder = async (req: any, res: Response) => {
     
     if (!items || items.length === 0) {
       console.log('Create order - No items provided')
-      return res.status(400).json({ error: 'No items provided' })
+      return res.status(400).json({ error: 'No items in order' })
     }
     
     // Create or find existing address
@@ -65,8 +65,13 @@ export const createOrder = async (req: any, res: Response) => {
     
     console.log('Create order - Order created successfully and cart cleared:', order.id)
     res.status(201).json({ order, message: 'Order created successfully' })
-  } catch (error) {
+  } catch (error: any) {
     console.error('Create order error:', error)
+    
+    if (error?.code === 'P2025') {
+      return res.status(404).json({ error: 'One or more products not found' })
+    }
+    
     res.status(500).json({ error: 'Failed to create order' })
   }
 }
@@ -85,7 +90,8 @@ export const getOrders = async (req: any, res: Response) => {
     })
     
     res.json({ orders })
-  } catch (error) {
+  } catch (error: any) {
+    console.error('Get orders error:', error)
     res.status(500).json({ error: 'Failed to fetch orders' })
   }
 }
@@ -118,7 +124,7 @@ export const getOrder = async (req: any, res: Response) => {
     
     console.log('Get order - Returning order data')
     res.json({ order })
-  } catch (error) {
+  } catch (error: any) {
     console.error('Get order error:', error)
     res.status(500).json({ error: 'Failed to fetch order' })
   }

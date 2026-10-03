@@ -37,7 +37,8 @@ export const getProducts = async (req: Request, res: Response) => {
       orderBy: { createdAt: 'desc' }
     })
     res.json({ products })
-  } catch (error) {
+  } catch (error: any) {
+    console.error('Get products error:', error)
     res.status(500).json({ error: 'Failed to fetch products' })
   }
 }
@@ -58,7 +59,8 @@ export const getProduct = async (req: Request, res: Response) => {
     }
     
     res.json({ product })
-  } catch (error) {
+  } catch (error: any) {
+    console.error('Get product error:', error)
     res.status(500).json({ error: 'Failed to fetch product' })
   }
 }
@@ -85,22 +87,25 @@ export const createProduct = async (req: any, res: Response) => {
       parentProductId 
     } = req.body
     
+    // Normalize SKU to uppercase
+    const normalizedSku = sku?.toUpperCase().trim()
+    
     const product = await prisma.product.create({
       data: {
-        name,
+        name: name.trim(),
         slug: name.toLowerCase().replace(/\s+/g, '-') + (color ? `-${color.toLowerCase().replace(/\s+/g, '-')}` : ''),
-        description,
+        description: description.trim(),
         priceGBP: parseFloat(priceGBP),
         priceUSD: parseFloat(priceUSD),
         priceINR: parseFloat(priceINR),
         comparePrice: comparePrice ? parseFloat(comparePrice) : null,
-        sku,
+        sku: normalizedSku,
         inventory: parseInt(inventory),
         category,
         family: family || null,
         images: images || [],
         productModelImage,
-        color,
+        color: color?.trim() || null,
         colorHex,
         featured: featured || false,
         active: active !== undefined ? active : true,
@@ -110,8 +115,21 @@ export const createProduct = async (req: any, res: Response) => {
     })
     
     res.status(201).json({ product })
-  } catch (error) {
+  } catch (error: any) {
     console.error('Create product error:', error)
+    
+    // Handle specific Prisma errors
+    if (error?.code === 'P2002') {
+      const field = error.meta?.target?.[0]
+      if (field === 'sku') {
+        return res.status(400).json({ error: 'This SKU is already in use' })
+      }
+      if (field === 'slug') {
+        return res.status(400).json({ error: 'A product with this name and color already exists' })
+      }
+      return res.status(400).json({ error: 'Duplicate entry found' })
+    }
+    
     res.status(500).json({ error: 'Failed to create product' })
   }
 }
@@ -138,32 +156,52 @@ export const updateProduct = async (req: any, res: Response) => {
       active
     } = req.body
     
+    // Normalize SKU to uppercase if provided
+    const normalizedSku = sku ? sku.toUpperCase().trim() : undefined
+    
     const product = await prisma.product.update({
       where: { id },
       data: {
-        name,
-        slug: name.toLowerCase().replace(/\s+/g, '-') + (color ? `-${color.toLowerCase().replace(/\s+/g, '-')}` : ''),
-        description,
-        priceGBP: parseFloat(priceGBP),
-        priceUSD: parseFloat(priceUSD),
-        priceINR: parseFloat(priceINR),
+        name: name?.trim(),
+        slug: name ? name.toLowerCase().replace(/\s+/g, '-') + (color ? `-${color.toLowerCase().replace(/\s+/g, '-')}` : '') : undefined,
+        description: description?.trim(),
+        priceGBP: priceGBP ? parseFloat(priceGBP) : undefined,
+        priceUSD: priceUSD ? parseFloat(priceUSD) : undefined,
+        priceINR: priceINR ? parseFloat(priceINR) : undefined,
         comparePrice: comparePrice ? parseFloat(comparePrice) : null,
-        sku,
-        inventory: parseInt(inventory),
+        sku: normalizedSku,
+        inventory: inventory ? parseInt(inventory) : undefined,
         category,
         family: family || null,
         images: images || [],
         productModelImage: productModelImage || null,
-        color: color || null,
+        color: color?.trim() || null,
         colorHex: colorHex || null,
-        featured: featured || false,
-        active: active !== undefined ? active : true
+        featured: featured !== undefined ? featured : undefined,
+        active: active !== undefined ? active : undefined
       }
     })
     
     res.json({ product })
-  } catch (error) {
+  } catch (error: any) {
     console.error('Update product error:', error)
+    
+    // Handle specific Prisma errors
+    if (error?.code === 'P2002') {
+      const field = error.meta?.target?.[0]
+      if (field === 'sku') {
+        return res.status(400).json({ error: 'This SKU is already in use' })
+      }
+      if (field === 'slug') {
+        return res.status(400).json({ error: 'A product with this name and color already exists' })
+      }
+      return res.status(400).json({ error: 'Duplicate entry found' })
+    }
+    
+    if (error?.code === 'P2025') {
+      return res.status(404).json({ error: 'Product not found' })
+    }
+    
     res.status(500).json({ error: 'Failed to update product' })
   }
 }
@@ -178,7 +216,13 @@ export const deleteProduct = async (req: any, res: Response) => {
     })
     
     res.json({ message: 'Product deleted successfully' })
-  } catch (error) {
+  } catch (error: any) {
+    console.error('Delete product error:', error)
+    
+    if (error?.code === 'P2025') {
+      return res.status(404).json({ error: 'Product not found' })
+    }
+    
     res.status(500).json({ error: 'Failed to delete product' })
   }
 }
