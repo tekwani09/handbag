@@ -27,10 +27,8 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
   user: null,
   token: localStorage.getItem('token'),
   isLoading: false,
+  isAuthenticated: !!localStorage.getItem('token'),
   error: null,
-  get isAuthenticated() {
-    return !!get().token
-  },
   get isAdmin() {
     const user = get().user
     console.log('isAdmin getter - user:', user)
@@ -54,7 +52,7 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       
       if (response.ok) {
         localStorage.setItem('token', data.token)
-        set({ user: data.user, token: data.token, isLoading: false, error: null })
+        set({ user: data.user, token: data.token, isAuthenticated: true, isLoading: false, error: null })
         return true
       } else {
         set({ isLoading: false })
@@ -79,7 +77,7 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       
       if (response.ok) {
         localStorage.setItem('token', data.token)
-        set({ user: data.user, token: data.token, isLoading: false, error: null })
+        set({ user: data.user, token: data.token, isAuthenticated: true, isLoading: false, error: null })
         return true
       } else {
         // Format error message from backend
@@ -100,7 +98,7 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
 
   logout: () => {
     localStorage.removeItem('token')
-    set({ user: null, token: null })
+    set({ user: null, token: null, isAuthenticated: false })
   },
 
   checkAuth: async () => {
@@ -116,7 +114,7 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       if (response.ok) {
         const data = await response.json()
         console.log('checkAuth - received user data:', data.user)
-        set({ user: data.user, isLoading: false })
+        set({ user: data.user, isAuthenticated: true, isLoading: false })
       } else if (response.status === 401) {
         // Only logout if token is actually invalid/expired
         console.log('checkAuth - Token expired or invalid, logging out')

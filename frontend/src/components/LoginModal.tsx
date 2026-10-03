@@ -40,15 +40,9 @@ export default function LoginModal({ isOpen, onClose, initialMode = 'login' }: L
     if (isOpen) {
       setIsLogin(initialMode === 'login')
       setShowWelcome(false)
+      setFieldErrors({}) // Clear errors when switching tabs
     }
   }, [isOpen, initialMode])
-
-  // Close modal if user becomes authenticated
-  useEffect(() => {
-    if (isAuthenticated && isOpen) {
-      onClose()
-    }
-  }, [isAuthenticated, isOpen, onClose])
 
   const [focusedField, setFocusedField] = useState<string | null>(null)
   const [formData, setFormData] = useState({
@@ -68,33 +62,35 @@ export default function LoginModal({ isOpen, onClose, initialMode = 'login' }: L
       [name]: value
     }))
 
-    // Real-time validation
-    const newFieldErrors = { ...fieldErrors }
-    
-    if (name === 'email') {
-      if (!value) {
-        delete newFieldErrors.email
-      } else if (!isValidEmail(value)) {
-        newFieldErrors.email = 'Please enter a valid email address'
-      } else {
-        delete newFieldErrors.email
-      }
-    }
-    
-    if (name === 'password') {
-      if (!value) {
-        delete newFieldErrors.password
-      } else {
-        const { errors } = validatePasswordStrength(value)
-        if (errors.length > 0) {
-          newFieldErrors.password = errors.join(', ')
+    // Real-time validation only on register form
+    if (!isLogin) {
+      const newFieldErrors = { ...fieldErrors }
+      
+      if (name === 'email') {
+        if (!value) {
+          delete newFieldErrors.email
+        } else if (!isValidEmail(value)) {
+          newFieldErrors.email = 'Please enter a valid email address'
         } else {
-          delete newFieldErrors.password
+          delete newFieldErrors.email
         }
       }
+      
+      if (name === 'password') {
+        if (!value) {
+          delete newFieldErrors.password
+        } else {
+          const { errors } = validatePasswordStrength(value)
+          if (errors.length > 0) {
+            newFieldErrors.password = errors.join(', ')
+          } else {
+            delete newFieldErrors.password
+          }
+        }
+      }
+      
+      setFieldErrors(newFieldErrors)
     }
-    
-    setFieldErrors(newFieldErrors)
   }
   
   const handleSubmit = async (e: React.FormEvent) => {
@@ -169,6 +165,7 @@ export default function LoginModal({ isOpen, onClose, initialMode = 'login' }: L
                   </div>
                   <div className={`sticky bottom-0 ${bgClasses.modal} pt-6 xl:pb-8 md:pb-6 pb-4`}>
                     <button 
+                      type="button"
                       onClick={() => {
                         handleClose()
                         navigate('/account')
@@ -385,7 +382,10 @@ export default function LoginModal({ isOpen, onClose, initialMode = 'login' }: L
                   </button>
                   <button 
                     type="button" 
-                    onClick={() => setIsLogin(!isLogin)}
+                    onClick={() => {
+                      setIsLogin(!isLogin)
+                      setFieldErrors({}) // Clear errors when switching tabs
+                    }}
                     className="relative hover:bg-black hover:text-white cursor-pointer text-sm transition-all inline-block py-4 px-6 bg-transparent uppercase text-center border border-black w-full mt-4"
                   >
                     <div className="transition-opacity w-full">{isLogin ? 'Create new account' : 'Login'}</div>

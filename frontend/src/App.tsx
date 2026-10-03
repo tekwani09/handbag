@@ -77,7 +77,7 @@ function App() {
           <Route path="/order/:id" element={<ProtectedRoute><OrderDetail /></ProtectedRoute>} />
           <Route path="/orders/:id" element={<ProtectedRoute><OrderDetail /></ProtectedRoute>} />
           <Route path="/order/:orderId/help" element={<ProtectedRoute><NeedHelp /></ProtectedRoute>} />
-          <Route path="/account" element={<Account />} />
+          <Route path="/account" element={<ProtectedRoute><Account /></ProtectedRoute>} />
           <Route path="/account/details" element={<ProtectedRoute><AccountDetails /></ProtectedRoute>} />
           <Route path="/account/orders" element={<ProtectedRoute><AccountOrders /></ProtectedRoute>} />
           <Route path="/account/addresses" element={<ProtectedRoute><AccountAddresses /></ProtectedRoute>} />
