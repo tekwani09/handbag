@@ -26,9 +26,10 @@ interface LoginModalProps {
   isOpen: boolean
   onClose: () => void
   initialMode?: 'login' | 'register'
+  redirectAfterLogin?: string
 }
 
-export default function LoginModal({ isOpen, onClose, initialMode = 'login' }: LoginModalProps) {
+export default function LoginModal({ isOpen, onClose, initialMode = 'login', redirectAfterLogin }: LoginModalProps) {
   const [isLogin, setIsLogin] = useState(initialMode === 'login')
   const [showWelcome, setShowWelcome] = useState(false)
   const navigate = useNavigate()
@@ -168,11 +169,15 @@ export default function LoginModal({ isOpen, onClose, initialMode = 'login' }: L
                       type="button"
                       onClick={() => {
                         handleClose()
-                        navigate('/account')
+                        if (redirectAfterLogin) {
+                          navigate(redirectAfterLogin)
+                        } else {
+                          navigate('/account')
+                        }
                       }}
                       className="relative hover:bg-transparent hover:text-inherit cursor-pointer text-sm transition-all inline-block py-4 px-6 text-white uppercase text-center bg-black border border-black w-full"
                     >
-                      <div className="w-full transition-opacity">Go to my account</div>
+                      <div className="w-full transition-opacity">{redirectAfterLogin ? 'Continue to Checkout' : 'Go to my account'}</div>
                     </button>
                     <button 
                       onClick={handleClose}

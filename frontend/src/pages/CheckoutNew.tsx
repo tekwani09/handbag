@@ -27,7 +27,7 @@ export default function Checkout() {
   const { user, isAuthenticated } = useAuthStore()
   const navigate = useNavigate()
   const [orderId, setOrderId] = useState<string | null>(null)
-  const [showAuthModal, setShowAuthModal] = useState(false)
+  const [showAuthModal, setShowAuthModal] = useState(!isAuthenticated)
   const [selectedAddress, setSelectedAddress] = useState<Address | null>(null)
   const [formData, setFormData] = useState({
     email: user?.email || '',
@@ -61,6 +61,8 @@ export default function Checkout() {
         firstName: user.firstName,
         lastName: user.lastName
       }))
+      // Close auth modal when user is authenticated
+      setShowAuthModal(false)
     }
   }, [user])
 
@@ -158,11 +160,14 @@ export default function Checkout() {
   }
 
   // Show auth modal if not authenticated
-  if (!isAuthenticated) {
+  if (showAuthModal && !isAuthenticated) {
     return (
-      <>
-        <LoginModal isOpen={true} onClose={() => navigate('/cart')} initialMode="login" />
-      </>
+      <LoginModal 
+        isOpen={true} 
+        onClose={() => navigate('/cart')} 
+        initialMode="login"
+        redirectAfterLogin="/checkout"
+      />
     )
   }
 
