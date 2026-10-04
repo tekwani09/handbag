@@ -159,15 +159,145 @@ export default function Checkout() {
     )
   }
 
-  // Show auth modal if not authenticated
-  if (showAuthModal && !isAuthenticated) {
+  // Show checkout page with auth modal overlay if not authenticated
+  if (!isAuthenticated) {
     return (
-      <LoginModal 
-        isOpen={true} 
-        onClose={() => navigate('/cart')} 
-        initialMode="login"
-        redirectAfterLogin="/checkout"
-      />
+      <>
+        {/* Checkout page in background (disabled) */}
+        <div className="min-h-screen pointer-events-none opacity-50" style={{backgroundColor: '#fcfcfb'}}>
+          <div className="max-w-6xl mx-auto px-4 py-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+              {/* Left Column - Form (disabled) */}
+              <div>
+                <div className="space-y-8">
+                  {/* Contact Section */}
+                  <section>
+                    <h2 className="text-lg font-medium mb-6">Contact</h2>
+                    <div className="space-y-4">
+                      <div className="flex items-center space-x-3">
+                        <input type="checkbox" disabled className="rounded border-gray-300" />
+                        <label className="text-sm text-gray-700">
+                          Sign up for email to hear about our new launches, restocks and special offers
+                        </label>
+                      </div>
+                    </div>
+                  </section>
+
+                  {/* Shipping Address Section */}
+                  <section>
+                    <h2 className="text-lg font-medium mb-6">Shipping address</h2>
+                    <div className="space-y-4">
+                      <input
+                        type="text"
+                        placeholder="First name"
+                        disabled
+                        className="w-full p-3 border border-gray-300 rounded bg-gray-50"
+                      />
+                      <input
+                        type="text"
+                        placeholder="Address"
+                        disabled
+                        className="w-full p-3 border border-gray-300 rounded bg-gray-50"
+                      />
+                    </div>
+                  </section>
+                </div>
+              </div>
+
+              {/* Right Column - Order Summary */}
+              <div className="bg-white p-6 rounded-lg h-fit sticky top-8">
+                <h2 className="text-lg font-medium mb-6">Order Summary</h2>
+                
+                <div className="space-y-4 mb-6">
+                  {items.map((item) => (
+                    <div key={item.id} className="flex gap-3">
+                      <div className="w-16 h-16 bg-gray-200 flex-shrink-0 rounded">
+                        <img 
+                          src={item.image} 
+                          alt={item.name}
+                          className="w-full h-full object-cover rounded"
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-sm font-medium">{item.name}</h3>
+                        <p className="text-sm text-gray-600">Qty: {item.quantity}</p>
+                        <p className="text-sm font-medium">{formatPrice(getProductPrice(item.product, selectedCountry.currency), selectedCountry.currency)}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="border-t pt-4 space-y-3">
+                  <div className="flex justify-between text-sm">
+                    <span>Subtotal</span>
+                    <span>{formatPrice(subtotal, selectedCountry.currency)}</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span>Shipping</span>
+                    <span>{shipping === 0 ? 'Free' : formatPrice(shipping, selectedCountry.currency)}</span>
+                  </div>
+                  <div className="flex justify-between text-lg font-semibold border-t pt-3">
+                    <span>Total</span>
+                    <span>{formatPrice(total, selectedCountry.currency)}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Auth Modal Overlay */}
+        {!showAuthModal && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-40">
+            <div className="bg-white p-12 rounded-lg max-w-md w-full mx-4">
+              <div className="flex justify-between items-center mb-6">
+                <h1 className="text-2xl font-light">Sign in to continue</h1>
+                <button 
+                  onClick={() => navigate('/cart')}
+                  className="text-2xl text-gray-400 hover:text-black"
+                >
+                  ×
+                </button>
+              </div>
+              
+              <p className="text-sm text-gray-600 mb-8 leading-relaxed">
+                You need to be signed in to proceed with checkout. Sign in to your account or create a new one.
+              </p>
+
+              <div className="space-y-4">
+                <button 
+                  onClick={() => setShowAuthModal(true)}
+                  className="block w-full bg-black text-white py-4 px-6 text-sm uppercase tracking-widest hover:bg-gray-800 transition-colors text-center rounded"
+                >
+                  Sign In
+                </button>
+
+                <button 
+                  onClick={() => setShowAuthModal(true)}
+                  className="block w-full border-2 border-black text-black py-4 px-6 text-sm uppercase tracking-widest hover:bg-black hover:text-white transition-colors text-center rounded"
+                >
+                  Create Account
+                </button>
+
+                <button 
+                  onClick={() => navigate('/cart')}
+                  className="block w-full text-center text-sm uppercase tracking-widest text-gray-600 hover:text-black py-4 transition-colors rounded"
+                >
+                  Back to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* LoginModal Sidebar */}
+        <LoginModal 
+          isOpen={showAuthModal} 
+          onClose={() => setShowAuthModal(false)} 
+          initialMode="login"
+          redirectAfterLogin="/checkout"
+        />
+      </>
     )
   }
 
