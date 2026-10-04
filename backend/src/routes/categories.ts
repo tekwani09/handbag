@@ -14,7 +14,9 @@ router.get('/', async (req, res) => {
       { id: 'TRAVEL_BAGS', name: 'Travel Bags', slug: 'travel-bags' },
       { id: 'RAFFIA_BAGS', name: 'Raffia Bags', slug: 'raffia-bags' },
       { id: 'EMBOSSED_BAGS', name: 'Embossed Bags', slug: 'embossed-bags' },
-      { id: 'SUEDE_BAGS', name: 'Suede Bags', slug: 'suede-bags' }
+      { id: 'SUEDE_BAGS', name: 'Suede Bags', slug: 'suede-bags' },
+      { id: 'SIGNATURE_EDITION', name: 'Signature Edition', slug: 'signature-edition' },
+      { id: 'PREMIUM_SELECTION', name: 'Premium Selection', slug: 'premium-selection' }
     ];
 
     res.json({
@@ -44,7 +46,9 @@ router.get('/:slug', async (req, res) => {
       { id: 'TRAVEL_BAGS', name: 'Travel Bags', slug: 'travel-bags' },
       { id: 'RAFFIA_BAGS', name: 'Raffia Bags', slug: 'raffia-bags' },
       { id: 'EMBOSSED_BAGS', name: 'Embossed Bags', slug: 'embossed-bags' },
-      { id: 'SUEDE_BAGS', name: 'Suede Bags', slug: 'suede-bags' }
+      { id: 'SUEDE_BAGS', name: 'Suede Bags', slug: 'suede-bags' },
+      { id: 'SIGNATURE_EDITION', name: 'Signature Edition', slug: 'signature-edition' },
+      { id: 'PREMIUM_SELECTION', name: 'Premium Selection', slug: 'premium-selection' }
     ];
     
     const category = categories.find(cat => cat.slug === slug);

@@ -51,6 +51,8 @@ export default function NavigationModal({ isOpen, onClose, section }: Navigation
               items: [
                 { name: 'ALL PRODUCTS', href: '/products' },
                 { name: 'MOSAIC COLLECTION', href: '/collections/mosaic-collection' },
+                { name: 'SIGNATURE EDITION', href: '/collections/signature-edition' },
+                { name: 'PREMIUM SELECTION', href: '/collections/premium-selection' },
                 { name: 'NEW ARRIVALS', href: '/collections/new-arrivals' },
                 { name: 'BESTSELLERS', href: '/collections/bestsellers' },
                 { name: 'NEW SILHOUETTES', href: '/collections/new-silhouettes' },
