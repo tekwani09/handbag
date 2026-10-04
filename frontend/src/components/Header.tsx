@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import CountrySwitcher from './CountrySwitcher'
 import SearchDropdown from './SearchDropdown'
 import LoginModal from './LoginModal'
+import { useModal } from '../context/ModalContext'
 import NavigationModal from './NavigationModal'
 import SearchModal from './SearchModal'
 import WishlistModal from './WishlistModal'
@@ -25,6 +26,7 @@ const Header = () => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
   const checkAuth = useAuthStore((state) => state.checkAuth)
   const { activeModal, openModal, closeModal } = useModalStore()
+  const { openLoginModal } = useModal()
   
   useEffect(() => {
     checkAuth()
@@ -97,7 +99,11 @@ const Header = () => {
                 <button 
                   onClick={() => {
                     console.log('User icon clicked - isAuthenticated:', isAuthenticated)
-                    openModal('account')
+                    if (isAuthenticated) {
+                      openModal('account')
+                    } else {
+                      openLoginModal('login')
+                    }
                   }} 
                   className="text-black transition-colors group"
                 >
@@ -196,8 +202,8 @@ const Header = () => {
         </div>
       )}
       
-      {/* Login Modal */}
-      <LoginModal isOpen={activeModal === 'account' || activeModal === 'register'} onClose={closeModal} initialMode={activeModal === 'register' ? 'register' : 'login'} />
+      {/* Global Login Modal */}
+      <LoginModal isOpen={activeModal === 'account'} onClose={closeModal} initialMode="login" />
       
       {/* Navigation Modal */}
       <NavigationModal 

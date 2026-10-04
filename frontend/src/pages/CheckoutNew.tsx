@@ -90,7 +90,6 @@ export default function Checkout() {
       
       if (!token) {
         alert('Please login first to place an order')
-        navigate('/login')
         return
       }
       
@@ -316,9 +315,12 @@ export default function Checkout() {
                     {user && (
                       <div className="text-sm text-gray-600">
                         {user.firstName} {user.lastName} ({user.email})
-                        <Link to="/login" className="ml-2 text-black underline hover:no-underline">
+                        <button onClick={() => {
+                          logout()
+                          navigate('/')
+                        }} className="ml-2 text-black underline hover:no-underline bg-none border-none p-0 cursor-pointer">
                           Sign out
-                        </Link>
+                        </button>
                       </div>
                     )}
                   </div>

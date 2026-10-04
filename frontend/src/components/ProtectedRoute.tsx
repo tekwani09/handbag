@@ -28,8 +28,8 @@ export default function ProtectedRoute({ children, adminOnly = false }: Protecte
   }
 
   if (!isAuthenticated) {
-    console.log('ProtectedRoute - Redirecting to login')
-    return <Navigate to="/login" replace />
+    console.log('ProtectedRoute - Redirecting to home')
+    return <Navigate to="/" replace />
   }
 
   if (adminOnly && !isAdmin) {

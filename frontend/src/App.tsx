@@ -5,6 +5,7 @@ import Header from './components/Header'
 import Footer from './components/Footer'
 import ErrorBoundary from './components/ErrorBoundary'
 import { useAuthStore } from './store/authStore'
+import { ModalProvider } from './context/ModalContext'
 
 import AdminLayout from './components/AdminLayout'
 import ProtectedRoute from './components/ProtectedRoute'
@@ -19,8 +20,6 @@ import Wishlist from './pages/Wishlist'
 import Cart from './pages/Cart'
 import Checkout from './pages/CheckoutNew'
 import Profile from './pages/Profile'
-import Login from './pages/Login'
-import Register from './pages/Register'
 import AdminDashboard from './pages/admin/Dashboard'
 import AdminProducts from './pages/admin/Products'
 import Account from './pages/Account'
@@ -46,17 +45,18 @@ function App() {
   return (
     <ErrorBoundary>
       <CurrencyProvider>
-        <div className="min-h-screen" style={{backgroundColor: '#fcfcfb', minHeight: '100vh'}}>
-          <Helmet>
-            <title>Luxury Handbags - Premium Collection</title>
-            <meta name="description" content="Discover our premium collection of luxury handbags crafted with finest materials" />
-          </Helmet>
-          
-          <Header />
-          <ScrollToTop />
-      
-      <main>
-        <Routes>
+        <ModalProvider>
+          <div className="min-h-screen" style={{backgroundColor: '#fcfcfb', minHeight: '100vh'}}>
+            <Helmet>
+              <title>Luxury Handbags - Premium Collection</title>
+              <meta name="description" content="Discover our premium collection of luxury handbags crafted with finest materials" />
+            </Helmet>
+            
+            <Header />
+            <ScrollToTop />
+        
+        <main>
+          <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/products" element={<Products />} />
           <Route path="/products/:id" element={<ProductDetail />} />
@@ -71,7 +71,6 @@ function App() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/register" element={<Register />} />
           <Route path="/payment-success" element={<PaymentSuccess />} />
           <Route path="/payment-failed" element={<PaymentFailed />} />
           <Route path="/order/:id" element={<ProtectedRoute><OrderDetail /></ProtectedRoute>} />
@@ -100,7 +99,8 @@ function App() {
         </Routes>
       </main>
       <Footer />
-        </div>
+          </div>
+        </ModalProvider>
       </CurrencyProvider>
     </ErrorBoundary>
   )

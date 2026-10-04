@@ -1,10 +1,12 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../store/authStore'
+import { useModal } from '../context/ModalContext'
 import { useState } from 'react'
 
 export default function Account() {
   const { user, isAuthenticated, logout } = useAuthStore()
   const navigate = useNavigate()
+  const { openLoginModal } = useModal()
   const [showPasswordModal, setShowPasswordModal] = useState(false)
   const [passwordForm, setPasswordForm] = useState({
     currentPassword: '',
@@ -38,24 +40,24 @@ export default function Account() {
           <div className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm">
             <div className="p-6 md:p-8">
               <div className="space-y-4">
-                <Link 
-                  to="/login"
+                <button 
+                  onClick={() => openLoginModal('login')}
                   className="block w-full bg-black text-white py-4 px-8 text-sm uppercase tracking-wide hover:bg-gray-800 transition-colors text-center rounded"
                 >
                   Sign In
-                </Link>
-                <Link 
-                  to="/register"
+                </button>
+                <button 
+                  onClick={() => openLoginModal('register')}
                   className="block w-full border-2 border-black text-black py-4 px-8 text-sm uppercase tracking-wide hover:bg-black hover:text-white transition-colors text-center rounded"
                 >
                   Create Account
-                </Link>
+                </button>
               </div>
             </div>
           </div>
 
           <div className="text-center text-sm text-gray-600 max-w-md mx-auto mt-8">
-            <p>New to HEGĒTT? <a href="/register" className="underline hover:no-underline">Create an account</a> to track orders and manage your preferences.</p>
+            <p>New to HEGĒTT? <button onClick={() => openLoginModal('register')} className="underline hover:no-underline bg-none border-none p-0 cursor-pointer">Create an account</button> to track orders and manage your preferences.</p>
           </div>
         </main>
       </div>
