@@ -162,8 +162,8 @@ export default function Checkout() {
   if (!isAuthenticated) {
     return (
       <>
-        {/* Checkout page in background (disabled) */}
-        <div className="min-h-screen pointer-events-none opacity-50" style={{backgroundColor: '#fcfcfb'}}>
+        {/* Checkout page in background */}
+        <div className="min-h-screen" style={{backgroundColor: '#fcfcfb'}}>
           <div className="max-w-6xl mx-auto px-4 py-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
               {/* Left Column - Form (disabled) */}
