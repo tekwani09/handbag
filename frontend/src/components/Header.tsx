@@ -26,7 +26,7 @@ const Header = () => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
   const checkAuth = useAuthStore((state) => state.checkAuth)
   const { activeModal, openModal, closeModal } = useModalStore()
-  const { openLoginModal } = useModal()
+  const { isLoginModalOpen, loginModalMode, closeLoginModal, openLoginModal } = useModal()
   
   useEffect(() => {
     checkAuth()
@@ -203,7 +203,10 @@ const Header = () => {
       )}
       
       {/* Global Login Modal */}
-      <LoginModal isOpen={activeModal === 'account'} onClose={closeModal} initialMode="login" />
+      <LoginModal isOpen={activeModal === 'account' || isLoginModalOpen} onClose={() => {
+        closeModal()
+        closeLoginModal()
+      }} initialMode={loginModalMode} />
       
       {/* Navigation Modal */}
       <NavigationModal 
